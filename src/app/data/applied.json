@@ -1,0 +1,508 @@
+{
+  "applied_companies": [
+    {
+      "skuId": 1,
+      "company_name": "TechCo",
+      "company_bio": "TechCo is a leading technology company specializing in software development and IT solutions.",
+      "overview": "TechCo is a leading technology company based in San Francisco, CA. Founded in 2005, TechCo has emerged as a pioneer in software development and IT solutions. With a workforce of approximately 1000 employees, TechCo continues to innovate and shape the future of technology. The company offers competitive salaries ranging from $120,000 to $150,000 per year for the role of Software Engineer.",
+      "job_description": "Software Engineer",
+      "description": "Are you ready to embark on an exhilarating journey in the world of software engineering? Join TechCo as a Software Engineer and be at the forefront of innovation. We're looking for talented individuals to join our team in San Francisco, CA, and help shape the future of technology.",
+      "experience_required": "2-5 years",
+      "job_link": "www.techco.com/careers/software-engineer",
+      "job_location": "San Francisco, CA",
+      "job_salary": "$120,000 - $150,000",
+      "company_info": {
+        "founded": 2005,
+        "location": "San Francisco, CA",
+        "website": "www.techco.com",
+        "employees": 1000
+      },
+      "key_responsibilities": [
+        "Architect, design, and develop scalable software solutions.",
+
+        "Collaborate with cross-functional teams to deliver high-quality products.",
+
+        "Implement and maintain code standards and best practices.",
+
+        "Troubleshoot and debug software issues to ensure smooth operation."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Computer Science or related field.",
+
+        "Proven experience in software development and programming languages (e.g., Java, Python, JavaScript).",
+
+        "Strong problem-solving and analytical skills.",
+
+        "Excellent communication and teamwork abilities."
+      ],
+
+      "benefits": [
+        "Competitive salary and stock options.",
+
+        "Comprehensive health and wellness benefits.",
+
+        "Opportunity for career growth and advancement.",
+
+        "Dynamic and collaborative work environment."
+      ]
+    },
+    {
+      "skuId": 2,
+      "company_name": "BioPharm",
+      "company_bio": "BioPharm is a pharmaceutical company dedicated to improving healthcare through innovative drug development.",
+      "overview": "BioPharm, headquartered in Boston, MA, is a leading pharmaceutical company committed to advancing healthcare through innovative drug development. Since its establishment in 1998, BioPharm has been at the forefront of medical research, with a workforce of around 500 employees. The company offers a competitive salary range of $100,000 to $130,000 per year for the position of Research Scientist.",
+      "job_description": "Research Scientist",
+      "job_location": "Boston, MA",
+      "job_salary": "$100,000 - $130,000",
+      "experience_required": "3-7 years",
+      "company_info": {
+        "founded": 1998,
+        "location": "Boston, MA",
+        "website": "www.ecotech.com",
+        "employees": 500
+      },
+
+      "job_link": "www.ecotech.com/careers/renewable-energy-engineer",
+
+      "description": "Are you passionate about creating a sustainable future? Join EcoTech as a Renewable Energy Engineer and play a vital role in developing clean energy solutions. We're seeking skilled engineers to join our team in Seattle, WA, and make a positive impact on the environment.",
+
+      "key_responsibilities": [
+        "Design, analyze, and optimize renewable energy systems.",
+
+        "Conduct feasibility studies and evaluate project proposals.",
+
+        "Collaborate with stakeholders to implement renewable energy projects.",
+
+        "Ensure compliance with regulatory standards and environmental policies."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Mechanical Engineering, Renewable Energy, or related field.",
+
+        "Experience in renewable energy project development and implementation.",
+
+        "Knowledge of energy modeling software and tools.",
+
+        "Strong communication and project management skills."
+      ],
+
+      "benefits": [
+        "Competitive salary and performance bonuses.",
+
+        "Opportunity to work on innovative renewable energy projects.",
+
+        "Professional development and training programs.",
+
+        "Supportive and inclusive work culture."
+      ]
+    },
+    {
+      "skuId": 3,
+      "company_name": "EcoTech",
+      "company_bio": "EcoTech is a green energy company focused on sustainable solutions for a cleaner environment.",
+      "overview": "EcoTech, based in Seattle, WA, is a leading green energy company dedicated to providing sustainable solutions for a cleaner environment. Since its inception in 2010, EcoTech has been committed to environmental conservation, with a workforce of approximately 300 employees. The company offers competitive salaries ranging from $110,000 to $140,000 per year for the role of Renewable Energy Engineer.",
+      "job_description": "Renewable Energy Engineer",
+      "job_location": "Seattle, WA",
+      "job_salary": "$110,000 - $140,000",
+      "company_info": {
+        "founded": 2010,
+        "location": "Seattle, WA",
+        "website": "https://www.ecotech.com",
+        "employees": 300
+      },
+      "experience_required": "2-4 years",
+
+      "job_link": "www.financecorp.com/careers/financial-analyst",
+
+      "description": "Are you a financial whiz with a passion for analysis? Join FinanceCorp as a Financial Analyst and help drive informed decision-making. We're looking for detail-oriented individuals to join our team in Chicago, IL, and contribute to our success in the financial services industry.",
+
+      "key_responsibilities": [
+        "Conduct financial analysis and forecasting to support business decisions.",
+
+        "Prepare financial reports and presentations for stakeholders.",
+
+        "Evaluate investment opportunities and perform risk assessments.",
+
+        "Monitor market trends and provide insights on industry developments."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Finance, Accounting, Economics, or related field.",
+
+        "Experience in financial analysis, investment banking, or corporate finance.",
+
+        "Proficiency in financial modeling and analytical tools (e.g., Excel, Bloomberg).",
+
+        "Strong communication and presentation skills."
+      ],
+
+      "benefits": [
+        "Competitive salary and performance-based bonuses.",
+
+        "Opportunity for career advancement and professional growth.",
+
+        "Comprehensive benefits package including health insurance and retirement plans.",
+
+        "Collaborative and supportive work environment."
+      ]
+    },
+
+    {
+      "skuId": 4,
+      "company_name": "FinanceCorp",
+      "company_bio": "FinanceCorp is a financial services company providing investment and banking solutions.",
+      "overview": "FinanceCorp, headquartered in Chicago, IL, is a leading financial services company specializing in investment and banking solutions. Since its establishment in 2000, FinanceCorp has been a trusted partner for individuals and businesses, with a workforce of approximately 800 employees. The company offers competitive salaries ranging from $100,000 to $130,000 per year for the role of Financial Analyst.",
+      "job_description": "Financial Analyst",
+      "job_location": "Chicago, IL",
+      "job_salary": "$100,000 - $130,000",
+      "company_info": {
+        "founded": 2000,
+        "location": "Chicago, IL",
+        "website": "https://www.financecorp.com",
+        "employees": 800
+      },
+      "experience_required": "2-4 years",
+
+      "job_link": "www.financecorp.com/careers/financial-analyst",
+
+      "description": "Are you a financial whiz with a passion for analysis? Join FinanceCorp as a Financial Analyst and help drive informed decision-making. We're looking for detail-oriented individuals to join our team in Chicago, IL, and contribute to our success in the financial services industry.",
+
+      "key_responsibilities": [
+        "Conduct financial analysis and forecasting to support business decisions.",
+
+        "Prepare financial reports and presentations for stakeholders.",
+
+        "Evaluate investment opportunities and perform risk assessments.",
+
+        "Monitor market trends and provide insights on industry developments."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Finance, Accounting, Economics, or related field.",
+
+        "Experience in financial analysis, investment banking, or corporate finance.",
+
+        "Proficiency in financial modeling and analytical tools (e.g., Excel, Bloomberg).",
+
+        "Strong communication and presentation skills."
+      ],
+
+      "benefits": [
+        "Competitive salary and performance-based bonuses.",
+
+        "Opportunity for career advancement and professional growth.",
+
+        "Comprehensive benefits package including health insurance and retirement plans.",
+
+        "Collaborative and supportive work environment."
+      ]
+    },
+
+    {
+      "skuId": 5,
+      "company_name": "FoodTech",
+      "company_bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food.",
+      "overview": "FoodTech, based in Austin, TX, is a pioneering food technology company dedicated to revolutionizing the food industry. Since its founding in 2015, FoodTech has been at the forefront of innovation, with a workforce of approximately 400 employees. The company offers competitive salaries ranging from $90,000 to $120,000 per year for the role of Food Scientist.",
+      "job_description": "Food Scientist",
+      "job_location": "Austin, TX",
+      "job_salary": "$90,000 - $120,000",
+      "company_info": {
+        "founded": 2015,
+        "location": "Austin, TX",
+        "website": "https://www.foodtech.com",
+        "employees": 400
+      },
+      "experience_required": "2-4 years",
+
+      "job_link": "www.foodtech.com/careers/food-scientist",
+
+      "description": "Are you passionate about the future of food? Join FoodTech as a Food Scientist and be part of a revolution in food technology. We're seeking innovative individuals to join our team in Austin, TX, and help us create sustainable and nutritious food products for a better world.",
+
+      "key_responsibilities": [
+        "Develop and optimize food formulations and processes.",
+
+        "Conduct sensory evaluations and quality assessments of food products.",
+
+        "Collaborate with cross-functional teams to bring new products to market.",
+
+        "Stay updated on industry trends and emerging technologies in food science."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Food Science, Nutrition, or related field.",
+
+        "Experience in food product development and formulation.",
+
+        "Knowledge of food safety regulations and quality standards.",
+
+        "Strong problem-solving and analytical skills."
+      ],
+
+      "benefits": [
+        "Competitive salary and performance bonuses.",
+
+        "Opportunity to work on innovative food projects with a positive impact.",
+
+        "Collaborative and inclusive work culture.",
+
+        "Professional development and training programs."
+      ]
+    },
+
+    {
+      "skuId": 6,
+      "company_name": "MedTech",
+      "company_bio": "MedTech is a medical technology company focused on developing innovative healthcare solutions.",
+      "overview": "MedTech, headquartered in Philadelphia, PA, is a leading medical technology company specializing in innovative healthcare solutions. Established in 2008, MedTech has been dedicated to improving healthcare through technology, with a workforce of approximately 600 employees. The company offers competitive salaries ranging from $110,000 to $140,000 per year for the role of Biomedical Engineer.",
+      "job_description": "Biomedical Engineer",
+      "job_location": "Philadelphia, PA",
+      "job_salary": "$110,000 - $140,000",
+      "company_info": {
+        "founded": 2008,
+        "location": "Philadelphia, PA",
+        "website": "https://www.medtech.com",
+        "employees": 600
+      },
+
+      "experience_required": "3-5 years",
+
+      "job_link": "www.medtech.com/careers/biomedical-engineer",
+
+      "description": "Are you passionate about improving healthcare through technology? Join MedTech as a Biomedical Engineer and help develop innovative healthcare solutions. We're seeking talented individuals to join our team in Philadelphia, PA, and make a difference in patient care.",
+
+      "key_responsibilities": [
+        "Design and develop medical devices and equipment.",
+
+        "Conduct research and experiments to improve healthcare technologies.",
+
+        "Collaborate with healthcare professionals to understand user needs and requirements.",
+
+        "Ensure compliance with regulatory standards and industry guidelines."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Biomedical Engineering or related field.",
+
+        "Experience in medical device design and development.",
+
+        "Knowledge of biomedical imaging, signal processing, or biomaterials.",
+
+        "Strong problem-solving and communication skills."
+      ],
+
+      "benefits": [
+        "Competitive salary and benefits package.",
+
+        "Opportunity to work on cutting-edge medical technologies.",
+
+        "Professional development and training programs.",
+
+        "Collaborative and supportive work environment."
+      ]
+    },
+
+    {
+      "skuId": 7,
+      "company_name": "SpaceTech",
+      "company_bio": "SpaceTech is a space exploration company committed to advancing humanity's presence in space.",
+      "overview": "SpaceTech, based in Washington, DC, is a leading space exploration company dedicated to advancing humanity's presence in space. Since its establishment in 2012, SpaceTech has been at the forefront of space exploration, with a workforce of approximately 200 employees. The company offers competitive salaries ranging from $120,000 to $150,000 per year for the role of Aerospace Engineer.",
+      "job_description": "Aerospace Engineer",
+      "job_location": "Washington, DC",
+      "job_salary": "$120,000 - $150,000",
+      "company_info": {
+        "founded": 2012,
+        "location": "Washington, DC",
+        "website": "https://www.spacetech.com",
+        "employees": 200
+      },
+      "experience_required": "3-6 years",
+
+      "job_link": "www.spacetech.com/careers/aerospace-engineer",
+
+      "description": "Are you fascinated by space exploration? Join SpaceTech as an Aerospace Engineer and contribute to humanity's journey beyond Earth. We're seeking passionate individuals to join our team in Washington, DC, and help shape the future of space exploration.",
+
+      "key_responsibilities": [
+        "Design and develop spacecraft and satellite systems.",
+
+        "Conduct simulations and analysis to optimize spacecraft performance.",
+
+        "Collaborate with cross-functional teams to integrate subsystems and components.",
+
+        "Ensure compliance with regulatory standards and mission requirements."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Aerospace Engineering or related field.",
+
+        "Experience in spacecraft design, analysis, or testing.",
+
+        "Knowledge of aerospace systems, propulsion, and orbital mechanics.",
+
+        "Strong problem-solving and teamwork abilities."
+      ],
+
+      "benefits": [
+        "Competitive salary and benefits package.",
+
+        "Opportunity to work on groundbreaking space missions.",
+
+        "Professional development and training programs.",
+
+        "Dynamic and collaborative work environment."
+      ]
+    },
+
+    {
+      "skuId": 8,
+      "company_name": "FashionTech",
+      "company_bio": "FashionTech is a fashion technology company blending fashion with cutting-edge technology.",
+      "overview": "FashionTech, headquartered in New York, NY, is a leading fashion technology company blending fashion with cutting-edge technology. Established in 2003, FashionTech has been at the forefront of fashion innovation, with a workforce of approximately 700 employees. The company offers competitive salaries ranging from $100,000 to $130,000 per year for the role of Fashion Designer.",
+      "job_description": "Fashion Designer",
+      "job_location": "New York, NY",
+      "job_salary": "$100,000 - $130,000",
+      "company_info": {
+        "founded": 2003,
+        "location": "New York, NY",
+        "website": "https://www.fashiontech.com",
+        "employees": 700
+      },
+      "experience_required": "2-4 years",
+
+      "job_link": "www.fashiontech.com/careers/fashion-designer",
+
+      "description": "Are you passionate about blending fashion with cutting-edge technology? Join FashionTech as a Fashion Designer and create innovative designs that push the boundaries of fashion. We're looking for creative individuals to join our team in New York, NY, and redefine the future of fashion.",
+
+      "key_responsibilities": [
+        "Conceptualize and develop fashion collections based on market trends and brand vision.",
+
+        "Create sketches, technical drawings, and prototypes to bring designs to life.",
+
+        "Collaborate with cross-functional teams to ensure design integrity and feasibility.",
+
+        "Stay updated on fashion trends, materials, and production techniques."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Fashion Design or related field.",
+
+        "Experience in fashion design, garment construction, and patternmaking.",
+
+        "Proficiency in design software such as Adobe Creative Suite.",
+
+        "Strong creativity, innovation, and attention to detail."
+      ],
+
+      "benefits": [
+        "Competitive salary and performance bonuses.",
+
+        "Opportunity to work with cutting-edge fashion technology.",
+
+        "Collaborative and supportive work environment.",
+
+        "Professional development and training programs."
+      ]
+    },
+    {
+      "skuId": 9,
+      "company_name": "RoboTech",
+      "company_bio": "RoboTech is a robotics company specializing in the development of advanced robotic systems.",
+      "overview": "RoboTech, based in Boston, MA, is a leading robotics company specializing in the development of advanced robotic systems. Established in 2011, RoboTech has been at the forefront of robotics innovation, with a workforce of approximately 250 employees. The company offers competitive salaries ranging from $110,000 to $140,000 per year for the role of Robotics Engineer.",
+      "job_description": "Robotics Engineer",
+      "job_location": "Boston, MA",
+      "job_salary": "$110,000 - $140,000",
+      "company_info": {
+        "founded": 2011,
+        "location": "Boston, MA",
+        "website": "https://www.robotech.com",
+        "employees": 250
+      },
+      "experience_required": "2-4 years",
+
+      "job_link": "www.robotech.com/careers/robotics-engineer",
+
+      "description": "Are you passionate about robotics and automation? Join RoboTech as a Robotics Engineer and help develop advanced robotic systems for various applications. We're seeking talented individuals to join our team in Boston, MA, and contribute to the future of robotics.",
+
+      "key_responsibilities": [
+        "Design, develop, and test robotic systems and components.",
+
+        "Implement algorithms and control strategies for robotic motion and perception.",
+
+        "Collaborate with cross-functional teams to integrate robotic systems into applications.",
+
+        "Conduct experiments and simulations to evaluate robotic performance."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Robotics, Mechanical Engineering, or related field.",
+
+        "Experience in robotics research, development, or programming.",
+
+        "Proficiency in programming languages such as C++, Python, or ROS.",
+
+        "Strong problem-solving and teamwork abilities."
+      ],
+
+      "benefits": [
+        "Competitive salary and benefits package.",
+
+        "Opportunity to work on cutting-edge robotic projects.",
+
+        "Professional development and training programs.",
+
+        "Collaborative and innovative work environment."
+      ]
+    },
+
+    {
+      "skuId": 10,
+      "company_name": "EducationTech",
+      "company_bio": "EducationTech is an education technology company dedicated to transforming learning through technology.",
+      "overview": "EducationTech, headquartered in Chicago, IL, is a leading education technology company dedicated to transforming learning through technology. Established in 2007, EducationTech has been at the forefront of educational innovation, with a workforce of approximately 350 employees. The company offers competitive salaries ranging from $120,000 to $150,000 per year for the role of EdTech Product Manager.",
+      "job_description": "EdTech Product Manager",
+      "job_location": "Chicago, IL",
+      "job_salary": "$120,000 - $150,000",
+      "company_info": {
+        "founded": 2007,
+        "location": "Chicago, IL",
+        "website": "https://www.educationtech.com",
+        "employees": 350
+      },
+      "experience_required": "3-5 years",
+
+      "job_link": "www.educationtech.com/careers/edtech-product-manager",
+
+      "description": "Are you passionate about transforming education through technology? Join EducationTech as an EdTech Product Manager and drive the development of innovative learning solutions. We're seeking experienced individuals to join our team in Chicago, IL, and make a difference in education.",
+
+      "key_responsibilities": [
+        "Lead the development and execution of EdTech product strategies and roadmaps.",
+
+        "Define product requirements based on market research and user feedback.",
+
+        "Collaborate with cross-functional teams to deliver high-quality educational products.",
+
+        "Analyze product performance and implement improvements to drive user engagement."
+      ],
+
+      "qualifications": [
+        "Bachelor's or Master's degree in Education, Business, Computer Science, or related field.",
+
+        "Experience in product management, particularly in the EdTech industry.",
+
+        "Strong understanding of educational technology trends and user needs.",
+
+        "Excellent communication and leadership skills."
+      ],
+
+      "benefits": [
+        "Competitive salary and benefits package.",
+
+        "Opportunity to shape the future of education through technology.",
+
+        "Professional development and training programs.",
+
+        "Dynamic and collaborative work environment."
+      ]
+    }
+  ]
+}

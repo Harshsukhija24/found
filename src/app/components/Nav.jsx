@@ -33,12 +33,14 @@ const Home = () => {
       <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
           <div>
-            <Image
-              src="https://i.pinimg.com/564x/09/13/79/0913791df5a8a7090c37b77a98277653.jpg"
-              width={80}
-              height={80}
-              className="hover:shadow-lg transition duration-300 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-0 hover:translate-x-2 hover:scale-110"
-            />
+            <Link href="/Job">
+              <Image
+                src="https://i.pinimg.com/564x/09/13/79/0913791df5a8a7090c37b77a98277653.jpg"
+                width={80}
+                height={80}
+                className="hover:shadow-lg transition duration-300 rounded-lg shadow-lg hover:shadow-2xl transition duration-300 ease-in-out transform hover:-translate-y-0 hover:translate-x-2 hover:scale-110"
+              />
+            </Link>
           </div>
           <div className="flex space-x-4 items-center">
             <form>

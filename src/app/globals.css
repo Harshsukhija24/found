@@ -2,14 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-@tailwind base;
-
+/* Global Styles */
 html,
 body {
   font-family: "Inter", sans-serif;
   line-height: 1.6;
   background-color: #f7fafc;
   color: #333;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 h1,
@@ -25,10 +27,6 @@ figure,
 blockquote {
   margin: 0;
   padding: 0;
-}
-
-body {
-  padding-top: 4rem; /* Adjust as needed */
 }
 
 a {
@@ -52,10 +50,7 @@ h6 {
   line-height: 1.2;
 }
 
-p {
-  margin-bottom: 1rem;
-}
-
+p,
 ul,
 ol {
   margin-bottom: 1rem;
