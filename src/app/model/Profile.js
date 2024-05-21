@@ -1,6 +1,11 @@
-const mongoose = require("mongoose");
+import { Schema, models, model } from "mongoose";
 
-const profileSchema = new mongoose.Schema({
+const ProfileSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "Userjob",
+    required: true,
+  },
   name: {
     type: String,
     required: true,
@@ -29,5 +34,4 @@ const profileSchema = new mongoose.Schema({
   achievement: String,
 });
 
-const profile = mongoose.model("profile", profileSchema);
-module.exports = profile;
+export default models.Profile || model("Profile", ProfileSchema);

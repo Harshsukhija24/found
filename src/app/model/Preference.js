@@ -1,6 +1,11 @@
-const mongoose = require("mongoose");
+import { Schema, models, model } from "mongoose";
 
-const PreferenceSchema = new mongoose.Schema({
+const PreferencesSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "Userjob",
+    required: true,
+  },
   relocation: {
     type: Boolean,
     required: true,
@@ -17,5 +22,4 @@ const PreferenceSchema = new mongoose.Schema({
   companySizes: [String],
 });
 
-const Preference = mongoose.model("PreferenceSchema", PreferenceSchema);
-module.exports = PreferenceSchema;
+export default models.Preferences || model("Preferences", PreferencesSchema);

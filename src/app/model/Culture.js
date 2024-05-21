@@ -1,7 +1,11 @@
-// CultureSchema.js
-const mongoose = require("mongoose");
+import { Schema, models, model } from "mongoose";
 
-const CultureSchema = new mongoose.Schema({
+const CultureSchema = new Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "Userjob",
+    required: true,
+  },
   nextJob: {
     type: String,
     required: true,
@@ -20,5 +24,4 @@ const CultureSchema = new mongoose.Schema({
   },
 });
 
-const Culture = mongoose.model("Culture", CultureSchema);
-module.exports = Culture;
+export default models.Culture || model("Culture", CultureSchema);

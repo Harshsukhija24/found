@@ -42,6 +42,13 @@ const Home = () => {
               />
             </Link>
           </div>
+          <div className="flex space-x-4">
+            <Link href="/authentication/Logout">
+              <span className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 cursor-pointer">
+                logout
+              </span>
+            </Link>
+          </div>
           <div className="flex space-x-4 items-center">
             <form>
               <select
