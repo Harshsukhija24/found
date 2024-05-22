@@ -58,7 +58,7 @@ const Page = () => {
         <Nav_Home />
       </div>
       <div className="flex flex-1">
-        <div className="w-1/6 py-4 px-4 bg-gray-200">
+        <div className="w-1/6 py-4 px-4 ">
           <Sidebar />
         </div>
         <div className="w-5/6 p-4 overflow-auto">

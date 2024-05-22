@@ -1,6 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "./Provider";
+import { AuthProvider } from "./Provider"; // Ensure this path is correct
+import Prvider from "./redux/provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,7 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Prvider>{children}</Prvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,39 +1,48 @@
-// pages/index.js
 "use client";
-import React, { useState } from "react";
-import Image from "next/image";
+
+import React, { useState, useRef, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setSelectedContentIndex } from "../redux/contentSlice"; // Import your action
 import Link from "next/link";
+import Image from "next/image";
 
 const Home = () => {
-  const [selectedContentIndex, setSelectedContentIndex] =
-    useState("open to work");
+  const selectedContentIndex = useSelector(
+    (state) => state.content.selectedContentIndex
+  );
+  const contents = useSelector((state) => state.content.contents);
+  const dispatch = useDispatch();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const contents = [
-    "open to work",
-    "ready to work",
-    "open to offer",
-    "closed to offer",
-  ];
+  const dropdownRef = useRef(null);
 
   const handleSelectChange = (e) => {
     const newIndex = parseInt(e.target.value);
-    setSelectedContentIndex(newIndex);
+    dispatch(setSelectedContentIndex(newIndex));
   };
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const closeDropdown = () => {
-    setIsDropdownOpen(false);
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
   };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   return (
     <nav className="bg-white fixed w-full top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
           <div>
-            <Link href="/Job">
+            <Link href="/candidates/Job">
               <Image
                 src="https://i.pinimg.com/564x/09/13/79/0913791df5a8a7090c37b77a98277653.jpg"
                 width={80}
@@ -42,16 +51,11 @@ const Home = () => {
               />
             </Link>
           </div>
-          <div className="flex space-x-4">
-            <Link href="/authentication/Logout">
-              <span className="px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 cursor-pointer">
-                logout
-              </span>
-            </Link>
-          </div>
+
           <div className="flex space-x-4 items-center">
             <form>
               <select
+                value={selectedContentIndex} // Set value to selected index
                 className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
                 onChange={handleSelectChange}
               >
@@ -62,10 +66,9 @@ const Home = () => {
                 ))}
               </select>
             </form>
-            <div className="ml-4 relative">
+            <div className="ml-4 relative" ref={dropdownRef}>
               <button
                 onClick={toggleDropdown}
-                onBlur={closeDropdown}
                 className="flex items-center focus:outline-none"
               >
                 <Image
@@ -75,17 +78,26 @@ const Home = () => {
                   className="bg-none"
                 />
               </button>
+              {/* Render the DropdownContent component */}
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg  flex flex-col">
-                  <div className="right-0 mt-2 w-48 bg-white   flex flex-col">
-                    <h6>personal</h6>
-                    <Link href="/edit-profile">Edit Profile</Link>
-                    <Link href="/about">About</Link>
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg flex flex-col">
+                  <div className="flex flex-col p-2">
+                    <h6 className="font-semibold">Personal</h6>
+                    <Link href="/edit-profile" className="mt-1">
+                      Edit Profile
+                    </Link>
+                    <Link href="/about" className="mt-1">
+                      About
+                    </Link>
                   </div>
-                  <div className="right-0 mt-2 w-48 bg-white flex flex-col">
-                    <h6>support</h6>
-                    <Link href="/help">Help</Link>
-                    <Link href="/logout">Logout</Link>
+                  <div className="flex flex-col p-2">
+                    <h6 className="font-semibold">Support</h6>
+                    <Link href="/help" className="mt-1">
+                      Help
+                    </Link>
+                    <Link href="/authentication/Logout" className="mt-1">
+                      Logout
+                    </Link>
                   </div>
                 </div>
               )}
