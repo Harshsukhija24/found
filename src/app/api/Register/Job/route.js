@@ -18,12 +18,16 @@ export async function POST(req) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await connectDb();
+    const userId =
+      Math.random().toString(36).substring(2, 9) +
+      Math.random().toString(36).substring(2, 9);
     await UserRegister.create({
       firstName,
       company,
       lastName,
       email,
       password: hashedPassword,
+      userId,
     });
 
     return NextResponse.json({ message: "User created" }, { status: 201 });

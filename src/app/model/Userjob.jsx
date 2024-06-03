@@ -20,4 +20,6 @@ const UserjobSchema = new Schema({
   },
 });
 
-export default models.Userjob || model("Userjob", UserjobSchema);
+const UserjobModel = models.Userjob || model("Userjob", UserjobSchema);
+
+export default UserjobModel;

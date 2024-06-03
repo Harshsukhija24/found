@@ -1,10 +1,10 @@
 "use client";
-import Nav_main from "@/app/components/Nav_main";
+import Nav_main from "../../components/Nav_main";
 import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const Page = () => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -48,6 +48,7 @@ const Page = () => {
       >
         <div className="max-w-md w-full p-8">
           <h1 className="text-center text-2xl font-bold mb-4">Welcome back!</h1>
+          {error && <p className="text-red-500">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col">
               <label htmlFor="email" className="mb-1">
@@ -75,7 +76,6 @@ const Page = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            {error && <p className="text-red-500">{error}</p>}
             <button
               type="submit"
               className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
@@ -89,4 +89,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Login;

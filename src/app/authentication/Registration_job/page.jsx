@@ -1,21 +1,40 @@
 "use client";
-import Nav_main from "@/app/components/Nav_main";
+import Nav_main from "../../components/Nav_main";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-const Page = () => {
+
+const Register = () => {
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
+
+  const generateUserId = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const length = 10;
+    let userId = "";
+    for (let i = 0; i < length; i++) {
+      userId += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return userId;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
       if (!firstname || !lastName || !email || !password) {
-        throw new Error("All fields are necessary.");
+        setError("All fields are necessary.");
+        return;
       }
 
+      // Check if user already exists
       const resUserExists = await fetch("/api/UserExits", {
         method: "POST",
         headers: {
@@ -25,15 +44,18 @@ const Page = () => {
       });
 
       if (!resUserExists.ok) {
-        throw new Error("Error checking user existence");
+        setError("Error checking user existence");
+        return;
       }
 
       const { user } = await resUserExists.json();
 
       if (user) {
-        throw new Error("User already exists.");
+        setError("User already exists.");
+        return;
       }
 
+      // Register new user
       const res = await fetch("/api/Register/User", {
         method: "POST",
         headers: {
@@ -44,19 +66,24 @@ const Page = () => {
           lastName,
           email,
           password,
+          // Add userId here
+          userId: generateUserId(),
         }),
       });
 
       if (!res.ok) {
-        throw new Error("Registration failed");
+        setError("Registration failed");
+        return;
       }
-
+      // const { userId } = await res.json();
       e.target.reset();
       router.push("/authentication/Login");
     } catch (error) {
-      console.error("Registration failed:", error.message);
+      setError("Registration failed: " + error.message);
     }
   };
+
+  // Function to generate a random alphanumeric string for userId
 
   return (
     <>
@@ -74,6 +101,7 @@ const Page = () => {
           <h1 className="text-center text-2xl font-bold mb-4">
             Create a New Account!
           </h1>
+          {error && <p className="text-red-500">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex space-x-4">
               <div className="flex flex-col w-1/2">
@@ -142,4 +170,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Register;

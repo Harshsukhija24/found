@@ -1,19 +1,25 @@
-// api/userExist.js
-
-import { connectDb } from "../../utils/connectdb";
 import User from "../../model/Userjob";
+import { connectDb } from "../../utils/connectdb";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
+    const body = await req.json();
+    const { email } = body;
+
+    if (!email) {
+      return NextResponse.json(
+        { message: "Email is required" },
+        { status: 400 }
+      );
+    }
+
     await connectDb();
-    const { email } = await req.json();
-    const user = await User.findOne({ email }).select("_id");
-    console.log("user: ", user);
-    return NextResponse.json({ user });
+
+    const user = await User.findOne({ email });
+    return NextResponse.json({ user }, { status: 200 });
   } catch (error) {
-    console.log(error);
-    // If there's an error, return an error response
-    return NextResponse.error(new Error("Error checking user existence"));
+    console.error("Error:", error);
+    return NextResponse.json({ message: "An error occurred" }, { status: 500 });
   }
 }

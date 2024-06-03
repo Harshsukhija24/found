@@ -1,4 +1,5 @@
-import User from "../../../model/Userjob";
+import User from "../../../model/Userjob"; // Import the User model
+
 import { connectDb } from "../../../utils/connectdb";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
@@ -27,12 +28,22 @@ export async function POST(req) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Generate a unique user ID
+    const userId =
+      Math.random().toString(36).substring(2, 9) +
+      Math.random().toString(36).substring(2, 9);
+
+    // Create a new user with the generated ID
     const newUser = new User({
       firstName,
       lastName,
       email,
       password: hashedPassword,
+      userId,
     });
+
+    // Save the new user to the database
     await newUser.save();
 
     return NextResponse.json({ message: "User created" }, { status: 201 });

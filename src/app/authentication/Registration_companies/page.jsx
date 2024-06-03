@@ -10,7 +10,18 @@ const Page = () => {
   const [companyname, setCompanyname] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-
+  const generateUserId = () => {
+    const characters =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const length = 10;
+    let userId = "";
+    for (let i = 0; i < length; i++) {
+      userId += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+    return userId;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -43,6 +54,7 @@ const Page = () => {
           email: email,
           password: password,
           company: companyname,
+          userId: generateUserId(),
         }),
       });
 
