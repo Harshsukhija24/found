@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
-import Applied from "../../../data/Applied.json";
+import AppliedData from "../../../data/Apply.json";
 
 export const GET = async () => {
-  return NextResponse.json(Applied);
+  try {
+    const fetchedData = AppliedData;
+    console.log("Fetched data:", fetchedData);
+    return NextResponse.json(fetchedData);
+  } catch (error) {
+    console.error("Error fetching data:", error);
+
+    return NextResponse.error(500, "Internal Server Error");
+  }
 };

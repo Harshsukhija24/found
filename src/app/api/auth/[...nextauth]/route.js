@@ -1,15 +1,14 @@
-import NextAuth from "next-auth/next";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDb } from "../../../utils/connectdb";
 import bcrypt from "bcryptjs";
-import JobSeeker from "../../../model/Userjob";
-import Company from "../../../model/UserRegister";
-import { getSession } from "next-auth/react";
+import Userjobs from "../../../model/UserJob";
+import Usereegisters from "../../../model/UserRegister"; // Adjusted import
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Job Seeker",
+      name: "JobSeekerCredentialsProvider",
       credentials: {
         email: {
           label: "Email",
@@ -21,10 +20,10 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           await connectDb();
-          const user = await JobSeeker.findOne({ email: credentials.email });
+          const user = await Userjobs.findOne({ email: credentials.email });
 
           if (!user) {
-            return null;
+            throw new Error("User not found");
           }
 
           const passwordMatch = await bcrypt.compare(
@@ -32,17 +31,18 @@ export const authOptions = {
             user.password
           );
           if (!passwordMatch) {
-            return null;
+            throw new Error("Invalid password");
           }
 
           return user;
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Authentication error:", error.message);
+          return null;
         }
       },
     }),
     CredentialsProvider({
-      name: "Company",
+      name: "CompanyCredentialsProvider",
       credentials: {
         email: {
           label: "Email",
@@ -54,10 +54,12 @@ export const authOptions = {
       async authorize(credentials) {
         try {
           await connectDb();
-          const user = await Company.findOne({ email: credentials.email });
+          const user = await Usereegisters.findOne({
+            email: credentials.email,
+          });
 
           if (!user) {
-            return null;
+            throw new Error("User not found");
           }
 
           const passwordMatch = await bcrypt.compare(
@@ -65,22 +67,25 @@ export const authOptions = {
             user.password
           );
           if (!passwordMatch) {
-            return null;
+            throw new Error("Invalid password");
           }
 
           return user;
         } catch (error) {
-          console.error("Error:", error);
+          console.error("Authentication error:", error.message);
+          return null;
         }
       },
     }),
   ],
-  strategy: "jwt",
+  session: {
+    jwt: true, // Enable JWT sessions
+  },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: {
-      jobSeeker: "/JobSeekers/SignIn",
-      company: "/Companies/SignIn",
+      jobSeeker: "/authentication/Registration_job",
+      company: "/authentication/Registration_companies",
     },
   },
 };

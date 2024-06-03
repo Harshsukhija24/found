@@ -1,0 +1,11 @@
+[
+  {
+    "skuId": "TC101",
+    "company_name": "TechCo",
+    "bio": "TechCo is a leading technology company specializing in software development and IT solutions.",
+    "location": "San Francisco, CA",
+    "description": "Software Engineer",
+    "salary": "$120,000 - $150,000",
+    "coverLetter": "hello"
+  }
+]

@@ -2,34 +2,35 @@ import Link from "next/link";
 
 const Sidebar = () => {
   return (
-    <aside className="bg-white fixed text-black w-36 h-4/5 flex flex-col justify-between p-4">
+    <aside className="bg-white fixed mt-10 text-black w-36 h-4/5 flex flex-col justify-between p-4">
       <div className="mt-9 ">
         <Link
-          href="/candidates/Home"
-          className="block py-4 px-6 mb-4 hover:bg-sky-400"
-        >
-          Home
-        </Link>
-        <Link
-          href="/candidates/Profile/Overview"
+          href="/companies/companyProfile/Profile"
           className="block py-4 px-6 mb-4 hover:bg-sky-400"
         >
           Profile
         </Link>
+
         <Link
-          href="/candidates/Job"
+          href="/companies/Postjob"
           className="block py-4 px-6 mb-4 hover:bg-sky-400"
         >
-          Job
+          Post a Job
         </Link>
         <Link
-          href="/candidates/Applied"
+          href="/companies/PostedJob"
           className="block py-4 px-6 mb-4 hover:bg-sky-400"
         >
-          Applied
+          Posted Job
         </Link>
         <Link
-          href="/candidates/Messages"
+          href="/companies/applicants"
+          className="block py-4 px-6 mb-4 hover:bg-sky-400"
+        >
+          Applicants
+        </Link>
+        <Link
+          href="/companies/messages"
           className="block py-4 px-6 mb-4 hover:bg-sky-400"
         >
           Messages

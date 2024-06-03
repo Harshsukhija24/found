@@ -71,7 +71,7 @@ const ModalApply = ({ isOpen, onClose, company }) => {
                 <p>Company Description: {company.description}</p>
                 <p>Key Responsibilities:</p>
                 <ul>
-                  {company.key_responsibilities.map(
+                  {company.key_responsibilities?.map(
                     (key_responsibility, index) => (
                       <li key={index}>{key_responsibility}</li>
                     )
@@ -79,13 +79,13 @@ const ModalApply = ({ isOpen, onClose, company }) => {
                 </ul>
                 <p>Qualifications:</p>
                 <ul>
-                  {company.qualifications.map((qualification, index) => (
+                  {company.qualifications?.map((qualification, index) => (
                     <li key={index}>{qualification}</li>
                   ))}
                 </ul>
                 <p>Benefits:</p>
                 <ul>
-                  {company.benefits.map((benefit, index) => (
+                  {company.benefits?.map((benefit, index) => (
                     <li key={index}>{benefit}</li>
                   ))}
                 </ul>

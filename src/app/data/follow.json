@@ -1,444 +1,222 @@
-{
-  "companies": [
-    {
-      "id": 1,
-      "company_name": "TechCo",
-      "bio": "TechCo is a leading technology company specializing in software development and IT solutions.",
-      "overview": "TechCo is a leading technology company offering software development and IT solutions. With job openings for Software Engineers and Data Scientists, TechCo provides competitive salaries ranging from $120,000 to $160,000 across locations such as San Francisco, CA, and New York, NY.",
-      "culture": "Innovation and collaboration are at the core of TechCo's culture. We prioritize continuous learning and provide opportunities for professional growth. Our work environment is inclusive, fostering teamwork and creativity.",
-      "benefits": [
-        "Competitive salary packages",
-        "Flexible work hours",
-        "Health and wellness programs",
-        "401(k) matching",
-        "Generous vacation and paid time off"
-      ],
-      "jobs": [
-        {
-          "id": 101,
-          "skuId": "TC101",
-          "description": "Software Engineer",
+[
+  {
+    "id": 1,
+    "company_name": "TechCo",
+    "bio": "TechCo is a leading technology company specializing in software development and IT solutions.",
+    "overview": "TechCo is a leading technology company offering software development and IT solutions. With job openings for Software Engineers and Data Scientists, TechCo provides competitive salaries ranging from $120,000 to $160,000 across locations such as San Francisco, CA, and New York, NY.",
+    "culture": "Innovation and collaboration are at the core of TechCo's culture. We prioritize continuous learning and provide opportunities for professional growth. Our work environment is inclusive, fostering teamwork and creativity.",
+    "benefits": [
+      "Competitive salary packages",
+      "Flexible work hours",
+      "Health and wellness programs",
+      "401(k) matching",
+      "Generous vacation and paid time off"
+    ],
+    "jobs": [
+      {
+        "id": 101,
+        "skuId": "TC101",
+        "description": "Software Engineer",
+        "location": "San Francisco, CA",
+        "salary": "$120,000 - $150,000"
+      },
+      {
+        "id": 102,
+        "skuId": "TC102",
+        "description": "Data Scientist",
+        "location": "New York, NY",
+        "salary": "$130,000 - $160,000"
+      }
+    ],
+    "peoples": [
+      {
+        "founder": {
+          "name": "John Smith",
           "location": "San Francisco, CA",
-          "salary": "$120,000 - $150,000"
+          "past_experience": "Senior Software Engineer at TechCorp"
         },
-        {
-          "id": 102,
-          "skuId": "TC102",
-          "description": "Data Scientist",
+        "co_founder": {
+          "name": "Emily Johnson",
           "location": "New York, NY",
-          "salary": "$130,000 - $160,000"
+          "past_experience": "Data Scientist at DataInnovate"
         }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "John Smith",
-            "location": "San Francisco, CA",
-            "past_experience": "Senior Software Engineer at TechCorp"
-          },
-          "co_founder": {
-            "name": "Emily Johnson",
-            "location": "New York, NY",
-            "past_experience": "Data Scientist at DataInnovate"
-          }
-        }
-      ]
-    },
-    {
-      "id": 2,
-      "company_name": "BioPharm",
-      "bio": "BioPharm is a pharmaceutical company dedicated to improving healthcare through innovative drug development.",
-      "overview": "BioPharm is dedicated to advancing healthcare through innovative drug development. Job opportunities include roles such as Research Scientist and Chemical Engineer, with competitive salaries ranging from $90,000 to $130,000 across locations like Boston, MA, and Houston, TX.",
-      "culture": "At BioPharm, we are dedicated to scientific excellence and teamwork. Our culture values integrity and collaboration, creating an environment where employees can thrive and make a meaningful impact.",
-      "benefits": [
-        "Comprehensive health insurance",
-        "Stock options",
-        "Professional development opportunities",
-        "On-site gym and wellness programs",
-        "Employee assistance program"
-      ],
-      "jobs": [
-        {
-          "id": 201,
-          "skuId": "BP201",
-          "description": "Research Scientist",
-          "location": "Boston, MA",
-          "salary": "$100,000 - $130,000"
-        },
-        {
-          "id": 202,
-          "skuId": "BP202",
-          "description": "Chemical Engineer",
-          "location": "Houston, TX",
-          "salary": "$90,000 - $120,000"
-        }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Michael Johnson",
-            "location": "Boston, MA",
-            "past_experience": "Pharmaceutical Researcher at HealthTech"
-          },
-          "co_founder": {
-            "name": "Sarah Williams",
-            "location": "Houston, TX",
-            "past_experience": "Chemical Engineer at ChemCorp"
-          }
-        }
-      ]
-    },
-    {
-      "id": 3,
-      "company_name": "EcoTech",
-      "bio": "EcoTech is a green energy company focused on sustainable solutions for a cleaner environment.",
-      "overview": "EcoTech is committed to providing sustainable solutions for a cleaner environment. Job openings include positions such as Renewable Energy Engineer and Environmental Scientist, offering competitive salaries ranging from $95,000 to $140,000 across locations such as Seattle, WA, and Denver, CO.",
-      "culture": "EcoTech is committed to sustainability and environmental stewardship. Our culture promotes innovation, transparency, and collaboration, empowering employees to make a positive impact on the planet.",
-      "benefits": [
-        "Remote work options",
-        "Company-sponsored volunteer opportunities",
-        "Green commuting incentives",
-        "Education assistance programs",
-        "Employee stock purchase plan"
-      ],
-      "jobs": [
-        {
-          "id": 301,
-          "skuId": "ET301",
-          "description": "Renewable Energy Engineer",
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "company_name": "EcoTech",
+    "bio": "EcoTech is a green energy company focused on sustainable solutions for a cleaner environment.",
+    "overview": "EcoTech is committed to providing sustainable solutions for a cleaner environment. Job openings include positions such as Renewable Energy Engineer and Environmental Scientist, offering competitive salaries ranging from $95,000 to $140,000 across locations such as Seattle, WA, and Denver, CO.",
+    "culture": "EcoTech is committed to sustainability and environmental stewardship. Our culture promotes innovation, transparency, and collaboration, empowering employees to make a positive impact on the planet.",
+    "benefits": [
+      "Remote work options",
+      "Company-sponsored volunteer opportunities",
+      "Green commuting incentives",
+      "Education assistance programs",
+      "Employee stock purchase plan"
+    ],
+    "jobs": [
+      {
+        "id": 301,
+        "skuId": "ET301",
+        "description": "Renewable Energy Engineer",
+        "location": "Seattle, WA",
+        "salary": "$110,000 - $140,000"
+      },
+      {
+        "id": 302,
+        "skuId": "ET302",
+        "description": "Environmental Scientist",
+        "location": "Denver, CO",
+        "salary": "$95,000 - $125,000"
+      }
+    ],
+    "peoples": [
+      {
+        "founder": {
+          "name": "Alex Green",
           "location": "Seattle, WA",
-          "salary": "$110,000 - $140,000"
+          "past_experience": "Environmental Scientist at GreenWorld"
         },
-        {
-          "id": 302,
-          "skuId": "ET302",
-          "description": "Environmental Scientist",
+        "co_founder": {
+          "name": "Jessica Brown",
           "location": "Denver, CO",
-          "salary": "$95,000 - $125,000"
+          "past_experience": "Renewable Energy Specialist at CleanEco"
         }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Alex Green",
-            "location": "Seattle, WA",
-            "past_experience": "Environmental Scientist at GreenWorld"
-          },
-          "co_founder": {
-            "name": "Jessica Brown",
-            "location": "Denver, CO",
-            "past_experience": "Renewable Energy Specialist at CleanEco"
-          }
-        }
-      ]
-    },
-    {
-      "id": 4,
-      "company_name": "FinanceCorp",
-      "overview": "FinanceCorp offers investment and banking solutions. With job openings for Financial Analysts and Investment Advisors, the company provides competitive salaries ranging from $100,000 to $150,000 across locations like Chicago, IL, and Miami, FL.",
-      "bio": "FinanceCorp is a financial services company providing investment and banking solutions.",
-      "culture": "FinanceCorp fosters a culture of excellence and teamwork. We prioritize diversity and inclusion, creating an environment where every voice is valued. Our culture is built on trust, respect, and continuous improvement.",
-      "benefits": [
-        "401(k) with employer match",
-        "Profit-sharing program",
-        "Tuition reimbursement",
-        "Employee discounts on financial services",
-        "Flexible spending accounts"
-      ],
-      "jobs": [
-        {
-          "id": 401,
-          "skuId": "FC401",
-          "description": "Financial Analyst",
-          "location": "Chicago, IL",
-          "salary": "$100,000 - $130,000"
-        },
-        {
-          "id": 402,
-          "skuId": "FC402",
-          "description": "Investment Advisor",
-          "location": "Miami, FL",
-          "salary": "$120,000 - $150,000"
-        }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "David Johnson",
-            "location": "Chicago, IL",
-            "past_experience": "Investment Manager at InvestWise"
-          },
-          "co_founder": {
-            "name": "Olivia Smith",
-            "location": "Miami, FL",
-            "past_experience": "Banking Executive at FinTrust"
-          }
-        }
-      ]
-    },
-    {
-      "id": 5,
-      "company_name": "FoodTech",
-      "overview": "FoodTech is revolutionizing the food industry with innovative technology. Job opportunities include roles such as Food Scientist and Food Engineer, offering competitive salaries ranging from $90,000 to $125,000 across locations like Austin, TX, and Los Angeles, CA.",
-      "bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food.",
-      "culture": "FoodTech is driven by innovation and creativity. Our culture values collaboration and work-life balance, creating a dynamic environment where employees can thrive and grow.",
-      "benefits": [
-        "Healthy snacks and meals provided",
-        "Employee wellness programs",
-        "Flexible work arrangements",
-        "Paid parental leave",
-        "Company-sponsored social events"
-      ],
-      "jobs": [
-        {
-          "id": 501,
-          "skuId": "FT501",
-          "description": "Food Scientist",
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "company_name": "FoodTech",
+    "overview": "FoodTech is revolutionizing the food industry with innovative technology. Job opportunities include roles such as Food Scientist and Food Engineer, offering competitive salaries ranging from $90,000 to $125,000 across locations like Austin, TX, and Los Angeles, CA.",
+    "bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food.",
+    "culture": "FoodTech is driven by innovation and creativity. Our culture values collaboration and work-life balance, creating a dynamic environment where employees can thrive and grow.",
+    "benefits": [
+      "Healthy snacks and meals provided",
+      "Employee wellness programs",
+      "Flexible work arrangements",
+      "Paid parental leave",
+      "Company-sponsored social events"
+    ],
+    "jobs": [
+      {
+        "id": 501,
+        "skuId": "FT501",
+        "description": "Food Scientist",
+        "location": "Austin, TX",
+        "salary": "$90,000 - $120,000"
+      },
+      {
+        "id": 502,
+        "skuId": "FT502",
+        "description": "Food Engineer",
+        "location": "Los Angeles, CA",
+        "salary": "$95,000 - $125,000"
+      }
+    ],
+    "peoples": [
+      {
+        "founder": {
+          "name": "Thomas Lee",
           "location": "Austin, TX",
-          "salary": "$90,000 - $120,000"
+          "past_experience": "Food Scientist at Culinary Innovations"
         },
-        {
-          "id": 502,
-          "skuId": "FT502",
-          "description": "Food Engineer",
+        "co_founder": {
+          "name": "Emily Chen",
           "location": "Los Angeles, CA",
-          "salary": "$95,000 - $125,000"
+          "past_experience": "Food Engineer at Gastronomy Labs"
         }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Thomas Lee",
-            "location": "Austin, TX",
-            "past_experience": "Food Scientist at Culinary Innovations"
-          },
-          "co_founder": {
-            "name": "Emily Chen",
-            "location": "Los Angeles, CA",
-            "past_experience": "Food Engineer at Gastronomy Labs"
-          }
-        }
-      ]
-    },
-    {
-      "id": 6,
-      "company_name": "MedTech",
-      "overview": "MedTech develops innovative healthcare solutions. Job openings include positions such as Biomedical Engineer and Medical Device Sales Representative, with competitive salaries ranging from $100,000 to $140,000 across locations like Philadelphia, PA, and Dallas, TX.",
-      "bio": "MedTech is a medical technology company focused on developing innovative healthcare solutions.",
-      "culture": "MedTech is committed to improving healthcare outcomes through innovation. Our culture promotes collaboration, inclusivity, and professional development, empowering employees to make a difference.",
-      "benefits": [
-        "Health and dental insurance",
-        "Stock options",
-        "Professional development stipends",
-        "Paid volunteer time off",
-        "Employee recognition programs"
-      ],
-      "jobs": [
-        {
-          "id": 601,
-          "skuId": "MT601",
-          "description": "Biomedical Engineer",
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "company_name": "MedTech",
+    "overview": "MedTech develops innovative healthcare solutions. Job openings include positions such as Biomedical Engineer and Medical Device Sales Representative, with competitive salaries ranging from $100,000 to $140,000 across locations like Philadelphia, PA, and Dallas, TX.",
+    "bio": "MedTech is a medical technology company focused on developing innovative healthcare solutions.",
+    "culture": "MedTech is committed to improving healthcare outcomes through innovation. Our culture promotes collaboration, inclusivity, and professional development, empowering employees to make a difference.",
+    "benefits": [
+      "Health and dental insurance",
+      "Stock options",
+      "Professional development stipends",
+      "Paid volunteer time off",
+      "Employee recognition programs"
+    ],
+    "jobs": [
+      {
+        "id": 601,
+        "skuId": "MT601",
+        "description": "Biomedical Engineer",
+        "location": "Philadelphia, PA",
+        "salary": "$110,000 - $140,000"
+      },
+      {
+        "id": 602,
+        "skuId": "MT602",
+        "description": "Medical Device Sales Representative",
+        "location": "Dallas, TX",
+        "salary": "$100,000 - $130,000"
+      }
+    ],
+    "peoples": [
+      {
+        "founder": {
+          "name": "Jennifer Patel",
           "location": "Philadelphia, PA",
-          "salary": "$110,000 - $140,000"
+          "past_experience": "Biomedical Engineer at Health Innovations"
         },
-        {
-          "id": 602,
-          "skuId": "MT602",
-          "description": "Medical Device Sales Representative",
+        "co_founder": {
+          "name": "Daniel Wilson",
           "location": "Dallas, TX",
-          "salary": "$100,000 - $130,000"
+          "past_experience": "Medical Device Sales Representative at MediSales"
         }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Jennifer Patel",
-            "location": "Philadelphia, PA",
-            "past_experience": "Biomedical Engineer at Health Innovations"
-          },
-          "co_founder": {
-            "name": "Daniel Wilson",
-            "location": "Dallas, TX",
-            "past_experience": "Medical Device Sales Representative at MediSales"
-          }
-        }
-      ]
-    },
-    {
-      "id": 7,
-      "company_name": "SpaceTech",
-      "overview": "SpaceTech is dedicated to advancing humanity's presence in space. Job opportunities include roles such as Aerospace Engineer and Mission Control Specialist, offering competitive salaries ranging from $110,000 to $150,000 across locations like Washington, DC, and Houston, TX.",
-      "bio": "SpaceTech is a space exploration company committed to advancing humanity's presence in space.",
-      "culture": "SpaceTech is dedicated to exploration and discovery. Our culture values adventure, resilience, and teamwork, fostering an environment where employees can push the boundaries of what's possible.",
-      "benefits": [
-        "Fitness memberships reimbursement",
-        "Employee assistance program",
-        "Flexible work hours",
-        "Generous vacation and paid time off",
-        "Company-sponsored team building activities"
-      ],
-      "jobs": [
-        {
-          "id": 701,
-          "skuId": "ST701",
-          "description": "Aerospace Engineer",
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "company_name": "SpaceTech",
+    "overview": "SpaceTech is dedicated to advancing humanity's presence in space. Job opportunities include roles such as Aerospace Engineer and Mission Control Specialist, offering competitive salaries ranging from $110,000 to $150,000 across locations like Washington, DC, and Houston, TX.",
+    "bio": "SpaceTech is a space exploration company committed to advancing humanity's presence in space.",
+    "culture": "SpaceTech is dedicated to exploration and discovery. Our culture values adventure, resilience, and teamwork, fostering an environment where employees can push the boundaries of what's possible.",
+    "benefits": [
+      "Fitness memberships reimbursement",
+      "Employee assistance program",
+      "Flexible work hours",
+      "Generous vacation and paid time off",
+      "Company-sponsored team building activities"
+    ],
+    "jobs": [
+      {
+        "id": 701,
+        "skuId": "ST701",
+        "description": "Aerospace Engineer",
+        "location": "Washington, DC",
+        "salary": "$120,000 - $150,000"
+      },
+      {
+        "id": 702,
+        "skuId": "ST702",
+        "description": "Mission Control Specialist",
+        "location": "Houston, TX",
+        "salary": "$110,000 - $140,000"
+      }
+    ],
+    "peoples": [
+      {
+        "founder": {
+          "name": "Rachel Adams",
           "location": "Washington, DC",
-          "salary": "$120,000 - $150,000"
+          "past_experience": "Aerospace Engineer at Space Dynamics"
         },
-        {
-          "id": 702,
-          "skuId": "ST702",
-          "description": "Mission Control Specialist",
+        "co_founder": {
+          "name": "Michael Thompson",
           "location": "Houston, TX",
-          "salary": "$110,000 - $140,000"
+          "past_experience": "Mission Control Specialist at NASA"
         }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Rachel Adams",
-            "location": "Washington, DC",
-            "past_experience": "Aerospace Engineer at Space Dynamics"
-          },
-          "co_founder": {
-            "name": "Michael Thompson",
-            "location": "Houston, TX",
-            "past_experience": "Mission Control Specialist at NASA"
-          }
-        }
-      ]
-    },
-    {
-      "id": 8,
-      "overview": "FashionTech blends fashion with cutting-edge technology. Job openings include positions such as Fashion Designer and Software Developer (Fashion), with competitive salaries ranging from $100,000 to $150,000 across locations like New York, NY, and San Francisco, CA.",
-      "company_name": "FashionTech",
-      "bio": "FashionTech is a fashion technology company blending fashion with cutting-edge technology.",
-      "culture": "FashionTech combines fashion with technology. Our culture promotes creativity, diversity, and collaboration, fostering an environment where employees can innovate and create.",
-      "benefits": [
-        "Discounts on company products",
-        "Flexible work arrangements",
-        "Employee development programs",
-        "Wellness programs and gym memberships",
-        "Company-sponsored events and social activities"
-      ],
-      "jobs": [
-        {
-          "id": 801,
-          "skuId": "FaT801",
-          "description": "Fashion Designer",
-          "location": "New York, NY",
-          "salary": "$100,000 - $130,000"
-        },
-        {
-          "id": 802,
-          "skuId": "FaT802",
-          "description": "Software Developer (Fashion)",
-          "location": "San Francisco, CA",
-          "salary": "$120,000 - $150,000"
-        }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Sophia Rodriguez",
-            "location": "New York, NY",
-            "past_experience": "Fashion Designer at Couture Creations"
-          },
-          "co_founder": {
-            "name": "Ethan Taylor",
-            "location": "San Francisco, CA",
-            "past_experience": "Software Engineer at TechFusion"
-          }
-        }
-      ]
-    },
-    {
-      "id": 9,
-      "company_name": "RoboTech",
-      "overview": "RoboTech specializes in the development of advanced robotic systems. Job opportunities include roles such as Robotics Engineer and AI Research Scientist, offering competitive salaries ranging from $110,000 to $160,000 across locations like Boston, MA, and Seattle, WA.",
-      "bio": "RoboTech is a robotics company specializing in the development of advanced robotic systems.",
-      "culture": "RoboTech is at the forefront of robotics innovation. Our culture values collaboration, innovation, and excellence, creating an environment where employees can unleash their creativity and drive.",
-      "benefits": [
-        "401(k) with employer match",
-        "Health insurance with vision and dental coverage",
-        "Flexible work schedules",
-        "Paid time off for volunteering",
-        "Employee recognition programs"
-      ],
-      "jobs": [
-        {
-          "id": 901,
-          "skuId": "RT901",
-          "description": "Robotics Engineer",
-          "location": "Boston, MA",
-          "salary": "$110,000 - $140,000"
-        },
-        {
-          "id": 902,
-          "skuId": "RT902",
-          "description": "AI Research Scientist",
-          "location": "Seattle, WA",
-          "salary": "$130,000 - $160,000"
-        }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Ryan Chen",
-            "location": "Boston, MA",
-            "past_experience": "Robotics Engineer at RoboInnovate"
-          },
-          "co_founder": {
-            "name": "Emma Johnson",
-            "location": "Seattle, WA",
-            "past_experience": "AI Research Scientist at AI Solutions"
-          }
-        }
-      ]
-    },
-    {
-      "id": 10,
-      "company_name": "EducationTech",
-      "overview": "EducationTech is dedicated to transforming learning through technology. Job openings include positions such as EdTech Product Manager and Instructional Designer, with competitive salaries ranging from $100,000 to $150,000 across locations like Chicago, IL, and Atlanta, GA.",
-      "bio": "EducationTech is an education technology company dedicated to transforming learning through technology.",
-      "culture": "EducationTech is dedicated to transforming learning through technology. Our culture values inclusivity, continuous learning, and making a positive impact on education.",
-      "benefits": [
-        "Professional development opportunities",
-        "Flexible work arrangements",
-        "Health and wellness programs",
-        "Paid parental leave",
-        "Company-sponsored volunteer opportunities"
-      ],
-      "jobs": [
-        {
-          "id": 1001,
-          "skuId": "ET1001",
-          "description": "EdTech Product Manager",
-          "location": "Chicago, IL",
-          "salary": "$120,000 - $150,000"
-        },
-        {
-          "id": 1002,
-          "skuId": "ET1002",
-          "description": "Instructional Designer",
-          "location": "Atlanta, GA",
-          "salary": "$100,000 - $130,000"
-        }
-      ],
-      "peoples": [
-        {
-          "founder": {
-            "name": "Mark Davis",
-            "location": "Chicago, IL",
-            "past_experience": "Education Consultant at LearnWell"
-          },
-          "co_founder": {
-            "name": "Sophie Martin",
-            "location": "Atlanta, GA",
-            "past_experience": "Instructional Designer at TechEdu"
-          }
-        }
-      ]
-    }
-  ]
-}
+      }
+    ]
+  }
+]

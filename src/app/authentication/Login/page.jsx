@@ -6,29 +6,31 @@ import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [email, setEmail] = useState("");
-
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    //setError("");
+    setError("");
+
     try {
       const response = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
-      console.log(response);
+
       if (response?.error) {
-        // setError("Invalid email or password.");
-        console.log(error);
+        setError("Invalid email or password.");
+        console.log(response.error);
         return;
       }
-      router.push("/Home");
+
+      router.push("/candidates/Job");
     } catch (error) {
       console.log("Error:", error);
-      // setError("An unexpected error occurred.");
+      setError("An unexpected error occurred.");
     }
   };
 
@@ -38,13 +40,13 @@ const Page = () => {
         <Nav_main />
       </div>
       <div
-        className="min-h-screen bg-cover bg-center flex items-center  justify-evenly"
+        className="min-h-screen bg-cover bg-center flex items-center justify-evenly"
         style={{
           backgroundImage:
             'url("https://i.pinimg.com/474x/ca/d7/6d/cad76d75091745f0636572ff0cc027ad.jpg")',
         }}
       >
-        <div className="max-w-md w-full p-8  ">
+        <div className="max-w-md w-full p-8">
           <h1 className="text-center text-2xl font-bold mb-4">Welcome back!</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex flex-col">
@@ -73,9 +75,10 @@ const Page = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
+            {error && <p className="text-red-500">{error}</p>}
             <button
               type="submit"
-              className="w-full px-4 py-2  space-y-8 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+              className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
             >
               Login
             </button>

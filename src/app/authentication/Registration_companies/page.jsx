@@ -1,8 +1,10 @@
 "use client";
 import Nav_main from "@/app/components/Nav_main";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Page = () => {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [firstname, setFirstname] = useState("");
   const [companyname, setCompanyname] = useState("");
@@ -17,11 +19,9 @@ const Page = () => {
         throw new Error("All fields are necessary.");
       }
 
-      /* const resUserExists = await fetch("/api/UserJobExits", {
+      const resUserExists = await fetch("/api/UserJobExits", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
@@ -30,22 +30,18 @@ const Page = () => {
       }
 
       const { user } = await resUserExists.json();
-
       if (user) {
         throw new Error("User already exists.");
       }
-      */
 
       const res = await fetch("/api/Register/Job", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          firstname,
-          lastName,
-          email,
-          password,
+          firstName: firstname,
+          lastName: lastName,
+          email: email,
+          password: password,
           company: companyname,
         }),
       });
@@ -56,18 +52,15 @@ const Page = () => {
 
       const form = e.target;
       form.reset();
-      router.push("/Login");
+      router.push("/authentication/Login");
     } catch (error) {
       console.error("Registration failed:", error.message);
-      //setError(error.message);
     }
   };
 
   return (
-    <>
-      <div>
-        <Nav_main />
-      </div>
+    <div>
+      <Nav_main />
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-evenly"
         style={{
@@ -122,12 +115,12 @@ const Page = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="email" className="mb-1">
+              <label htmlFor="companyname" className="mb-1">
                 Company Name
               </label>
               <input
-                id="email"
-                placeholder="Enter your email"
+                id="companyname"
+                placeholder="Enter your company"
                 type="text"
                 className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
                 value={companyname}
@@ -156,7 +149,7 @@ const Page = () => {
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

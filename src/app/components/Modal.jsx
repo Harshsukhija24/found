@@ -1,18 +1,41 @@
+"use client";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Modal = ({ isOpen, onClose, company }) => {
+  const router = useRouter();
   if (!isOpen || !company) {
     return null;
   }
 
+  const [followed, setFollowed] = useState(company.followed);
   const [activeTab, setActiveTab] = useState("overview");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
+  const handleFollow = async () => {
+    try {
+      const response = await fetch("/api/candidates/follow", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: company.id }),
+      });
+      if (!response.ok) {
+        setFollowed(!followed);
+      } else {
+        console.error("Failed to follow/unfollow company");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
   return (
-    <div className="fixed inset-0 flex items-center  h-auto justify-end bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-end bg-black bg-opacity-50 z-50">
       <div className="w-full max-w-lg bg-white p-8 rounded-lg shadow-md max-h-full overflow-y-auto">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-bold">{company.company_name}</h2>
@@ -22,8 +45,11 @@ const Modal = ({ isOpen, onClose, company }) => {
         </div>
         <div className="flex items-center mb-4">
           <h2 className="mr-2">{company.bio}</h2>
-          <button className="bg-gradient-to-r mt-1 from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-1 rounded-full shadow-md transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50">
-            Follow
+          <button
+            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-3 py-1 rounded-full shadow-md transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
+            onClick={handleFollow}
+          >
+            {followed ? "Unfollow" : "Follow"}
           </button>
         </div>
         <div className="flex mb-4 border-b pb-2">
@@ -74,7 +100,14 @@ const Modal = ({ isOpen, onClose, company }) => {
                     <p>{job.description}</p>
                     <p>{job.location}</p>
                     <p>{job.salary}</p>
-                    <button className="text-blue-500">Apply</button>
+                    <button
+                      onClick={() =>
+                        router.push(`/candidates/Job/${job.skuId}`)
+                      }
+                      className="text-blue-500"
+                    >
+                      Apply
+                    </button>
                   </div>
                 ))}
               </div>
@@ -126,7 +159,12 @@ const Modal = ({ isOpen, onClose, company }) => {
                   <h3>{job.description}</h3>
                   <p>{job.location}</p>
                   <p>{job.salary}</p>
-                  <button className="text-blue-500">Apply</button>
+                  <button
+                    className="text-blue-500"
+                    onClick={() => router.push(`/candidates/Job/${job.skuId}`)}
+                  >
+                    Apply
+                  </button>
                 </div>
               ))}
             </div>

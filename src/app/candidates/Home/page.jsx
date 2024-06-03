@@ -15,6 +15,7 @@ const Page = () => {
   const [name, setName] = useState("");
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
+  const [followedCompanies, setFollowedCompanies] = useState([]); // Changed state variable name
   const [loading, setLoading] = useState(true);
 
   const handleSelectChange = (e) => {
@@ -30,6 +31,7 @@ const Page = () => {
           fetchProfileData(),
           fetchRecommendedJobs(),
           fetchAppliedJobs(),
+          fetchFollowData(), // Corrected function name
         ]);
       } finally {
         setLoading(false);
@@ -46,9 +48,23 @@ const Page = () => {
         throw new Error("Failed to fetch profile data");
       }
       const data = await response.json();
-      setName(data.name); // Assuming 'name' is the property containing the name
+      setName(data.name);
     } catch (err) {
       console.error("Profile Error:", err);
+    }
+  };
+
+  const fetchFollowData = async () => {
+    // Corrected function name
+    try {
+      const response = await fetch("/api/candidates/followup");
+      if (!response.ok) {
+        throw new Error("Failed to fetch follow data");
+      }
+      const data = await response.json();
+      setFollowedCompanies(data); // Changed state variable name
+    } catch (err) {
+      console.error("Follow Data Error:", err); // Corrected error message
     }
   };
 
@@ -85,7 +101,7 @@ const Page = () => {
         throw new Error("Failed to fetch data");
       }
       const jsonData = await response.json();
-      setAppliedJobs(jsonData.applied_companies);
+      setAppliedJobs(jsonData);
     } catch (error) {
       console.error("Error fetching applied jobs:", error);
     }
@@ -114,7 +130,7 @@ const Page = () => {
           </h1>
           <form>
             <select
-              value={selectedContentIndex} // Set value to selected index
+              value={selectedContentIndex}
               className="px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:border-blue-500"
               onChange={handleSelectChange}
             >
@@ -152,7 +168,7 @@ const Page = () => {
         </div>
         <div className="p-4 border border-black">
           <h2 className="text-lg font-semibold mb-3">Applied Jobs</h2>
-          {appliedJobs.length > 0 ? (
+          {appliedJobs && appliedJobs.length > 0 ? (
             appliedJobs.slice(0, 4).map((applied_company, index) => (
               <div key={index} className="mb-2 border border-black p-2">
                 <h3 className="text-lg font-semibold">
@@ -173,6 +189,32 @@ const Page = () => {
               More Applied Jobs
             </button>
           </Link>
+        </div>
+        <div className="p-4 border border-black">
+          <h2 className="text-lg font-semibold mb-3">Followed Companies</h2>
+          {followedCompanies.length > 0 ? (
+            followedCompanies.map(
+              (
+                company,
+                index // Changed variable name
+              ) => (
+                <div
+                  key={index}
+                  className="mb-2 border border
+              -black p-2"
+                >
+                  <h3 className="text-lg font-semibold">
+                    {company.company_name}
+                  </h3>
+                  <p>{company.bio}</p>
+                </div>
+              )
+            )
+          ) : (
+            <div className="p-4 border border-black">
+              <p>No followed companies available</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

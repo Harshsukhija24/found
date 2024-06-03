@@ -19,14 +19,18 @@
           "skuId": "TC101",
           "description": "Software Engineer",
           "location": "San Francisco, CA",
-          "salary": "$120,000 - $150,000"
+          "salary": "$120,000 - $150,000",
+          "company_name": "TechCo",
+          "bio": "TechCo is a leading technology company specializing in software development and IT solutions."
         },
         {
           "id": 102,
           "skuId": "TC102",
           "description": "Data Scientist",
           "location": "New York, NY",
-          "salary": "$130,000 - $160,000"
+          "salary": "$130,000 - $160,000",
+          "company_name": "TechCo",
+          "bio": "TechCo is a leading technology company specializing in software development and IT solutions."
         }
       ],
       "peoples": [
@@ -63,14 +67,18 @@
           "skuId": "BP201",
           "description": "Research Scientist",
           "location": "Boston, MA",
-          "salary": "$100,000 - $130,000"
+          "salary": "$100,000 - $130,000",
+          "company_name": "BioPharm",
+          "bio": "BioPharm is a pharmaceutical company dedicated to improving healthcare through innovative drug development."
         },
         {
           "id": 202,
           "skuId": "BP202",
           "description": "Chemical Engineer",
           "location": "Houston, TX",
-          "salary": "$90,000 - $120,000"
+          "salary": "$90,000 - $120,000",
+          "company_name": "BioPharm",
+          "bio": "BioPharm is a pharmaceutical company dedicated to improving healthcare through innovative drug development."
         }
       ],
       "peoples": [
@@ -107,14 +115,18 @@
           "skuId": "ET301",
           "description": "Renewable Energy Engineer",
           "location": "Seattle, WA",
-          "salary": "$110,000 - $140,000"
+          "salary": "$110,000 - $140,000",
+          "company_name": "EcoTech",
+          "bio": "EcoTech is a green energy company focused on sustainable solutions for a cleaner environment."
         },
         {
           "id": 302,
           "skuId": "ET302",
           "description": "Environmental Scientist",
           "location": "Denver, CO",
-          "salary": "$95,000 - $125,000"
+          "salary": "$95,000 - $125,000",
+          "company_name": "EcoTech",
+          "bio": "EcoTech is a green energy company focused on sustainable solutions for a cleaner environment."
         }
       ],
       "peoples": [
@@ -135,8 +147,8 @@
     {
       "id": 4,
       "company_name": "FinanceCorp",
-      "overview": "FinanceCorp offers investment and banking solutions. With job openings for Financial Analysts and Investment Advisors, the company provides competitive salaries ranging from $100,000 to $150,000 across locations like Chicago, IL, and Miami, FL.",
       "bio": "FinanceCorp is a financial services company providing investment and banking solutions.",
+      "overview": "FinanceCorp offers investment and banking solutions. With job openings for Financial Analysts and Investment Advisors, the company provides competitive salaries ranging from $100,000 to $150,000 across locations like Chicago, IL, and Miami, FL.",
       "culture": "FinanceCorp fosters a culture of excellence and teamwork. We prioritize diversity and inclusion, creating an environment where every voice is valued. Our culture is built on trust, respect, and continuous improvement.",
       "benefits": [
         "401(k) with employer match",
@@ -151,14 +163,18 @@
           "skuId": "FC401",
           "description": "Financial Analyst",
           "location": "Chicago, IL",
-          "salary": "$100,000 - $130,000"
+          "salary": "$100,000 - $130,000",
+          "company_name": "FinanceCorp",
+          "bio": "FinanceCorp is a financial services company providing investment and banking solutions."
         },
         {
           "id": 402,
           "skuId": "FC402",
           "description": "Investment Advisor",
           "location": "Miami, FL",
-          "salary": "$120,000 - $150,000"
+          "salary": "$120,000 - $150,000",
+          "company_name": "FinanceCorp",
+          "bio": "FinanceCorp is a financial services company providing investment and banking solutions."
         }
       ],
       "peoples": [
@@ -179,8 +195,8 @@
     {
       "id": 5,
       "company_name": "FoodTech",
-      "overview": "FoodTech is revolutionizing the food industry with innovative technology. Job opportunities include roles such as Food Scientist and Food Engineer, offering competitive salaries ranging from $90,000 to $125,000 across locations like Austin, TX, and Los Angeles, CA.",
       "bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food.",
+      "overview": "FoodTech is revolutionizing the food industry with innovative technology. Job opportunities include roles such as Food Scientist and Food Engineer, offering competitive salaries ranging from $90,000 to $125,000 across locations like Austin, TX, and Los Angeles, CA.",
       "culture": "FoodTech is driven by innovation and creativity. Our culture values collaboration and work-life balance, creating a dynamic environment where employees can thrive and grow.",
       "benefits": [
         "Healthy snacks and meals provided",
@@ -195,31 +211,36 @@
           "skuId": "FT501",
           "description": "Food Scientist",
           "location": "Austin, TX",
-          "salary": "$90,000 - $120,000"
+          "salary": "$90,000 - $120,000",
+          "company_name": "FoodTech",
+          "bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food."
         },
         {
           "id": 502,
           "skuId": "FT502",
           "description": "Food Engineer",
           "location": "Los Angeles, CA",
-          "salary": "$95,000 - $125,000"
+          "salary": "$95,000 - $125,000",
+          "company_name": "FoodTech",
+          "bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food."
         }
       ],
       "peoples": [
         {
           "founder": {
-            "name": "Thomas Lee",
+            "name": "Laura Martinez",
             "location": "Austin, TX",
-            "past_experience": "Food Scientist at Culinary Innovations"
+            "past_experience": "Food Technologist at NutriFoods"
           },
           "co_founder": {
-            "name": "Emily Chen",
+            "name": "Kevin Lee",
             "location": "Los Angeles, CA",
-            "past_experience": "Food Engineer at Gastronomy Labs"
+            "past_experience": "Product Engineer at FoodInnovate"
           }
         }
       ]
     },
+
     {
       "id": 6,
       "company_name": "MedTech",
@@ -239,14 +260,18 @@
           "skuId": "MT601",
           "description": "Biomedical Engineer",
           "location": "Philadelphia, PA",
-          "salary": "$110,000 - $140,000"
+          "salary": "$110,000 - $140,000",
+          "company_name": "MedTech",
+          "bio": "MedTech is a medical technology company focused on developing innovative healthcare solutions."
         },
         {
           "id": 602,
           "skuId": "MT602",
           "description": "Medical Device Sales Representative",
           "location": "Dallas, TX",
-          "salary": "$100,000 - $130,000"
+          "salary": "$100,000 - $130,000",
+          "company_name": "MedTech",
+          "bio": "MedTech is a medical technology company focused on developing innovative healthcare solutions."
         }
       ],
       "peoples": [
@@ -283,14 +308,18 @@
           "skuId": "ST701",
           "description": "Aerospace Engineer",
           "location": "Washington, DC",
-          "salary": "$120,000 - $150,000"
+          "salary": "$120,000 - $150,000",
+          "company_name": "SpaceTech",
+          "bio": "SpaceTech is a space exploration company committed to advancing humanity's presence in space."
         },
         {
           "id": 702,
           "skuId": "ST702",
           "description": "Mission Control Specialist",
           "location": "Houston, TX",
-          "salary": "$110,000 - $140,000"
+          "salary": "$110,000 - $140,000",
+          "company_name": "SpaceTech",
+          "bio": "SpaceTech is a space exploration company committed to advancing humanity's presence in space."
         }
       ],
       "peoples": [
@@ -310,10 +339,9 @@
     },
     {
       "id": 8,
-      "overview": "FashionTech blends fashion with cutting-edge technology. Job openings include positions such as Fashion Designer and Software Developer (Fashion), with competitive salaries ranging from $100,000 to $150,000 across locations like New York, NY, and San Francisco, CA.",
       "company_name": "FashionTech",
+      "overview": "FashionTech blends fashion with cutting-edge technology. Job openings include positions such as Fashion Designer and Software Developer (Fashion), with competitive salaries ranging from $100,000 to $150,000 across locations like New York, NY, and San Francisco, CA.",
       "bio": "FashionTech is a fashion technology company blending fashion with cutting-edge technology.",
-
       "culture": "FashionTech combines fashion with technology. Our culture promotes creativity, diversity, and collaboration, fostering an environment where employees can innovate and create.",
       "benefits": [
         "Discounts on company products",
@@ -328,14 +356,18 @@
           "skuId": "FaT801",
           "description": "Fashion Designer",
           "location": "New York, NY",
-          "salary": "$100,000 - $130,000"
+          "salary": "$100,000 - $130,000",
+          "company_name": "FashionTech",
+          "bio": "FashionTech is a fashion technology company blending fashion with cutting-edge technology."
         },
         {
           "id": 802,
           "skuId": "FaT802",
           "description": "Software Developer (Fashion)",
           "location": "San Francisco, CA",
-          "salary": "$120,000 - $150,000"
+          "salary": "$120,000 - $150,000",
+          "company_name": "FashionTech",
+          "bio": "FashionTech is a fashion technology company blending fashion with cutting-edge technology."
         }
       ],
       "peoples": [
@@ -372,14 +404,18 @@
           "skuId": "RT901",
           "description": "Robotics Engineer",
           "location": "Boston, MA",
-          "salary": "$110,000 - $140,000"
+          "salary": "$110,000 - $140,000",
+          "company_name": "RoboTech",
+          "bio": "RoboTech is a robotics company specializing in the development of advanced robotic systems."
         },
         {
           "id": 902,
           "skuId": "RT902",
           "description": "AI Research Scientist",
           "location": "Seattle, WA",
-          "salary": "$130,000 - $160,000"
+          "salary": "$130,000 - $160,000",
+          "company_name": "RoboTech",
+          "bio": "RoboTech is a robotics company specializing in the development of advanced robotic systems."
         }
       ],
       "peoples": [
@@ -416,27 +452,31 @@
           "skuId": "ET1001",
           "description": "EdTech Product Manager",
           "location": "Chicago, IL",
-          "salary": "$120,000 - $150,000"
+          "salary": "$120,000 - $150,000",
+          "company_name": "EducationTech",
+          "bio": "EducationTech is an education technology company dedicated to transforming learning through technology."
         },
         {
           "id": 1002,
           "skuId": "ET1002",
           "description": "Instructional Designer",
           "location": "Atlanta, GA",
-          "salary": "$100,000 - $130,000"
+          "salary": "$100,000 - $130,000",
+          "company_name": "EducationTech",
+          "bio": "EducationTech is an education technology company dedicated to transforming learning through technology."
         }
       ],
       "peoples": [
         {
           "founder": {
-            "name": "Mark Davis",
+            "name": "Lisa Martinez",
             "location": "Chicago, IL",
-            "past_experience": "Education Consultant at LearnWell"
+            "past_experience": "Product Manager at LearnTech"
           },
           "co_founder": {
-            "name": "Sophie Martin",
+            "name": "David Kim",
             "location": "Atlanta, GA",
-            "past_experience": "Instructional Designer at TechEdu"
+            "past_experience": "Instructional Designer at TeachInnovate"
           }
         }
       ]

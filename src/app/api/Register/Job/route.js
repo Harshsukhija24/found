@@ -1,11 +1,13 @@
-import User from "../../../model/UserRegister";
-import { connectDb } from "../../../utils/connectdb";
+// pages/api/Register/Job.js
+
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
-
+import UserRegister from "../../../model/UserRegister";
+import { connectDb } from "../../../utils/connectdb";
 export async function POST(req) {
   try {
-    const { firstName, lastName, email, password, company } = await req.json();
+    const body = await req.json();
+    const { firstName, lastName, email, password, company } = body;
 
     if (!firstName || !lastName || !company || !email || !password) {
       return NextResponse.json(
@@ -16,7 +18,7 @@ export async function POST(req) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await connectDb();
-    await User.create({
+    await UserRegister.create({
       firstName,
       company,
       lastName,
