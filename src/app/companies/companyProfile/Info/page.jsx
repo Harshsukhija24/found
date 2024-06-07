@@ -11,10 +11,35 @@ const Page = () => {
   const [website, setWebsite] = useState("");
   const [employees, setEmployees] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log("Form submitted!");
+
+    try {
+      const response = await fetch("/api/companies/Profile/Info", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          founded,
+          location,
+          website,
+          employees,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit form");
+      }
+
+      // Clear form fields after successful submission
+      setFounded("");
+      setLocation("");
+      setWebsite("");
+      setEmployees("");
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   return (

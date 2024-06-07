@@ -1,23 +1,20 @@
-import { Schema, models, model } from "mongoose";
+// In your Info schema file (e.g., Info.js)
+import { Schema, model, models } from "mongoose";
 
 const InfoSchema = new Schema({
-  CompanyName: {
+  founded: {
     type: String,
     required: true,
   },
-  bio: {
-    type: String,
+  location: {
+    type: String, // Corrected typo here
     required: true,
   },
-  Overview: {
-    type: String,
+  website: {
+    type: String, // Corrected typo here
     required: true,
   },
-  culture: {
-    type: String,
-    required: true,
-  },
-  Benefits: {
+  employees: {
     type: String,
     required: true,
   },

@@ -2,8 +2,7 @@ import { Schema, models, model } from "mongoose";
 
 const ProfileSchema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
-    ref: "Userjob",
+    type: String,
     required: true,
   },
   name: {

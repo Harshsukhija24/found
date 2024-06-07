@@ -1,3 +1,4 @@
+// model/companies/Team.js
 import { Schema, model, models } from "mongoose";
 
 const TeamSchema = new Schema({

@@ -1,3 +1,4 @@
+// pages/Profile.js
 "use client";
 
 import React, { useState } from "react";
@@ -9,9 +10,44 @@ const Page = () => {
   const [founderName, setFounderName] = useState("");
   const [founderLocation, setFounderLocation] = useState("");
   const [founderPastExperience, setFounderPastExperience] = useState("");
-  const [cofounderName, setCofounderName] = useState("");
-  const [cofounderLocation, setCofounderLocation] = useState("");
-  const [cofounderPastExperience, setCofounderPastExperience] = useState("");
+  const [coFounderName, setCoFounderName] = useState("");
+  const [coFounderLocation, setCoFounderLocation] = useState("");
+  const [coFounderPastExperience, setCoFounderPastExperience] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("/api/companies/Profile/Team", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          founderName,
+          founderLocation,
+          founderPastExperience,
+          coFounderName,
+          coFounderLocation,
+          coFounderPastExperience,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit form");
+      }
+
+      // Clear form fields after successful submission
+      setFounderName("");
+      setFounderLocation("");
+      setFounderPastExperience("");
+      setCoFounderName("");
+      setCoFounderLocation("");
+      setCoFounderPastExperience("");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -22,7 +58,10 @@ const Page = () => {
         </div>
         <div className="w-5/6 p-6 flex flex-col space-y-4">
           <ProfileNav />
-          <form className="bg-white p-6 rounded-lg space-y-6">
+          <form
+            onSubmit={handleSubmit}
+            className="bg-white p-6 rounded-lg space-y-6"
+          >
             <div className="flex space-x-6">
               <div className="flex flex-col w-1/2">
                 <label className="block text-gray-700 font-bold mb-1">
@@ -41,8 +80,8 @@ const Page = () => {
                 </label>
                 <input
                   type="text"
-                  value={cofounderName}
-                  onChange={(e) => setCofounderName(e.target.value)}
+                  value={coFounderName}
+                  onChange={(e) => setCoFounderName(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -65,8 +104,8 @@ const Page = () => {
                 </label>
                 <input
                   type="text"
-                  value={cofounderLocation}
-                  onChange={(e) => setCofounderLocation(e.target.value)}
+                  value={coFounderLocation}
+                  onChange={(e) => setCoFounderLocation(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
@@ -89,8 +128,8 @@ const Page = () => {
                 </label>
                 <input
                   type="text"
-                  value={cofounderPastExperience}
-                  onChange={(e) => setCofounderPastExperience(e.target.value)}
+                  value={coFounderPastExperience}
+                  onChange={(e) => setCoFounderPastExperience(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>

@@ -30,7 +30,7 @@ const Page = () => {
         throw new Error("All fields are necessary.");
       }
 
-      const resUserExists = await fetch("/api/UserJobExits", {
+      const resUserExists = await fetch("/api/UserExits", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),

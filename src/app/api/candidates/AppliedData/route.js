@@ -1,6 +1,7 @@
-import fs from "fs";
-import path from "path";
+import appliedData from "@/app/model/appliedData";
 import { NextResponse } from "next/server";
+import { connectDb } from "@/app/utils/connectdb";
+import mongoose from "mongoose";
 
 export async function POST(req) {
   try {
@@ -14,17 +15,9 @@ export async function POST(req) {
       salary,
       coverLetter,
     } = body;
-    const destinationPath = path.resolve("./src/app/data/apply.json");
-    const existingData = fs.existsSync(destinationPath)
-      ? JSON.parse(fs.readFileSync(destinationPath, "utf8"))
-      : [];
-    const applicationExists = existingData.some((app) => app.skuId === skuId);
-    if (applicationExists) {
-      return NextResponse.json({
-        message: "Application with this SKU ID already exists",
-      });
-    }
-    const newapplication = {
+    await connectDb();
+
+    const newAppliedData = new appliedData({
       skuId,
       company_name,
       bio,
@@ -32,13 +25,33 @@ export async function POST(req) {
       description,
       salary,
       coverLetter,
-    };
-    const updatedData = [...existingData, newapplication];
-    fs.writeFileSync(destinationPath, JSON.stringify(updatedData, null, 2));
-    console.log("Data has been written to the file:", updatedData); // Log the updated data
-    return NextResponse.json({ message: "Application is submitted" });
+    });
+
+    await newAppliedData.save();
+    return NextResponse.json({ message: "Saved" });
   } catch (error) {
-    console.log("Error writing data to file:", error); // Log any errors
-    return NextResponse.error(500, "Internal Server Error");
+    console.log("Error writing data to file:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 }
+
+export const GET = async (req) => {
+  try {
+    await connectDb();
+    const db = mongoose.connection.db;
+
+    const collection = db.collection("applieddatas");
+    const applieddatas = await collection.find().toArray();
+
+    return NextResponse.json(applieddatas, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching applieddatas:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+};

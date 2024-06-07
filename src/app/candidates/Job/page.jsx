@@ -21,14 +21,18 @@ const Page = () => {
 
         if (Array.isArray(jsonData)) {
           setData(jsonData);
-        } else if (jsonData && jsonData.data && Array.isArray(jsonData.data)) {
+        } else if (
+          jsonData &&
+          jsonData?.data &&
+          Array?.isArray(jsonData.data)
+        ) {
           setData(jsonData.data);
         } else if (
           jsonData &&
-          jsonData.companies &&
-          Array.isArray(jsonData.companies)
+          jsonData?.companies &&
+          Array.isArray(jsonData?.companies)
         ) {
-          setData(jsonData.companies);
+          setData(jsonData?.companies);
         } else {
           throw new Error("Invalid data format");
         }

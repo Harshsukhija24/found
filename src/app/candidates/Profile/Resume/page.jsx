@@ -6,9 +6,13 @@ import React, { useState } from "react";
 const Page = () => {
   const [resume, setResume] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [uploadSuccess, setUploadSuccess] = useState(false);
+  const [uploadError, setUploadError] = useState(null);
 
   const handleFileChange = (event) => {
-    setResume(event.target.files[0]);
+    setResume(event.target.file);
+    setUploadSuccess(false);
+    setUploadError(null);
   };
 
   const handleUpload = async () => {
@@ -17,8 +21,12 @@ const Page = () => {
       return;
     }
 
+    console.log("Selected file:", resume);
+
     const formData = new FormData();
     formData.append("resume", resume);
+
+    // Rest of the code...
 
     setUploading(true);
 
@@ -30,12 +38,15 @@ const Page = () => {
 
       if (response.ok) {
         console.log("Resume uploaded successfully");
+        setUploadSuccess(true);
       } else {
         const errorText = await response.text();
         console.error("Failed to upload resume:", errorText);
+        setUploadError(errorText);
       }
     } catch (error) {
       console.error("Error uploading resume:", error);
+      setUploadError(error.message);
     } finally {
       setUploading(false);
     }
@@ -69,6 +80,14 @@ const Page = () => {
               >
                 {uploading ? "Uploading..." : "Upload"}
               </button>
+              {uploadSuccess && (
+                <p className="text-green-500 mt-2">
+                  Resume uploaded successfully!
+                </p>
+              )}
+              {uploadError && (
+                <p className="text-red-500 mt-2">Error: {uploadError}</p>
+              )}
             </div>
           </div>
         </div>

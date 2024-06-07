@@ -7,5 +7,14 @@
     "description": "Software Engineer",
     "salary": "$120,000 - $150,000",
     "coverLetter": "hello"
+  },
+  {
+    "skuId": "ET1001",
+    "company_name": "EducationTech",
+    "bio": "EducationTech is an education technology company dedicated to transforming learning through technology.",
+    "location": "Chicago, IL",
+    "description": "EdTech Product Manager",
+    "salary": "$120,000 - $150,000",
+    "coverLetter": "hello"
   }
 ]

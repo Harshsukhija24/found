@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { connectDb } from "@/app/utils/connectdb";
-import Company from "../../../../model/companies/Company"; // Ensure the correct path to the model
-
+import Company from "../../../../model/companies/Company";
 export const POST = async (req) => {
   try {
     const { companyName, bio, overview, culture, benefit } = await req.json();
@@ -54,6 +53,24 @@ export const PUT = async (req) => {
     return NextResponse.json({ message: "Company updated" }, { status: 200 });
   } catch (error) {
     console.error("Error updating company:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+};
+
+export const GET = async (req) => {
+  try {
+    await connectDb();
+    const { db } = mongoose.connection;
+
+    const collection = db.collection("Company"); // Make sure the collection name matches your setup
+    const Company = await collection.find().toArray();
+
+    return NextResponse.json(Compnay, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching teams:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

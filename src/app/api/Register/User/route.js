@@ -52,3 +52,25 @@ export async function POST(req) {
     return NextResponse.json({ message: "An error occurred" }, { status: 500 });
   }
 }
+
+export async function GET(req) {
+  try {
+    await connectDb();
+
+    const { email } = req.query; // Extract email from the request query parameters
+
+    // Find the user with the provided email
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      // If user is not found, return appropriate error response
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    // Return the user details
+    return NextResponse.json({ user }, { status: 200 });
+  } catch (error) {
+    console.error("Error:", error);
+    return NextResponse.json({ message: "An error occurred" }, { status: 500 });
+  }
+}

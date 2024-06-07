@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import Nav_bar from "../components/Nav_Bar";
-
 import Sidebar from "../components/side_bar";
 
 const Page = () => {
@@ -9,25 +8,51 @@ const Page = () => {
   const [experienceRequired, setExperienceRequired] = useState("");
   const [jobLink, setJobLink] = useState("");
   const [jobLocation, setJobLocation] = useState("");
-  const [jobSalary, setJobSalary] = useState("");
+  const [salaryRange, setSalaryRange] = useState("");
   const [keyResponsibilities, setKeyResponsibilities] = useState("");
   const [qualifications, setQualifications] = useState("");
   const [dateOfJoining, setDateOfJoining] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
-      jobDescription,
-      experienceRequired,
-      jobLink,
-      jobLocation,
-      jobSalary,
-      keyResponsibilities,
-      qualifications,
-      dateOfJoining,
+      JobDescription: jobDescription,
+      ExperienceRequired: experienceRequired,
+      JobLink: jobLink,
+      JobLocation: jobLocation,
+      SalaryRange: salaryRange,
+      KeyResponsibilities: keyResponsibilities,
+      Qualifications: qualifications,
+      DateofJoining: dateOfJoining,
     };
-    console.log("Form submitted!", formData);
-    // Optionally send the formData to a server here
+
+    try {
+      const response = await fetch("/api/companies/PostJob", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit form");
+      }
+
+      // Clear form fields after successful submission
+      setJobDescription("");
+      setExperienceRequired("");
+      setJobLink("");
+      setJobLocation("");
+      setSalaryRange("");
+      setKeyResponsibilities("");
+      setQualifications("");
+      setDateOfJoining("");
+
+      console.log("Form submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   return (
@@ -37,7 +62,7 @@ const Page = () => {
         <div className="w-1/6">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-6 flex flex-col  mt-8 space-y-4">
+        <div className="w-5/6 p-6 flex flex-col mt-8 space-y-4">
           <form
             onSubmit={handleSubmit}
             className="bg-white p-6 rounded-lg space-y-6"
@@ -96,8 +121,8 @@ const Page = () => {
                 </label>
                 <input
                   type="text"
-                  value={jobSalary}
-                  onChange={(e) => setJobSalary(e.target.value)}
+                  value={salaryRange}
+                  onChange={(e) => setSalaryRange(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded-md"
                   placeholder="Salary"
                 />

@@ -174,9 +174,9 @@ const Page = () => {
                 <h3 className="text-lg font-semibold">
                   {applied_company.company_name}
                 </h3>
-                <p>Location: {applied_company.company_info.location}</p>
-                <p>Salary: {applied_company.job_salary}</p>
-                <p>{applied_company.company_bio}</p>
+                <p>Location: {applied_company.location}</p>
+                <p>Salary: {applied_company.salary}</p>
+                <p>{applied_company.bio}</p>
               </div>
             ))
           ) : (

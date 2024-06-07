@@ -1,15 +1,24 @@
-const mongoose = require("mongoose");
+import { Schema, models, model } from "mongoose";
 
-const resumeSchema = new mongoose.Schema({
+const resumeSchema = new Schema({
+  filename: {
+    type: String,
+    required: true,
+  },
   data: {
     type: Buffer,
     required: true,
   },
-  contentType: {
+  mimetype: {
     type: String,
+    required: true,
+  },
+  uploadDate: {
+    type: Date,
+    default: Date.now,
   },
 });
 
-const Resume = mongoose.model("Resume", resumeSchema);
+const Resume = models.Resume || model("Resume", resumeSchema);
 
-module.exports = Resume;
+export default Resume;

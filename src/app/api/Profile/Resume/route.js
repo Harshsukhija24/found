@@ -1,53 +1,40 @@
-import { connectDb } from "@/app/utils/connectdb";
-import { NextResponse } from "next/server";
+// pages/api/Profile/Resume.js
+
+import cloudinary from "cloudinary";
 import formidable from "formidable";
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export const config = {
   api: {
-    bodyParser: false, // Disabling Next.js bodyParser to handle file uploads with formidable
+    bodyParser: false,
   },
 };
 
-export default async function handler(req) {
-  if (req.method === "POST") {
-    const form = new formidable.IncomingForm();
+export const POST = async (req, res) => {
+  const form = new formidable.IncomingForm();
+  form.keepExtensions = true;
 
-    return new Promise((resolve, reject) => {
-      form.parse(req, async (err, fields, files) => {
-        if (err) {
-          console.error("Error parsing form:", err);
-          resolve(
-            NextResponse.json(
-              { message: "Failed to upload resume" },
-              { status: 500 }
-            )
-          );
-          return;
-        }
+  form.parse(req, async (err, fields, files) => {
+    if (err) {
+      console.error("Error parsing form:", err);
+      return res.status(500).json({ error: "Error parsing form" });
+    }
 
-        const resume = files.resume;
-        try {
-          const { db } = await connectDb();
-          const collection = db.collection("Resume");
-          await collection.insertOne({ resume: resume });
-          resolve(
-            NextResponse.json({ message: "Resume created" }, { status: 201 })
-          );
-        } catch (error) {
-          console.error("Error uploading resume:", error);
-          resolve(
-            NextResponse.json(
-              { message: "Failed to upload resume" },
-              { status: 500 }
-            )
-          );
-        }
+    try {
+      const result = await cloudinary.uploader.upload(files.resume.path, {
+        folder: "resumes", // Optional: Specify a folder in Cloudinary to upload the file
       });
-    });
-  } else {
-    return NextResponse.json(
-      { message: "Method not allowed" },
-      { status: 405 }
-    );
-  }
-}
+
+      res.status(200).json({ url: result.secure_url });
+    } catch (error) {
+      console.error("Error uploading resume to Cloudinary:", error);
+      res.status(500).json({ error: "Error uploading resume to Cloudinary" });
+    }
+  });
+};

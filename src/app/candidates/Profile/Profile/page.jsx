@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { useSession } from "next-auth/react";
 import Nav_Home from "@/app/components/Nav_Home";
 import Sidebar from "@/app/components/Sidebar";
 
@@ -19,15 +20,26 @@ const Page = () => {
   const [skills, setSkills] = useState("");
   const [achievement, setAchievement] = useState("");
 
+  const { data: session } = useSession();
+
+  // Inside your functional component
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!session) {
+      console.log("Unauthorized");
+      return;
+    }
+
     try {
       const response = await fetch("/api/Profile/Profile", {
         method: "POST",
         headers: {
-          "Content-type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          userId: session.user.userId, // Include userId here
           name,
           location,
           role,
@@ -44,11 +56,15 @@ const Page = () => {
           achievement,
         }),
       });
-      if (!response) {
-        throw new Error("failed");
+
+      if (!response.ok) {
+        throw new Error(`Failed to save profile: ${response.statusText}`);
       }
+
+      const result = await response.json();
+      console.log(result.message);
     } catch (error) {
-      console.log("error", error);
+      console.error("Error:", error.message);
     }
   };
 
@@ -296,7 +312,7 @@ const Page = () => {
                 <textarea
                   className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="achievement"
-                  type="text"
+                  rows="4"
                   placeholder="Achievement"
                   value={achievement}
                   onChange={(e) => setAchievement(e.target.value)}

@@ -21,7 +21,7 @@ const ModalApply = ({ isOpen, onClose, company }) => {
           </button>
         </div>
         <div className="flex items-center mb-4">
-          <h2 className="mr-2">{company.company_bio}</h2>
+          <h2 className="mr-2">{company.bio}</h2>
         </div>
         <div className="flex mb-4 border-b pb-2">
           <button
@@ -57,7 +57,8 @@ const ModalApply = ({ isOpen, onClose, company }) => {
                 <h2 className="text-xl font-bold mb-2">
                   {company.company_name}
                 </h2>
-                {/* Add your Application content here */}
+                <h2>cover letter</h2>
+                {company.coverLetter}
               </div>
             )}
             {activeTab === "Jobdescription" && (
