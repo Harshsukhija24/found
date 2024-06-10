@@ -1,37 +1,44 @@
 import { NextResponse } from "next/server";
 import { connectDb } from "@/app/utils/connectdb";
 import Info from "../../../../model/companies/Info";
-import mongoose from "mongoose";
-export const POST = async (req) => {
-  try {
-    const { founded, location, website, employees } = await req.json();
-    await connectDb();
+import { getSession } from "next-auth/react";
 
-    const newInfo = new Info({
+export const POST = async (req) => {
+  if (req.method === "POST") {
+    const session = await getSession({ req });
+    console.log(session);
+    const { userId, founded, location, website, employees } = await req.json();
+
+    const { db } = await connectDb();
+    const collection = db.collection("infos");
+
+    await collection.insertOne({
+      userId,
       founded,
       location,
       website,
       employees,
     });
 
-    await newInfo.save();
     return NextResponse.json({ message: "Company created" }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating company:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
   }
 };
 
 export const PUT = async (req) => {
   try {
-    const { id, founded, location, website, employees } = await req.json();
+    const session = await getSession({ req });
+    console.log("Session in PUT:", session); // Debug log
+
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+
+    const { userId, founded, location, website, employees } = await req.json();
+
     await connectDb();
 
     const updatedInfo = await Info.findByIdAndUpdate(
-      id,
+      userId,
       {
         founded,
         location,
@@ -42,7 +49,7 @@ export const PUT = async (req) => {
     );
 
     if (!updatedInfo) {
-      return NextResponse.json({ message: "Info not found" });
+      return NextResponse.json({ message: "Info not found" }, { status: 404 });
     }
 
     return NextResponse.json({ message: "Company updated" }, { status: 200 });
@@ -58,14 +65,10 @@ export const PUT = async (req) => {
 export const GET = async (req) => {
   try {
     await connectDb();
-    const { db } = mongoose.connection;
-
-    const collection = db.collection("Info"); // Make sure the collection name matches your setup
-    const Info = await collection.find().toArray();
-
-    return NextResponse.json(Info, { status: 200 });
+    const infoList = await Info.find();
+    return NextResponse.json(infoList, { status: 200 });
   } catch (error) {
-    console.error("Error fetching teams:", error);
+    console.error("Error fetching companies:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Sidebar from "@/app/components/Sidebar";
 import Nav_Home from "@/app/components/Nav_Home";
+import { useSession } from "next-auth/react";
 
 const USWorkAuthorizationPage = () => {
   const [relocation, setRelocation] = useState("");
@@ -13,8 +14,29 @@ const USWorkAuthorizationPage = () => {
   const [desiredSalary, setDesiredSalary] = useState("");
   const [companySizes, setCompanySizes] = useState([]);
 
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
+
+  // Log session to check its structure
+  console.log("Session data:", session);
+  console.log(userId);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!session) {
+      console.log("Unauthorized");
+      return;
+    }
     try {
       const response = await fetch("/api/Profile/Preferences", {
         method: "POST",
@@ -22,6 +44,7 @@ const USWorkAuthorizationPage = () => {
           "Content-type": "application/json",
         },
         body: JSON.stringify({
+          userId,
           relocation,
           authorized,
           jobtype,

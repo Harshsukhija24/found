@@ -1,23 +1,17 @@
 import { connectDb } from "@/app/utils/connectdb";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getSession } from "next-auth/react";
 
 export const POST = async (req) => {
+  const session = await getSession({ req });
+
+  console.log("route", session);
+
   if (req.method === "POST" || req.method === "PUT") {
-    const {
-      relocation,
-      authorized,
-      jobtype,
-      openToJobTypes,
-      desiredLocations,
-      openToRemoteWork,
-      desiredSalary,
-      companySizes,
-    } = await req.json();
-    const { db } = await connectDb();
-    const collection = db.collection("Preferences");
-    if (req.method === "POST") {
-      await collection.insertOne({
+    try {
+      const {
+        userId,
         relocation,
         authorized,
         jobtype,
@@ -26,12 +20,21 @@ export const POST = async (req) => {
         openToRemoteWork,
         desiredSalary,
         companySizes,
-      });
-      return NextResponse.created({ message: "Preferences created" });
-    } else {
-      const filter = { _id: req.body.id };
-      const updateDoc = {
-        $set: {
+      } = await req.json();
+
+      if (!userId) {
+        return NextResponse.json(
+          { message: "Missing user ID" },
+          { status: 400 }
+        );
+      }
+
+      const { db } = await connectDb();
+      const collection = db.collection("Preferences");
+
+      if (req.method === "POST") {
+        await collection.insertOne({
+          userId,
           relocation,
           authorized,
           jobtype,
@@ -40,15 +43,33 @@ export const POST = async (req) => {
           openToRemoteWork,
           desiredSalary,
           companySizes,
-        },
-      };
-      const result = await collection.updateOne(filter, updateDoc);
-
-      if (result.modifiedCount === 1) {
-        return NextResponse.ok({
-          message: "Preferences data updated successfully",
         });
+        return NextResponse.json({ message: "Preferences created" });
+      } else {
+        const filter = { userId };
+        const updateDoc = {
+          $set: {
+            relocation,
+            authorized,
+            jobtype,
+            openToJobTypes,
+            desiredLocations,
+            openToRemoteWork,
+            desiredSalary,
+            companySizes,
+          },
+        };
+        const result = await collection.updateOne(filter, updateDoc);
+
+        if (result.modifiedCount === 1) {
+          return NextResponse.ok({
+            message: "Preferences data updated successfully",
+          });
+        }
       }
+    } catch (error) {
+      console.error("Error processing request:", error);
+      return NextResponse.error({ message: "Error processing request" });
     }
   } else {
     return NextResponse.methodNotAllowed();

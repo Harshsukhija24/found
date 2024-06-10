@@ -37,6 +37,10 @@ const PostajobSchema = new Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
 });
 
 export default models.Postajob || model("Postajob", PostajobSchema);

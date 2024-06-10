@@ -4,15 +4,35 @@ import React, { useState } from "react";
 import Nav_bar from "../../components/Nav_Bar";
 import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [founded, setFounded] = useState("");
   const [location, setLocation] = useState("");
   const [website, setWebsite] = useState("");
   const [employees, setEmployees] = useState("");
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
+
+  // Log session to check its structure
+  console.log("Session data:", session);
+  console.log(userId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!session) {
+      console.log("Unauthorized");
+      return;
+    }
 
     try {
       const response = await fetch("/api/companies/Profile/Info", {
@@ -21,6 +41,7 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          userId,
           founded,
           location,
           website,

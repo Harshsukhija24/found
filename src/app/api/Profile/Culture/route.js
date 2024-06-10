@@ -1,14 +1,18 @@
-// api/Profile/Culture.js
 import { connectDb } from "@/app/utils/connectdb";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
+import { getSession } from "next-auth/react";
 
 export const POST = async (req) => {
   if (req.method === "POST") {
-    const { nextJob, motivate, future, environment } = await req.json();
+    const session = await getSession({ req });
+    console.log(session);
+
+    const { userId, nextJob, motivate, future, environment } = await req.json();
     const { db } = await connectDb();
     const collection = db.collection("Culture");
     await collection.insertOne({
+      userId,
       nextJob,
       motivate,
       future,
@@ -19,10 +23,10 @@ export const POST = async (req) => {
       { status: 201 }
     );
   } else if (req.method === "PUT") {
-    const { nextJob, motivate, future, environment, id } = await req.json();
+    const { nextJob, motivate, future, environment, userId } = await req.json();
     const { db } = await connectDb();
     const collection = db.collection("Preferences");
-    const filter = { _id: id };
+    const filter = { userId };
     const updateDoc = {
       $set: {
         nextJob,

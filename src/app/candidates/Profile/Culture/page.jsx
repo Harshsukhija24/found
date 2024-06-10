@@ -2,14 +2,30 @@
 import React, { useState } from "react";
 import Sidebar from "@/app/components/Sidebar";
 import Nav_Home from "@/app/components/Nav_Home";
+import { useSession } from "next-auth/react";
 
 const JobPreferencesPage = () => {
   const [nextJob, setNextJob] = useState("");
   const [motivate, setMotivate] = useState("");
   const [future, setFuture] = useState("");
   const [environment, setEnvironment] = useState("");
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
 
   const handleSubmit = async (e) => {
+    if (!session) {
+      console.log("Unauthorized");
+      return;
+    }
     e.preventDefault();
     try {
       const response = await fetch("/api/Profile/Culture", {
@@ -17,15 +33,23 @@ const JobPreferencesPage = () => {
         headers: {
           "Content-type": "application/json",
         },
-        body: JSON.stringify({ nextJob, motivate, future, environment }),
+        body: JSON.stringify({
+          userId,
+          nextJob,
+          motivate,
+          future,
+          environment,
+        }),
       });
-      if (!response) {
-        throw new Error("failed");
+      if (!response.ok) {
+        throw new Error("Failed to save preferences");
       }
+      console.log("Preferences saved successfully");
     } catch (error) {
-      console.log("error", error);
+      console.error("Error saving preferences:", error);
     }
   };
+
   return (
     <div className="grid grid-cols-12 gap-4">
       <div className="col-span-2">

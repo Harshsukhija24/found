@@ -2,10 +2,15 @@
 import { Schema, model, models } from "mongoose";
 
 const InfoSchema = new Schema({
+  userId: {
+    type: String,
+    required: true,
+  },
   founded: {
     type: String,
     required: true,
   },
+
   location: {
     type: String, // Corrected typo here
     required: true,

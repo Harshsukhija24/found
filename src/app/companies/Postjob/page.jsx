@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Nav_bar from "../components/Nav_Bar";
 import Sidebar from "../components/side_bar";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [jobDescription, setJobDescription] = useState("");
@@ -12,10 +13,14 @@ const Page = () => {
   const [keyResponsibilities, setKeyResponsibilities] = useState("");
   const [qualifications, setQualifications] = useState("");
   const [dateOfJoining, setDateOfJoining] = useState("");
-
+  const { data: session, status } = useSession();
+  const userId = session.user.userId;
+  console.log(session);
+  console.log(userId);
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = {
+      userId,
       JobDescription: jobDescription,
       ExperienceRequired: experienceRequired,
       JobLink: jobLink,

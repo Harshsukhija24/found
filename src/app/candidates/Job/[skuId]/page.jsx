@@ -3,23 +3,23 @@ import React, { useState, useEffect } from "react";
 import Nav from "../../../components/Nav";
 import Sidebar from "@/app/components/Sidebar";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const Page = ({ params: { skuId } }) => {
   const [companyData, setCompanyData] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
+  const { data: session, status } = useSession();
 
   useEffect(() => {
+    if (!session) return;
+
     const fetchData = async () => {
       try {
         const response = await fetch(`/api/candidates/Job/${skuId}`);
-
-        if (!response.ok) {
+        if (!response.ok)
           throw new Error(`Failed to fetch data: ${response.statusText}`);
-        }
 
         const jsonData = await response.json();
-        console.log("Fetched data:", jsonData);
-
         if (Array.isArray(jsonData) && jsonData.length > 0) {
           setCompanyData(jsonData[0]);
         } else if (jsonData && typeof jsonData === "object") {
@@ -33,16 +33,15 @@ const Page = ({ params: { skuId } }) => {
     };
 
     fetchData();
-  }, [skuId]);
+  }, [skuId, session]);
 
-  const handleCoverLetterChange = (e) => {
-    setCoverLetter(e.target.value);
-  };
+  const handleCoverLetterChange = (e) => setCoverLetter(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const applicationData = {
+      userId: session.user.userId,
       skuId,
       company_name: companyData?.company_name || "",
       bio: companyData?.bio || "",
@@ -55,26 +54,24 @@ const Page = ({ params: { skuId } }) => {
     try {
       const response = await fetch("/api/candidates/AppliedData", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(applicationData),
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to submit application");
-      }
+      if (!response.ok) throw new Error("Failed to submit application");
 
       const result = await response.json();
-      console.log(result);
       console.log(result.message);
     } catch (error) {
       console.error("Error submitting application:", error);
     }
   };
 
+  if (status === "loading") return <div>Loading...</div>;
+  if (!session || !session.user) return <div>No user session found</div>;
+
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen">
       <div className="bg-white shadow">
         <Nav />
       </div>
@@ -82,7 +79,7 @@ const Page = ({ params: { skuId } }) => {
         <div className="w-1/4 lg:w-1/6 m-3">
           <Sidebar />
         </div>
-        <div className="flex-grow  mt-16  p-8">
+        <div className="flex-grow mt-16 p-8">
           <div className="text-2xl font-bold mb-4">Company Info</div>
           <div className="flex mb-8 bg-white rounded p-4">
             <div className="w-1/2">
@@ -91,8 +88,8 @@ const Page = ({ params: { skuId } }) => {
                   <h1 className="text-2xl font-bold mb-2">
                     {companyData.company_name}
                   </h1>
-                  <h2>{companyData.bio}</h2>
-                  <h2 className="">{companyData.description}</h2>
+                  <p>{companyData.bio}</p>
+                  <p>{companyData.description}</p>
                   <p className="text-gray-700 mb-2">{companyData.location}</p>
                   <p className="text-gray-700 mb-2">{companyData.salary}</p>
                 </>
@@ -100,10 +97,9 @@ const Page = ({ params: { skuId } }) => {
                 <p className="text-black">No details available</p>
               )}
             </div>
-            <div className="w-1/2   ">
+            <div className="w-1/2">
               <h1 className="text-white bg-black w-auto h-1/5 p-6 rounded-xl flex justify-center">
-                Apply to{" "}
-                {companyData ? companyData.company_name : <span>wait</span>}
+                Apply to {companyData ? companyData.company_name : "wait"}
               </h1>
               <h3 className="mt-4">
                 Is your profile up to date? Click here to{" "}
@@ -115,7 +111,7 @@ const Page = ({ params: { skuId } }) => {
                 </Link>{" "}
                 how you will appear to recruiters.
               </h3>
-              <form className="" onSubmit={handleSubmit}>
+              <form onSubmit={handleSubmit}>
                 <label
                   className="block text-gray-700 text-sm font-bold mt-4"
                   htmlFor="cover-letter"
@@ -127,6 +123,7 @@ const Page = ({ params: { skuId } }) => {
                   className="w-full h-32 p-2 border rounded mb-4"
                   value={coverLetter}
                   onChange={handleCoverLetterChange}
+                  aria-label="Cover Letter"
                 />
                 <button
                   type="submit"

@@ -1,15 +1,17 @@
 "use client";
-import Nav_main from "@/app/components/Nav_main";
+import Nav_main from "../../components/Nav_main";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 
-const Page = () => {
-  const router = useRouter();
+const Register = () => {
   const [email, setEmail] = useState("");
-  const [firstname, setFirstname] = useState("");
-  const [companyname, setCompanyname] = useState("");
+  const [company, setCompany] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const router = useRouter();
+
   const generateUserId = () => {
     const characters =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -22,57 +24,55 @@ const Page = () => {
     }
     return userId;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
     try {
-      if (!firstname || !companyname || !lastName || !email || !password) {
-        throw new Error("All fields are necessary.");
+      if (!firstName || !lastName || !email || !password || !company) {
+        setError("All fields are necessary.");
+        return;
       }
 
-      const resUserExists = await fetch("/api/UserExits", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!resUserExists.ok) {
-        throw new Error("Error checking user existence");
-      }
-
-      const { user } = await resUserExists.json();
-      if (user) {
-        throw new Error("User already exists.");
-      }
-
+      // Register new user
+      const userId = generateUserId(); // Generate userId
       const res = await fetch("/api/Register/Job", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
-          firstName: firstname,
-          lastName: lastName,
-          email: email,
-          password: password,
-          company: companyname,
-          userId: generateUserId(),
+          firstName,
+          lastName,
+          email,
+          password,
+          company,
+          userId, // Send userId to API endpoint
         }),
       });
 
       if (!res.ok) {
-        throw new Error("Registration failed");
+        setError("Registration failed");
+        return;
       }
 
-      const form = e.target;
-      form.reset();
+      setEmail("");
+      setCompany("");
+      setFirstName("");
+      setLastName("");
+      setPassword("");
       router.push("/authentication/Login");
     } catch (error) {
-      console.error("Registration failed:", error.message);
+      setError("Registration failed: " + error.message);
     }
   };
 
   return (
-    <div>
-      <Nav_main />
+    <>
+      <div>
+        <Nav_main />
+      </div>
       <div
         className="min-h-screen bg-cover bg-center flex items-center justify-evenly"
         style={{
@@ -84,6 +84,7 @@ const Page = () => {
           <h1 className="text-center text-2xl font-bold mb-4">
             Create a New Account!
           </h1>
+          {error && <p className="text-red-500">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex space-x-4">
               <div className="flex flex-col w-1/2">
@@ -95,8 +96,8 @@ const Page = () => {
                   placeholder="Enter Your First Name"
                   type="text"
                   className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
                 />
               </div>
               <div className="flex flex-col w-1/2">
@@ -127,16 +128,16 @@ const Page = () => {
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="companyname" className="mb-1">
-                Company Name
+              <label htmlFor="company" className="mb-1">
+                Company
               </label>
               <input
-                id="companyname"
+                id="company"
                 placeholder="Enter your company"
                 type="text"
                 className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
-                value={companyname}
-                onChange={(e) => setCompanyname(e.target.value)}
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
               />
             </div>
             <div className="flex flex-col">
@@ -161,8 +162,8 @@ const Page = () => {
           </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Page;
+export default Register;

@@ -6,6 +6,10 @@ const TeamSchema = new Schema({
     type: String,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+  },
   founderLocation: {
     type: String,
     required: true,

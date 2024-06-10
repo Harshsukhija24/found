@@ -3,10 +3,15 @@ import { NextResponse } from "next/server";
 import { connectDb } from "@/app/utils/connectdb";
 import Team from "../../../../model/companies/Team"; // Use the correct model import
 import mongoose from "mongoose";
+import { getSession } from "next-auth/react";
 
 export const POST = async (req) => {
-  try {
+  if (req.method === "POST") {
+    const session = await getSession({ req });
+    console.log(session);
+
     const {
+      userId,
       founderName,
       founderLocation,
       founderPastExperience,
@@ -14,9 +19,11 @@ export const POST = async (req) => {
       coFounderLocation,
       coFounderPastExperience,
     } = await req.json();
-    await connectDb();
 
-    const newTeam = new Team({
+    const { db } = await connectDb();
+    const collection = db.collection("team");
+    await collection.insertOne({
+      userId,
       founderName,
       founderLocation,
       founderPastExperience,
@@ -25,14 +32,7 @@ export const POST = async (req) => {
       coFounderPastExperience,
     });
 
-    await newTeam.save();
     return NextResponse.json({ message: "Company created" }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating company:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
   }
 };
 

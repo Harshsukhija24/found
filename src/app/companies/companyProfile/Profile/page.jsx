@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Nav_bar from "../../components/Nav_Bar";
 import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [companyName, setCompanyName] = useState("");
@@ -11,6 +12,20 @@ const Page = () => {
   const [overview, setOverview] = useState("");
   const [culture, setCulture] = useState("");
   const [benefit, setBenefit] = useState("");
+
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
+  console.log("user", session);
+  console.log("user", userId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,6 +37,7 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          userId,
           companyName,
           bio,
           overview,
@@ -34,7 +50,6 @@ const Page = () => {
         throw new Error("Failed to submit form");
       }
 
-      // Clear form fields after successful submission
       setCompanyName("");
       setBio("");
       setOverview("");

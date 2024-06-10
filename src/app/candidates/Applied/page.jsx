@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "../../components/Modal_apply";
 import Nav from "../../components/Nav";
 import Sidebar from "../../components/Sidebar";
+import { useSession } from "next-auth/react";
 //import { useRouter } from "next/navigation";
 
 const Page = () => {
@@ -10,11 +11,25 @@ const Page = () => {
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const router = useRouter();
+  const { data: session, status } = useSession();
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
 
   useEffect(() => {
+    if (!session) {
+      console.log("Unauthorized");
+      return;
+    }
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/candidates/Applied");
+        const response = await fetch("/api/candidates/AppliedData");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }

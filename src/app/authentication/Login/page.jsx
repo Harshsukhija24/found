@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("jobseeker"); // Default to job seeker
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -18,6 +19,7 @@ const Login = () => {
       const response = await signIn("credentials", {
         email,
         password,
+        userType,
         redirect: false,
       });
 
@@ -27,7 +29,11 @@ const Login = () => {
         return;
       }
 
-      router.push("/candidates/Job");
+      if (userType === "jobseeker") {
+        router.push("/candidates/Job");
+      } else if (userType === "company") {
+        router.push("/companies/PostedJob"); // Change this to the company's dashboard route
+      }
     } catch (error) {
       console.log("Error:", error);
       setError("An unexpected error occurred.");
@@ -50,6 +56,20 @@ const Login = () => {
           <h1 className="text-center text-2xl font-bold mb-4">Welcome back!</h1>
           {error && <p className="text-red-500">{error}</p>}
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col">
+              <label htmlFor="userType" className="mb-1">
+                I am a:
+              </label>
+              <select
+                id="userType"
+                className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+              >
+                <option value="jobseeker">Job Seeker</option>
+                <option value="company">Company</option>
+              </select>
+            </div>
             <div className="flex flex-col">
               <label htmlFor="email" className="mb-1">
                 Email

@@ -1,11 +1,14 @@
 import { NextResponse } from "next/server";
 import { connectDb } from "@/app/utils/connectdb";
-import Postajob from "@/app/model/companies/postajob";
 import mongoose from "mongoose";
+import { getSession } from "next-auth/react";
 
 export const POST = async (req) => {
-  try {
+  if (req.method === "POST") {
+    const session = await getSession({ req });
+    console.log(session);
     const {
+      userId,
       JobDescription,
       ExperienceRequired,
       JobLink,
@@ -16,13 +19,15 @@ export const POST = async (req) => {
       DateofJoining,
     } = await req.json();
 
-    await connectDb();
-
     const skuId =
       Math.random().toString(36).substring(2, 9) +
       Math.random().toString(36).substring(2, 9);
 
-    const newPostajob = new Postajob({
+    const { db } = await connectDb();
+    const collection = db.collection("postajobs");
+
+    await collection.insertOne({
+      userId,
       skuId,
       JobDescription,
       ExperienceRequired,
@@ -34,15 +39,7 @@ export const POST = async (req) => {
       DateofJoining,
     });
 
-    await newPostajob.save();
-
     return NextResponse.json({ message: "created" }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating postajob:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
   }
 };
 

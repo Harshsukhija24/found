@@ -20,9 +20,21 @@ const Page = () => {
   const [skills, setSkills] = useState("");
   const [achievement, setAchievement] = useState("");
 
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
 
-  // Inside your functional component
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
+
+  // Log session to check its structure
+  console.log("Session data:", session);
+  console.log(userId);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,7 +51,7 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId: session.user.userId, // Include userId here
+          userId, // Ensure this matches the actual session data structure
           name,
           location,
           role,
@@ -71,16 +83,14 @@ const Page = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="flex">
-        {/* Sidebar container */}
         <div className="w-1/5 text-white">
           <Sidebar />
         </div>
-        {/* Main container */}
         <div className="w-4/5 p-4">
           <h1 className="text-xl font-bold mb-4">Edit your Found Profile</h1>
           <Nav_Home />
           <form onSubmit={handleSubmit}>
-            {/* Name and Location */}
+            {/* Form fields */}
             <div className="flex mb-4">
               <div className="w-1/2 pr-2">
                 <label className="block text-sm font-bold mb-2" htmlFor="name">
@@ -112,7 +122,7 @@ const Page = () => {
                 />
               </div>
             </div>
-            {/* Role and Bio */}
+            {/* More form fields */}
             <div className="flex mb-4">
               <div className="w-1/2 pr-2">
                 <label className="block text-sm font-bold mb-2" htmlFor="role">

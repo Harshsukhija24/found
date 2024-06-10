@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import Nav_bar from "../../components/Nav_Bar";
 import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [founderName, setFounderName] = useState("");
@@ -14,6 +15,19 @@ const Page = () => {
   const [coFounderLocation, setCoFounderLocation] = useState("");
   const [coFounderPastExperience, setCoFounderPastExperience] = useState("");
 
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
+
+  const userId = session.user.userId;
+  console.log("user", session);
+  console.log("user", userId);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,6 +38,7 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          userId,
           founderName,
           founderLocation,
           founderPastExperience,

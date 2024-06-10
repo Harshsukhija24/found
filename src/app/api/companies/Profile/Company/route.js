@@ -1,12 +1,21 @@
 import { NextResponse } from "next/server";
 import { connectDb } from "@/app/utils/connectdb";
-import Company from "../../../../model/companies/Company";
-export const POST = async (req) => {
-  try {
-    const { companyName, bio, overview, culture, benefit } = await req.json();
-    await connectDb();
+import Company from "../../../../model/companies/Company"; // Assuming you have a Company model
+import { getSession } from "next-auth/react";
 
-    const newCompany = new Company({
+export const POST = async (req) => {
+  if (req.method === "POST") {
+    const session = await getSession({ req });
+    console.log(session);
+
+    const { userId, companyName, bio, overview, culture, benefit } =
+      await req.json();
+
+    const { db } = await connectDb();
+    const collection = db.collection("Company");
+
+    await collection.insertOne({
+      userId,
       companyName,
       bio,
       overview,
@@ -14,66 +23,6 @@ export const POST = async (req) => {
       benefit,
     });
 
-    await newCompany.save();
     return NextResponse.json({ message: "Company created" }, { status: 201 });
-  } catch (error) {
-    console.error("Error creating company:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
-  }
-};
-
-export const PUT = async (req) => {
-  try {
-    const { id, companyName, bio, overview, culture, benefit } =
-      await req.json();
-    await connectDb();
-
-    const company = await Company.findByIdAndUpdate(
-      id,
-      {
-        companyName,
-        bio,
-        overview,
-        culture,
-        benefit,
-      },
-      { new: true }
-    );
-
-    if (!company) {
-      return NextResponse.json(
-        { message: "Company not found" },
-        { status: 404 }
-      );
-    }
-
-    return NextResponse.json({ message: "Company updated" }, { status: 200 });
-  } catch (error) {
-    console.error("Error updating company:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
-  }
-};
-
-export const GET = async (req) => {
-  try {
-    await connectDb();
-    const { db } = mongoose.connection;
-
-    const collection = db.collection("Company"); // Make sure the collection name matches your setup
-    const Company = await collection.find().toArray();
-
-    return NextResponse.json(Compnay, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching teams:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
   }
 };

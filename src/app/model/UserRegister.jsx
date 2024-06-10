@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, models, model } from "mongoose";
 
 const UserRegisterSchema = new Schema({
   firstName: {
@@ -12,23 +12,24 @@ const UserRegisterSchema = new Schema({
   email: {
     type: String,
     required: true,
-  },
-  company: {
-    type: String,
-    required: true,
+    unique: true,
   },
   userId: {
     type: String,
-    unique: true,
     required: true,
+    unique: true, // Ensure userId is unique
   },
   password: {
     type: String,
     required: true,
   },
+  company: {
+    type: String,
+    required: true,
+  },
 });
 
-const UserRegister =
-  models.UserRegister || model("UserRegister", UserRegisterSchema);
+const UserRegisterModel =
+  models.userregister || model("userregister", UserRegisterSchema);
 
-export default UserRegister;
+export default UserRegisterModel;

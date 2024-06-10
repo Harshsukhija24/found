@@ -1,38 +1,57 @@
-// pages/api/Register/Job.js
-
-import { NextResponse } from "next/server";
-import bcrypt from "bcryptjs";
-import UserRegister from "../../../model/UserRegister";
+import UserRegisterModel from "@/app/model/UserRegister";
 import { connectDb } from "../../../utils/connectdb";
+import bcrypt from "bcryptjs";
+import { getSession } from "next-auth/react";
+import { NextResponse } from "next/server";
+
 export async function POST(req) {
   try {
-    const body = await req.json();
-    const { firstName, lastName, email, password, company } = body;
+    const { firstName, lastName, email, password, company, userId } =
+      await req.json();
 
-    if (!firstName || !lastName || !company || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !company) {
       return NextResponse.json(
         { message: "All fields are necessary" },
         { status: 400 }
       );
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
     await connectDb();
-    const userId =
-      Math.random().toString(36).substring(2, 9) +
-      Math.random().toString(36).substring(2, 9);
-    await UserRegister.create({
+
+    // Check if the user already exists
+    const existingUser = await UserRegisterModel.findOne({ email });
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "User already exists." },
+        { status: 409 }
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user with the provided userId
+    const newUser = new UserRegisterModel({
       firstName,
-      company,
       lastName,
       email,
       password: hashedPassword,
-      userId,
+      company,
+      userId, // Ensure userId is saved correctly
     });
+
+    // Save the new user to the database
+    await newUser.save();
+
+    // Save userId to the session after successful registration
+    const session = await getSession({ req });
+    if (session) {
+      session.userId = userId;
+      await session.commit();
+    }
 
     return NextResponse.json({ message: "User created" }, { status: 201 });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error registering user:", error);
     return NextResponse.json({ message: "An error occurred" }, { status: 500 });
   }
 }

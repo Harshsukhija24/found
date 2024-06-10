@@ -2,8 +2,8 @@ import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectDb } from "../../../utils/connectdb";
 import bcrypt from "bcryptjs";
-import Userjobs from "../../../model/UserJob";
-import Usereegisters from "../../../model/UserRegister"; // Adjusted import
+import Userjobs from "../../../model/Userjob";
+import Usereegisters from "../../../model/UserRegister";
 
 export const authOptions = {
   providers: [
@@ -16,77 +16,81 @@ export const authOptions = {
           placeholder: "jdoe@example.com",
         },
         password: { label: "Password", type: "password" },
+        userType: { label: "User Type", type: "text" },
       },
       async authorize(credentials) {
-        try {
-          await connectDb();
-          const user = await Userjobs.findOne({ email: credentials.email });
+        await connectDb();
 
-          if (!user) {
-            throw new Error("User not found");
-          }
-
-          const passwordMatch = await bcrypt.compare(
-            credentials.password,
-            user.password
+        let user;
+        if (credentials.userType === "jobseeker") {
+          console.log(
+            `JobSeeker: Trying to find user with email: ${credentials.email}`
           );
-          if (!passwordMatch) {
-            throw new Error("Invalid password");
-          }
-
-          return user;
-        } catch (error) {
-          console.error("Authentication error:", error.message);
-          return null;
-        }
-      },
-    }),
-    CredentialsProvider({
-      name: "CompanyCredentialsProvider",
-      credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "company@example.com",
-        },
-        password: { label: "Password", type: "password" },
-      },
-      async authorize(credentials) {
-        try {
-          await connectDb();
-          const user = await Usereegisters.findOne({
-            email: credentials.email,
-          });
-
-          if (!user) {
-            throw new Error("User not found");
-          }
-
-          const passwordMatch = await bcrypt.compare(
-            credentials.password,
-            user.password
+          user = await Userjobs.findOne({ email: credentials.email });
+          console.log("JobSeeker: User found:", user);
+        } else if (credentials.userType === "company") {
+          console.log(
+            `Company: Trying to find user with email: ${credentials.email}`
           );
-          if (!passwordMatch) {
-            throw new Error("Invalid password");
-          }
-
-          return user;
-        } catch (error) {
-          console.error("Authentication error:", error.message);
-          return null;
+          user = await Usereegisters.findOne({ email: credentials.email });
+          console.log("Company: User found:", user);
         }
+
+        if (!user) {
+          console.error(`${credentials.userType}: User not found`);
+          throw new Error("User not found");
+        }
+
+        const passwordMatch = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        if (!passwordMatch) {
+          console.error(`${credentials.userType}: Invalid password`);
+          throw new Error("Invalid password");
+        }
+
+        console.log(`${credentials.userType}: User authorized`);
+        return {
+          userId: user.userId, // Change from id to userId
+          firstName: user.firstName || null,
+          lastName: user.lastName || null,
+          email: user.email,
+          userType: credentials.userType, // Include user type
+        };
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.userId = user.userId; // Change from id to userId
+        token.firstName = user.firstName || null;
+        token.lastName = user.lastName || null;
+        token.email = user.email;
+        token.userType = user.userType; // Include user type
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user = {
+          userId: token.userId,
+          firstName: token.firstName || null,
+          lastName: token.lastName || null,
+          email: token.email,
+          userType: token.userType,
+        };
+      }
+      return session;
+    },
+  },
   session: {
-    jwt: true, // Enable JWT sessions
+    strategy: "jwt",
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: {
-      jobSeeker: "/authentication/Registration_job",
-      company: "/authentication/Registration_companies",
-    },
+    signIn: "/authentication/Login",
   },
 };
 
