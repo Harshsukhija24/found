@@ -13,7 +13,7 @@ const Page = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/candidates/Companies");
+        const response = await fetch("/api/candidates/AppliedData");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -58,7 +58,6 @@ const Page = () => {
     <div className="flex flex-col h-screen">
       <div className="w-full">
         <Nav />
-
         <Nav_Home />
       </div>
       <div className="flex flex-1">
@@ -74,27 +73,27 @@ const Page = () => {
                   onClick={() => openModal(company)}
                   className="bg-white shadow-md rounded-lg p-6 mb-6 cursor-pointer"
                 >
-                  <h2 className="text-2xl font-bold mb-2">
-                    {company.company_name}
-                  </h2>
-                  <p className="text-gray-700 mb-2">{company.bio}</p>
-                  <h3 className="text-lg font-semibold mb-2">Jobs:</h3>
-                  {company.jobs.map((job, jobIndex) => (
-                    <div
-                      key={jobIndex}
-                      className="bg-gray-100 p-4 rounded mb-2"
-                    >
+                  {company.company.map((item, skuId) => (
+                    <div key={skuId} className="bg-gray-100 p-4 rounded mb-2">
+                      <p className="mb-1">
+                        <span className="font-semibold">Company Name:</span>{" "}
+                        {item.companyName}
+                      </p>
+                      <p className="mb-1">
+                        <span className="font-semibold">Bio:</span> {item.bio}
+                      </p>
+                      <h3 className="text-lg font-semibold mb-2">Jobs:</h3>
                       <p className="mb-1">
                         <span className="font-semibold">Job Description:</span>{" "}
-                        {job.description}
+                        {company.JobDescription}
                       </p>
                       <p className="mb-1">
                         <span className="font-semibold">Salary:</span>{" "}
-                        {job.salary}
+                        {company.SalaryRange}
                       </p>
                       <p className="mb-1">
-                        <span className="font-semibold">Location:</span>{" "}
-                        {job.location}
+                        <span className="font-semibold">location:</span>{" "}
+                        {company.JobLocation}
                       </p>
                     </div>
                   ))}

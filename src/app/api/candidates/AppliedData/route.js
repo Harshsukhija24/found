@@ -1,60 +1,48 @@
 import { NextResponse } from "next/server";
 import { connectDb } from "@/app/utils/connectdb";
-import appliedData from "@/app/model/appliedData";
+import postajob from "@/app/model/companies/postajob";
 import { getSession } from "next-auth/react";
 import mongoose from "mongoose";
 
-export async function POST(req) {
-  const session = await getSession({ req });
+export const POST = async (req) => {
+  if (req.method === "POST") {
+    const session = await getSession({ req });
+    console.log("hello", session);
 
-  if (!session) {
-    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
-  }
-
-  try {
-    const body = await req.json();
     const {
       userId,
       skuId,
-      company_name,
-      bio,
-      location,
-      description,
-      salary,
+
       coverLetter,
-    } = body;
+      companyData,
+    } = await req.json();
 
-    await connectDb();
+    const { db } = await connectDb();
+    const collection = db.collection("applieddatas");
 
-    const newAppliedData = new appliedData({
+    await collection.insertOne({
       userId,
       skuId,
-      company_name,
-      bio,
-      location,
-      description,
-      salary,
+
       coverLetter,
+      companyData,
     });
 
-    await newAppliedData.save();
     return NextResponse.json({ message: "Saved" });
-  } catch (error) {
-    console.error("Error saving application:", error);
-    return NextResponse.json(
-      { message: "Internal Server Error" },
-      { status: 500 }
-    );
   }
-}
+};
 
 export const GET = async (req) => {
   try {
     await connectDb();
-    const appliedDatas = await appliedData.find();
-    return NextResponse.json(appliedDatas, { status: 200 });
+    const { db } = mongoose.connection;
+
+    const collection = db.collection("postajobs"); // Make sure the collection name matches your setup
+    const teams = await collection.find().toArray();
+
+    return NextResponse.json(teams, { status: 200 });
   } catch (error) {
-    console.error("Error fetching applied data:", error);
+    console.error("Error fetching teams:", error);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }

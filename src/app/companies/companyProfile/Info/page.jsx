@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Nav_bar from "../../components/Nav_Bar";
 import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
@@ -11,21 +11,37 @@ const Page = () => {
   const [location, setLocation] = useState("");
   const [website, setWebsite] = useState("");
   const [employees, setEmployees] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false); // State for showing success message
   const { data: session, status } = useSession();
+  const [profileData, setProfileData] = useState({});
+  const userId = session?.user?.userId;
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/companies/Profile/Info/${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+        const data = await response.json();
+        console.log("Fetched data:", data);
 
-  if (!session || !session.user) {
-    return <div>No user session found</div>;
-  }
+        if (data) {
+          const profile = data[0]; // Assuming the response is an array with one object
+          setFounded(profile.founded || "");
+          setLocation(profile.location || "");
+          setWebsite(profile.website || "");
+          setEmployees(profile.employees || "");
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
 
-  const userId = session.user.userId;
-
-  // Log session to check its structure
-  console.log("Session data:", session);
-  console.log(userId);
+    if (userId) {
+      fetchData();
+    }
+  }, [userId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,8 +51,9 @@ const Page = () => {
     }
 
     try {
+      // POST request to save new data or update existing data
       const response = await fetch("/api/companies/Profile/Info", {
-        method: "POST",
+        method: "POST", // Use POST to create new data
         headers: {
           "Content-Type": "application/json",
         },
@@ -53,15 +70,41 @@ const Page = () => {
         throw new Error("Failed to submit form");
       }
 
-      // Clear form fields after successful submission
-      setFounded("");
-      setLocation("");
-      setWebsite("");
-      setEmployees("");
+      // Assuming you handle updates with a PUT request
+      const putResponse = await fetch("/api/companies/Profile/Info", {
+        method: "PUT", // Use PUT to update existing data
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId,
+          founded,
+          location,
+          website,
+          employees,
+        }),
+      });
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update form");
+      }
+
+      console.log("Form updated successfully");
+
+      setIsPopupVisible(true);
+      setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -138,6 +181,11 @@ const Page = () => {
               </button>
             </div>
           </form>
+          {isPopupVisible && (
+            <div className="bg-green-200 border border-green-600 text-green-800 px-4 py-3 rounded relative">
+              Form updated successfully!
+            </div>
+          )}
         </div>
       </div>
     </div>

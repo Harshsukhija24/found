@@ -1,15 +1,19 @@
+// pages/Page.js
 "use client";
 import React, { useEffect, useState } from "react";
-import Nav_bar from "../components/Nav_Bar";
-import Sidebar from "../components/side_bar";
+import NavBar from "../components/Nav_Bar"; // Corrected component name
+import Sidebar from "../components/Side_Bar"; // Corrected component name
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const [jobs, setJobs] = useState([]);
+  const { data: session, status } = useSession();
+  const userId = session?.user?.userId; // Ensure userId is safely accessed
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/companies/PostJob", {
+        const response = await fetch(`/api/companies/PostJob/${userId}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -24,20 +28,27 @@ const Page = () => {
         setJobs(data);
       } catch (error) {
         console.error("Error fetching data:", error);
+        // Optionally, set a state to handle errors
       }
     };
 
-    fetchData();
-  }, []);
+    if (session) {
+      fetchData();
+    }
+  }, [session, userId]);
+
+  if (status === "loading") {
+    return <div>Loading...</div>; // Simple loading indicator
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Nav_bar />
+      <NavBar />
       <div className="flex flex-1">
         <div className="w-1/6">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-6 flex flex-col mt-8 space-y-4">
+        <div className="w-5/6 p-6 flex flex-col mt-16 space-y-4">
           {jobs.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {jobs.map((job) => (

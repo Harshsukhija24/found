@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Nav_Home from "@/app/components/Nav_Home";
 import Sidebar from "@/app/components/Sidebar";
@@ -19,22 +19,48 @@ const Page = () => {
   const [education, setEducation] = useState("");
   const [skills, setSkills] = useState("");
   const [achievement, setAchievement] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const { data: session, status } = useSession();
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (status === "authenticated" && session?.user) {
+        const userId = session.user.userId;
+        try {
+          const response = await fetch(`/api/Profile/Profile/${userId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
 
-  if (!session || !session.user) {
-    return <div>No user session found</div>;
-  }
+          const data = await response.json();
+          console.log("Fetched data:", data);
 
-  const userId = session.user.userId;
+          if (data.length > 0) {
+            const userProfile = data[0];
+            setName(userProfile.name || "");
+            setLocation(userProfile.location || "");
+            setRole(userProfile.role || "");
+            setBio(userProfile.bio || "");
+            setWebsite(userProfile.website || "");
+            setLinkedin(userProfile.linkedin || "");
+            setGithub(userProfile.github || "");
+            setTwitter(userProfile.twitter || "");
+            setCompany(userProfile.company || "");
+            setTitle(userProfile.title || "");
+            setDescription(userProfile.description || "");
+            setEducation(userProfile.education || "");
+            setSkills(userProfile.skills || "");
+            setAchievement(userProfile.achievement || "");
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
 
-  // Log session to check its structure
-  console.log("Session data:", session);
-  console.log(userId);
+    fetchData();
+  }, [session, status]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,41 +70,65 @@ const Page = () => {
       return;
     }
 
+    const userId = session.user.userId;
+    const userProfile = {
+      userId,
+      name,
+      location,
+      role,
+      bio,
+      website,
+      linkedin,
+      github,
+      twitter,
+      company,
+      title,
+      description,
+      education,
+      skills,
+      achievement,
+    };
+
     try {
       const response = await fetch("/api/Profile/Profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          userId, // Ensure this matches the actual session data structure
-          name,
-          location,
-          role,
-          bio,
-          website,
-          linkedin,
-          github,
-          twitter,
-          company,
-          title,
-          description,
-          education,
-          skills,
-          achievement,
-        }),
+        body: JSON.stringify(userProfile),
       });
 
       if (!response.ok) {
         throw new Error(`Failed to save profile: ${response.statusText}`);
       }
 
-      const result = await response.json();
-      console.log(result.message);
-    } catch (error) {
-      console.error("Error:", error.message);
+      const putResponse = await fetch("/api/Profile/Profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userProfile),
+      });
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      console.log("Profile updated successfully");
+      setIsPopupVisible(true);
+      setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
+    } catch (err) {
+      console.error("Error:", err);
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
 
   return (
     <div className="min-h-screen bg-white">
@@ -339,6 +389,11 @@ const Page = () => {
               </button>
             </div>
           </form>
+          {isPopupVisible && (
+            <div className="fixed bottom-0 right-0 mb-4 mr-4 p-4 bg-green-500 text-white rounded shadow-lg">
+              Profile updated successfully!
+            </div>
+          )}
         </div>
       </div>
     </div>

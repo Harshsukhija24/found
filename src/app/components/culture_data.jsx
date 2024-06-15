@@ -1,29 +1,39 @@
+// CultureData.js
 "use client";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const CultureData = () => {
-  const [culture, setCulture] = useState([]);
+const CultureData = ({ params: userId }) => {
+  const [culture, setCulture] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchCulture = async () => {
-      try {
-        const response = await fetch("/api/Profile/Culture");
-        if (!response.ok) {
-          throw new Error("API not working");
+      if (status === "authenticated" && session?.user) {
+        const userId = session.user.userId;
+        try {
+          const response = await fetch(`/api/Profile/Culture/${userId}`);
+          if (!response.ok) {
+            throw new Error("API not working");
+          }
+          const data = await response.json();
+          if (data.length > 0) {
+            setCulture(data[0]);
+          } else {
+            setCulture(null);
+          }
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setCulture(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchCulture();
-  }, []);
+  }, [session, status]);
 
   if (loading) {
     return (
@@ -39,23 +49,22 @@ const CultureData = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Culture</h1>
-      <ul className="space-y-4">
-        {culture.map((item) => (
-          <li key={item._id} className="p-4 border rounded-lg shadow">
-            <h2 className="text-2xl font-semibold">{item.nextJob}</h2>
-            <p className="mt-2">
-              <strong>Motivate:</strong> {item.motivate}
-            </p>
-            <p className="mt-2">
-              <strong>Future:</strong> {item.future}
-            </p>
-            <p className="mt-2">
-              <strong>Environment:</strong> {item.environment}
-            </p>
-          </li>
-        ))}
-      </ul>
+      {culture ? (
+        <div className="p-4 ">
+          <h2 className="text-2xl font-semibold">{culture.nextJob}</h2>
+          <p className="mt-2">
+            <strong>Motivate:</strong> {culture.motivate}
+          </p>
+          <p className="mt-2">
+            <strong>Future:</strong> {culture.future}
+          </p>
+          <p className="mt-2">
+            <strong>Environment:</strong> {culture.environment}
+          </p>
+        </div>
+      ) : (
+        <div className="text-center mt-4">No culture data available.</div>
+      )}
     </div>
   );
 };

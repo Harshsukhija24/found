@@ -62,19 +62,70 @@ export const POST = async (req) => {
 
 export const GET = async (req) => {
   if (req.method === "GET") {
-    try {
-      await connectDb();
-      const { db } = mongoose.connection;
-      const collection = db.collection("profile");
+    const { db } = await connectDb();
 
-      const profile = await collection.find().toArray();
+    const collection = db.collection("profile");
 
-      return NextResponse.json(profile);
-    } catch (error) {
-      console.error("Error processing request:", error);
-      return NextResponse.error({ message: "Error fetching profile" });
+    const profile = await collection.find().toArray();
+
+    return NextResponse.json(profile);
+  }
+};
+export const PUT = async (req) => {
+  if (req.method === "PUT") {
+    const session = await getSession({ req });
+    console.log(session);
+
+    const {
+      userId,
+      name,
+      location,
+      role,
+      bio,
+      website,
+      linkedin,
+      github,
+      twitter,
+      company,
+      title,
+      description,
+      education,
+      skills,
+      achievement,
+    } = await req.json();
+
+    const { db } = await connectDb();
+    const collection = db.collection("profile");
+
+    const result = await collection.updateOne(
+      { userId },
+      {
+        $set: {
+          name,
+          location,
+          role,
+          bio,
+          website,
+          linkedin,
+          github,
+          twitter,
+          company,
+          title,
+          description,
+          education,
+          skills,
+          achievement,
+        },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 }
+      );
     }
-  } else {
-    return NextResponse.error({ message: "Method not allowed" });
+
+    return NextResponse.json({ message: "Company updated" }, { status: 200 });
   }
 };

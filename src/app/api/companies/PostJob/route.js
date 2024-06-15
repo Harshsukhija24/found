@@ -6,7 +6,7 @@ import { getSession } from "next-auth/react";
 export const POST = async (req) => {
   if (req.method === "POST") {
     const session = await getSession({ req });
-    console.log(session);
+
     const {
       userId,
       JobDescription,
@@ -17,6 +17,9 @@ export const POST = async (req) => {
       KeyResponsibilities,
       Qualifications,
       DateofJoining,
+      info,
+      company,
+      team,
     } = await req.json();
 
     const skuId =
@@ -26,7 +29,7 @@ export const POST = async (req) => {
     const { db } = await connectDb();
     const collection = db.collection("postajobs");
 
-    await collection.insertOne({
+    const result = await collection.insertOne({
       userId,
       skuId,
       JobDescription,
@@ -37,12 +40,16 @@ export const POST = async (req) => {
       KeyResponsibilities,
       Qualifications,
       DateofJoining,
+      info,
+      company,
+      team,
     });
 
     return NextResponse.json({ message: "created" }, { status: 201 });
+  } else {
+    return NextResponse.error("Method Not Allowed", { status: 405 });
   }
 };
-
 export const GET = async (req) => {
   try {
     await connectDb();

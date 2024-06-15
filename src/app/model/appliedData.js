@@ -1,23 +1,32 @@
 import { models, model, Schema } from "mongoose";
 
 const appliedDataSchema = new Schema({
+  coverLetter: {
+    type: String,
+    required: true,
+  },
+
   skuId: {
     type: String,
     required: true,
   },
-  company_name: {
+  userId: {
     type: String,
     required: true,
   },
-  bio: {
+  companyName: {
     type: String,
     required: true,
   },
-  location: {
+  companyBio: {
     type: String,
     required: true,
   },
-  description: {
+  companyLocation: {
+    type: String,
+    required: true,
+  },
+  companyDescription: {
     type: String,
     required: true,
   },
@@ -29,6 +38,62 @@ const appliedDataSchema = new Schema({
     type: String,
     required: true,
   },
+  nextJob: {
+    type: String,
+    required: true,
+  },
+  motivate: {
+    type: String,
+    required: true,
+  },
+  future: {
+    type: String,
+    required: true,
+  },
+  environment: {
+    type: String,
+    required: true,
+  },
+  relocation: {
+    type: Boolean,
+    required: true,
+  },
+  authorized: {
+    type: Boolean,
+    required: true,
+  },
+  jobType: String,
+  openToJobTypes: [String],
+  desiredLocations: [String],
+  openToRemoteWork: Boolean,
+  desiredSalary: String,
+  companySizes: [String],
+  applicantName: {
+    type: String,
+    required: true,
+  },
+  applicantLocation: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    required: true,
+  },
+  applicantBio: {
+    type: String,
+    required: true,
+  },
+  website: String,
+  linkedin: String,
+  github: String,
+  twitter: String,
+  company: String,
+  title: String,
+  description: String,
+  education: String,
+  skills: String,
+  achievement: String,
 });
 
 export default models.AppliedData || model("AppliedData", appliedDataSchema);

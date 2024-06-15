@@ -4,32 +4,17 @@ import Modal from "../../components/Modal_apply";
 import Nav from "../../components/Nav";
 import Sidebar from "../../components/Sidebar";
 import { useSession } from "next-auth/react";
-//import { useRouter } from "next/navigation";
 
 const Page = () => {
   const [data, setData] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const router = useRouter();
   const { data: session, status } = useSession();
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  if (!session || !session.user) {
-    return <div>No user session found</div>;
-  }
-
-  const userId = session.user.userId;
 
   useEffect(() => {
-    if (!session) {
-      console.log("Unauthorized");
-      return;
-    }
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/candidates/AppliedData");
+        const response = await fetch("/api/candidates/Applied");
         if (!response.ok) {
           throw new Error("Failed to fetch data");
         }
@@ -41,7 +26,7 @@ const Page = () => {
     };
 
     fetchData();
-  }, []);
+  }, [session]);
 
   const openModal = (company) => {
     setSelectedCompany(company);
@@ -62,18 +47,29 @@ const Page = () => {
       <div className="w-5/6 mt-20 p-4">
         {/* Page content */}
         {data.length > 0 ? (
-          data.map((company, index) => (
-            <div
-              key={index}
-              className="bg-white shadow-md rounded p-4 mb-4"
-              onClick={() => openModal(company)}
-            >
-              <h2 className="text-xl font-bold">{company.company_name}</h2>
-              <p className="text-gray-600">{company.description}</p>
-              <p className="text-gray-600">{company.location}</p>
-              <p className="text-gray-600">{company.salary}</p>
-            </div>
-          ))
+          data.map((item, index) => {
+            const companyData = item.companyData;
+            const companyInfo = companyData?.company?.[0];
+            const info = companyData?.info?.[0];
+
+            if (!companyInfo) {
+              return null; // Skip rendering if company info is missing
+            }
+
+            return (
+              <div
+                key={index}
+                className="bg-white shadow-md rounded p-4 mb-4"
+                onClick={() => openModal(item)}
+              >
+                <h2 className="text-xl font-bold">{companyInfo.companyName}</h2>
+                <p className="text-gray-600">{companyInfo.bio}</p>
+                {info && <p className="text-gray-600">{info.location}</p>}
+                <p className="text-gray-600">{companyData.JobDescription}</p>
+                <p className="text-gray-600">{companyData.SalaryRange}</p>
+              </div>
+            );
+          })
         ) : (
           <p>No data available.</p>
         )}

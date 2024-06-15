@@ -1,29 +1,42 @@
+// Profiles.js
 "use client";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const Profiles = () => {
-  const [profiles, setProfiles] = useState([]);
+const Profiles = ({ params: userId }) => {
+  const { data: session, status } = useSession();
+  const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProfiles = async () => {
-      try {
-        const response = await fetch("/api/Profile/Profile");
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+    const fetchProfile = async () => {
+      if (status === "authenticated" && session?.user) {
+        const userId = session.user.userId;
+        try {
+          const response = await fetch(`/api/Profile/Profile/${userId}`);
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          const data = await response.json();
+          if (data.length > 0) {
+            setProfile(data[0]);
+          } else {
+            setProfile(null);
+          }
+        } catch (error) {
+          console.error("Error fetching profile:", error);
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setProfiles(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
+      } else {
         setLoading(false);
       }
     };
 
-    fetchProfiles();
-  }, []);
+    fetchProfile();
+  }, [status, session]);
 
   if (loading) {
     return (
@@ -37,32 +50,37 @@ const Profiles = () => {
     return <div className="text-red-500 text-center mt-4">Error: {error}</div>;
   }
 
+  if (!profile) {
+    return <div>No profile found</div>;
+  }
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Profiles</h1>
-      <ul className="space-y-4">
-        {profiles.map((profile) => (
-          <li key={profile._id} className="p-4 border rounded-lg shadow">
-            <h2 className="text-2xl font-semibold">{profile.name}</h2>
-            <p className="mt-2">{profile.bio}</p>
-            <p className="mt-2">
-              <strong>Education:</strong> {profile.education}
-            </p>
-            <p className="mt-2">
-              <strong>Skills:</strong> {profile.skills}
-            </p>
-            <p className="mt-2">
-              <strong>Role:</strong> {profile.role}
-            </p>
-            <a
-              href={profile.github}
-              className="text-blue-500 hover:underline mt-2 block"
-            >
-              GitHub
-            </a>
-          </li>
-        ))}
-      </ul>
+      <div className="p-4 ">
+        <h2 className="text-2xl font-semibold">
+          <strong>Name:</strong> {profile.name}
+        </h2>
+        <p className="mt-2">
+          <strong>Bio:</strong> {profile.bio}
+        </p>
+        <p className="mt-2">
+          <strong>Education:</strong> {profile.education}
+        </p>
+        <p className="mt-2">
+          <strong>Skills:</strong> {profile.skills}
+        </p>
+        <p className="mt-2">
+          <strong>Role:</strong> {profile.role}
+        </p>
+        {profile.github && (
+          <a
+            href={profile.github}
+            className="text-blue-500 hover:underline mt-2 block"
+          >
+            GitHub
+          </a>
+        )}
+      </div>
     </div>
   );
 };

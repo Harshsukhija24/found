@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Nav_bar from "../../components/Nav_Bar";
 import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
@@ -12,23 +12,62 @@ const Page = () => {
   const [overview, setOverview] = useState("");
   const [culture, setCulture] = useState("");
   const [benefit, setBenefit] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
 
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!session || !session.user) return;
+      const userId = session.user.userId;
+      try {
+        const response = await fetch(
+          `/api/companies/Profile/Company/${userId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch data");
+        }
+
+        const data = await response.json();
+        console.log("Fetched data:", data);
+
+        if (data.length > 0) {
+          const companyData = data[0];
+          setCompanyName(companyData.companyName);
+          setBio(companyData.bio);
+          setOverview(companyData.overview);
+          setCulture(companyData.culture);
+          setBenefit(companyData.benefit);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [session]);
 
   if (status === "loading") {
     return <div>Loading...</div>;
   }
 
-  if (!session || !session.user) {
-    return <div>No user session found</div>;
-  }
-
-  const userId = session.user.userId;
-  console.log("user", session);
-  console.log("user", userId);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!session || !session.user) {
+      console.error("User session is not available");
+      return;
+    }
+
+    const userId = session.user.userId;
+    const companyData = {
+      userId,
+      companyName,
+      bio,
+      overview,
+      culture,
+      benefit,
+    };
 
     try {
       const response = await fetch("/api/companies/Profile/Company", {
@@ -36,25 +75,31 @@ const Page = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          userId,
-          companyName,
-          bio,
-          overview,
-          culture,
-          benefit,
-        }),
+        body: JSON.stringify(companyData),
       });
 
       if (!response.ok) {
         throw new Error("Failed to submit form");
       }
 
-      setCompanyName("");
-      setBio("");
-      setOverview("");
-      setCulture("");
-      setBenefit("");
+      console.log("Form submitted successfully");
+
+      const putResponse = await fetch("/api/companies/Profile/Company", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(companyData),
+      });
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update form");
+      }
+
+      console.log("Form updated successfully");
+
+      setIsPopupVisible(true);
+      setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
     } catch (err) {
       console.error("Error:", err);
     }
@@ -143,6 +188,11 @@ const Page = () => {
               </button>
             </div>
           </form>
+          {isPopupVisible && (
+            <div className="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-md shadow-lg">
+              Data saved successfully!
+            </div>
+          )}
         </div>
       </div>
     </div>

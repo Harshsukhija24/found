@@ -1,13 +1,13 @@
 // pages/Profile.js
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Nav_bar from "../../components/Nav_Bar";
 import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
 import { useSession } from "next-auth/react";
 
-const Page = () => {
+const Profile = () => {
   const [founderName, setFounderName] = useState("");
   const [founderLocation, setFounderLocation] = useState("");
   const [founderPastExperience, setFounderPastExperience] = useState("");
@@ -17,17 +17,37 @@ const Page = () => {
 
   const { data: session, status } = useSession();
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(
+          `/api/companies/Profile/Team/${session.user.userId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+        const data = await response.json();
+        console.log("Fetched data:", data);
 
-  if (!session || !session.user) {
-    return <div>No user session found</div>;
-  }
+        if (data.length > 0) {
+          const profile = data[0];
+          setFounderName(profile.founderName || "");
+          setFounderLocation(profile.founderLocation || "");
+          setFounderPastExperience(profile.founderPastExperience || "");
+          setCoFounderName(profile.coFounderName || "");
+          setCoFounderLocation(profile.coFounderLocation || "");
+          setCoFounderPastExperience(profile.coFounderPastExperience || "");
+        }
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
 
-  const userId = session.user.userId;
-  console.log("user", session);
-  console.log("user", userId);
+    if (session) {
+      fetchData();
+    }
+  }, [session]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -38,7 +58,7 @@ const Page = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          userId,
+          userId: session.user.userId,
           founderName,
           founderLocation,
           founderPastExperience,
@@ -52,17 +72,42 @@ const Page = () => {
         throw new Error("Failed to submit form");
       }
 
-      // Clear form fields after successful submission
-      setFounderName("");
-      setFounderLocation("");
-      setFounderPastExperience("");
-      setCoFounderName("");
-      setCoFounderLocation("");
-      setCoFounderPastExperience("");
+      const putResponse = await fetch("/api/companies/Profile/Team", {
+        method: "PUT", // Use PUT to update existing data
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: session.user.userId,
+          founderName,
+          founderLocation,
+          founderPastExperience,
+          coFounderName,
+          coFounderLocation,
+          coFounderPastExperience,
+        }),
+      });
+
+      if (!putResponse.ok) {
+        throw new Error("Failed to update form");
+      }
+
+      console.log("Form updated successfully");
+
+      setIsPopupVisible(true);
+      setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
+
+  if (!session || !session.user) {
+    return <div>No user session found</div>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -164,4 +209,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Profile;

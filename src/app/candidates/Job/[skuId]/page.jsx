@@ -5,34 +5,79 @@ import Sidebar from "@/app/components/Sidebar";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-const Page = ({ params: { skuId } }) => {
+const Page = ({ params: { skuId, userId } }) => {
   const [companyData, setCompanyData] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [preference, setPreference] = useState(null); // Corrected typo in state variable name
+  const [culture, setCulture] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
   const { data: session, status } = useSession();
 
   useEffect(() => {
     if (!session) return;
+    const userId = session.user.userId;
 
-    const fetchData = async () => {
+    const fetchCompanyData = async () => {
       try {
         const response = await fetch(`/api/candidates/Job/${skuId}`);
         if (!response.ok)
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
-
-        const jsonData = await response.json();
-        if (Array.isArray(jsonData) && jsonData.length > 0) {
-          setCompanyData(jsonData[0]);
-        } else if (jsonData && typeof jsonData === "object") {
-          setCompanyData(jsonData);
-        } else {
-          throw new Error("Invalid data format");
-        }
+          throw new Error(
+            `Failed to fetch company data: ${response.statusText}`
+          );
+        const data = await response.json();
+        setCompanyData(Array.isArray(data) ? data[0] : data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching company data:", error);
       }
     };
 
-    fetchData();
+    const fetchProfileData = async () => {
+      try {
+        const response = await fetch(`/api/Profile/Profile/${userId}`);
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch profile data: ${response.statusText}`
+          );
+        const data = await response.json();
+        setProfile(data);
+        console.log(profile);
+      } catch (error) {
+        console.error("Error fetching profile data:", error);
+      }
+    };
+
+    const fetchPreferenceData = async () => {
+      try {
+        const response = await fetch(`/api/Profile/Preferences/${userId}`);
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch preference data: ${response.statusText}`
+          );
+        const data = await response.json();
+        setPreference(data);
+      } catch (error) {
+        console.error("Error fetching preference data:", error);
+      }
+    };
+
+    const fetchCultureData = async () => {
+      try {
+        const response = await fetch(`/api/Profile/Culture/${userId}`);
+        if (!response.ok)
+          throw new Error(
+            `Failed to fetch culture data: ${response.statusText}`
+          );
+        const data = await response.json();
+        setCulture(data);
+      } catch (error) {
+        console.error("Error fetching culture data:", error);
+      }
+    };
+
+    fetchCompanyData();
+    fetchProfileData();
+    fetchPreferenceData();
+    fetchCultureData();
   }, [skuId, session]);
 
   const handleCoverLetterChange = (e) => setCoverLetter(e.target.value);
@@ -40,18 +85,29 @@ const Page = ({ params: { skuId } }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Check if companyData is available
+    if (!companyData || !companyData.company) {
+      console.error("Company data not available.");
+      return;
+    }
+
     const applicationData = {
       userId: session.user.userId,
       skuId,
-      company_name: companyData?.company_name || "",
-      bio: companyData?.bio || "",
-      description: companyData?.description || "",
-      location: companyData?.location || "",
-      salary: companyData?.salary || "",
       coverLetter,
+      companyData,
+    };
+
+    const summaryData = {
+      skuId,
+      coverLetter,
+      profile,
+      preference,
+      culture,
     };
 
     try {
+      // Submit application data
       const response = await fetch("/api/candidates/AppliedData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -62,6 +118,18 @@ const Page = ({ params: { skuId } }) => {
 
       const result = await response.json();
       console.log(result.message);
+
+      // Submit summary data
+      const summaryResponse = await fetch("/api/candidates/Summary", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(summaryData),
+      });
+
+      if (!summaryResponse.ok) throw new Error("Failed to submit summary");
+
+      const summaryResult = await summaryResponse.json();
+      console.log(summaryResult.message);
     } catch (error) {
       console.error("Error submitting application:", error);
     }
@@ -85,13 +153,29 @@ const Page = ({ params: { skuId } }) => {
             <div className="w-1/2">
               {companyData ? (
                 <>
-                  <h1 className="text-2xl font-bold mb-2">
-                    {companyData.company_name}
-                  </h1>
-                  <p>{companyData.bio}</p>
-                  <p>{companyData.description}</p>
-                  <p className="text-gray-700 mb-2">{companyData.location}</p>
-                  <p className="text-gray-700 mb-2">{companyData.salary}</p>
+                  {companyData.company.map((item, index) => (
+                    <div key={index} className="p-4 mb-2">
+                      <p className="mb-1">
+                        <span className="font-semibold">Company Name:</span>{" "}
+                        {item.companyName}
+                      </p>
+                      <p className="mb-1">
+                        <span className="font-semibold">Bio:</span> {item.bio}
+                      </p>
+                      <p className="mb-1">
+                        <span className="font-semibold">Overview:</span>{" "}
+                        {item.overview}
+                      </p>
+                    </div>
+                  ))}
+                  <p className="text-gray-700 mb-2">
+                    <span className="font-semibold">Location:</span>{" "}
+                    {companyData.JobLocation}
+                  </p>
+                  <p className="text-gray-700 mb-2">
+                    <span className="font-semibold">Salary:</span>{" "}
+                    {companyData.SalaryRange}
+                  </p>
                 </>
               ) : (
                 <p className="text-black">No details available</p>

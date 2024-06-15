@@ -6,7 +6,7 @@ import { getSession } from "next-auth/react";
 export const POST = async (req) => {
   if (req.method === "POST") {
     const session = await getSession({ req });
-    console.log(session);
+    console.log("hello123", session);
 
     const { userId, nextJob, motivate, future, environment } = await req.json();
     const { db } = await connectDb();
@@ -65,5 +65,37 @@ export const GET = async (req) => {
     }
   } else {
     return NextResponse.error({ message: "Method not allowed" });
+  }
+};
+export const PUT = async (req) => {
+  if (req.method === "PUT") {
+    const session = await getSession({ req });
+    console.log(session);
+
+    const { userId, nextJob, motivate, future, environment } = await req.json();
+
+    const { db } = await connectDb();
+    const collection = db.collection("Culture");
+
+    const result = await collection.updateOne(
+      { userId },
+      {
+        $set: {
+          nextJob,
+          motivate,
+          future,
+          environment,
+        },
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ message: "Company updated" }, { status: 200 });
   }
 };

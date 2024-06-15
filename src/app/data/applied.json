@@ -2,6 +2,7 @@
   "applied_companies": [
     {
       "skuId": 1,
+      "coverLetter": "hello",
       "company_name": "TechCo",
       "company_bio": "TechCo is a leading technology company specializing in software development and IT solutions.",
       "overview": "TechCo is a leading technology company based in San Francisco, CA. Founded in 2005, TechCo has emerged as a pioneer in software development and IT solutions. With a workforce of approximately 1000 employees, TechCo continues to innovate and shape the future of technology. The company offers competitive salaries ranging from $120,000 to $150,000 per year for the role of Software Engineer.",
@@ -49,6 +50,7 @@
     },
     {
       "skuId": 2,
+      "coverLetter": "hello",
       "company_name": "BioPharm",
       "company_bio": "BioPharm is a pharmaceutical company dedicated to improving healthcare through innovative drug development.",
       "overview": "BioPharm, headquartered in Boston, MA, is a leading pharmaceutical company committed to advancing healthcare through innovative drug development. Since its establishment in 1998, BioPharm has been at the forefront of medical research, with a workforce of around 500 employees. The company offers a competitive salary range of $100,000 to $130,000 per year for the position of Research Scientist.",
@@ -99,6 +101,7 @@
     },
     {
       "skuId": 3,
+      "coverLetter": "hello",
       "company_name": "EcoTech",
       "company_bio": "EcoTech is a green energy company focused on sustainable solutions for a cleaner environment.",
       "overview": "EcoTech, based in Seattle, WA, is a leading green energy company dedicated to providing sustainable solutions for a cleaner environment. Since its inception in 2010, EcoTech has been committed to environmental conservation, with a workforce of approximately 300 employees. The company offers competitive salaries ranging from $110,000 to $140,000 per year for the role of Renewable Energy Engineer.",
@@ -150,6 +153,7 @@
 
     {
       "skuId": 4,
+      "coverLetter": "hello",
       "company_name": "FinanceCorp",
       "company_bio": "FinanceCorp is a financial services company providing investment and banking solutions.",
       "overview": "FinanceCorp, headquartered in Chicago, IL, is a leading financial services company specializing in investment and banking solutions. Since its establishment in 2000, FinanceCorp has been a trusted partner for individuals and businesses, with a workforce of approximately 800 employees. The company offers competitive salaries ranging from $100,000 to $130,000 per year for the role of Financial Analyst.",
@@ -201,6 +205,7 @@
 
     {
       "skuId": 5,
+      "coverLetter": "hello",
       "company_name": "FoodTech",
       "company_bio": "FoodTech is a food technology company revolutionizing the way we produce and consume food.",
       "overview": "FoodTech, based in Austin, TX, is a pioneering food technology company dedicated to revolutionizing the food industry. Since its founding in 2015, FoodTech has been at the forefront of innovation, with a workforce of approximately 400 employees. The company offers competitive salaries ranging from $90,000 to $120,000 per year for the role of Food Scientist.",

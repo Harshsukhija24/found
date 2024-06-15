@@ -37,9 +37,12 @@ export const POST = async (req) => {
 };
 
 export const PUT = async (req) => {
-  try {
+  if (req.method === "PUT") {
+    const session = await getSession({ req });
+    console.log(session);
+
     const {
-      id,
+      userId,
       founderName,
       founderLocation,
       founderPastExperience,
@@ -47,32 +50,32 @@ export const PUT = async (req) => {
       coFounderLocation,
       coFounderPastExperience,
     } = await req.json();
-    await connectDb();
 
-    const updatedTeam = await Team.findByIdAndUpdate(
-      id,
+    const { db } = await connectDb();
+    const collection = db.collection("team");
+
+    const result = await collection.updateOne(
+      { userId },
       {
-        founderName,
-        founderLocation,
-        founderPastExperience,
-        coFounderName,
-        coFounderLocation,
-        coFounderPastExperience,
-      },
-      { new: true }
+        $set: {
+          founderName,
+          founderLocation,
+          founderPastExperience,
+          coFounderName,
+          coFounderLocation,
+          coFounderPastExperience,
+        },
+      }
     );
 
-    if (!updatedTeam) {
-      return NextResponse.json({ message: "Team not found" });
+    if (result.matchedCount === 0) {
+      return NextResponse.json(
+        { message: "Company not found" },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json({ message: "Company updated" }, { status: 200 });
-  } catch (error) {
-    console.error("Error updating company:", error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
   }
 };
 

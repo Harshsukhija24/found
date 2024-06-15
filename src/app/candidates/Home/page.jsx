@@ -1,3 +1,4 @@
+// pages/Page.js
 "use client";
 import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
@@ -5,6 +6,7 @@ import Sidebar from "@/app/components/Sidebar";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedContentIndex } from "../../redux/contentSlice";
+import { useSession } from "next-auth/react";
 
 const Page = () => {
   const selectedContentIndex = useSelector(
@@ -15,8 +17,9 @@ const Page = () => {
   const [name, setName] = useState("");
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
-  const [followedCompanies, setFollowedCompanies] = useState([]); // Changed state variable name
+  const [followedCompanies, setFollowedCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { data: session, status } = useSession();
 
   const handleSelectChange = (e) => {
     const newIndex = parseInt(e.target.value);
@@ -31,7 +34,7 @@ const Page = () => {
           fetchProfileData(),
           fetchRecommendedJobs(),
           fetchAppliedJobs(),
-          fetchFollowData(), // Corrected function name
+          fetchFollowData(),
         ]);
       } finally {
         setLoading(false);
@@ -42,29 +45,37 @@ const Page = () => {
   }, []);
 
   const fetchProfileData = async () => {
-    try {
-      const response = await fetch("/api/Profile/Profile");
-      if (!response.ok) {
-        throw new Error("Failed to fetch profile data");
+    if (status === "authenticated" && session?.user) {
+      const userId = session.user.userId;
+      try {
+        const response = await fetch(`/api/Profile/Profile?userId=${userId}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch profile data");
+        }
+        const data = await response.json();
+        console.log("Profile Data:", data); // Log the data received from the API
+        if (data.length > 0) {
+          setName(data[0].name); // Assuming 'name' is a property of the object
+        } else {
+          setName(null);
+        }
+      } catch (err) {
+        console.error("Profile Error:", err);
+        setName(null); // Set name to null on error
       }
-      const data = await response.json();
-      setName(data.name);
-    } catch (err) {
-      console.error("Profile Error:", err);
     }
   };
 
   const fetchFollowData = async () => {
-    // Corrected function name
     try {
       const response = await fetch("/api/candidates/followup");
       if (!response.ok) {
         throw new Error("Failed to fetch follow data");
       }
       const data = await response.json();
-      setFollowedCompanies(data); // Changed state variable name
+      setFollowedCompanies(data);
     } catch (err) {
-      console.error("Follow Data Error:", err); // Corrected error message
+      console.error("Follow Data Error:", err);
     }
   };
 
@@ -72,20 +83,20 @@ const Page = () => {
     try {
       const response = await fetch("/api/candidates/Companies");
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch recommended jobs data");
       }
       const jsonData = await response.json();
 
       if (Array.isArray(jsonData)) {
-        setRecommendedJobs(jsonData);
+        setRecommendedJobs(jsonData.slice(5, 9)); // Adjusted slicing to limit results
       } else if (jsonData && jsonData.data && Array.isArray(jsonData.data)) {
-        setRecommendedJobs(jsonData.data);
+        setRecommendedJobs(jsonData.data.slice(5, 9)); // Adjusted slicing to limit results
       } else if (
         jsonData &&
         jsonData.companies &&
         Array.isArray(jsonData.companies)
       ) {
-        setRecommendedJobs(jsonData.companies);
+        setRecommendedJobs(jsonData.companies.slice(5, 9)); // Adjusted slicing to limit results
       } else {
         throw new Error("Invalid data format");
       }
@@ -98,10 +109,10 @@ const Page = () => {
     try {
       const response = await fetch("/api/candidates/Applied");
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch applied jobs data");
       }
       const jsonData = await response.json();
-      setAppliedJobs(jsonData);
+      setAppliedJobs(jsonData.slice(0, 4)); // Adjusted slicing to limit results
     } catch (error) {
       console.error("Error fetching applied jobs:", error);
     }
@@ -122,12 +133,13 @@ const Page = () => {
       <div className="col-span-10 p-5 mt-9 grid gap-5">
         <div className="p-4 border border-black">
           <h1 className="text-xl font-bold mb-3">Profile</h1>
-          <p>Name: {name}</p>
-          <h1>
+          <p>Name: {typeof name === "string" ? name : "Name not available"}</p>
+
+          <h2>
             Where are you in your job search?
             <br /> Keep your job status up-to-date to inform employers of your
             search.
-          </h1>
+          </h2>
           <form>
             <select
               value={selectedContentIndex}
@@ -145,7 +157,7 @@ const Page = () => {
         <div className="p-4 border border-black">
           <h2 className="text-lg font-semibold mb-3">Recommended Jobs</h2>
           {recommendedJobs.length > 0 ? (
-            recommendedJobs.slice(5, 9).map((company, index) => (
+            recommendedJobs.map((company, index) => (
               <div key={index} className="mb-4 border border-black p-4">
                 <h3 className="text-lg font-semibold">
                   {company.company_name}
@@ -168,8 +180,8 @@ const Page = () => {
         </div>
         <div className="p-4 border border-black">
           <h2 className="text-lg font-semibold mb-3">Applied Jobs</h2>
-          {appliedJobs && appliedJobs.length > 0 ? (
-            appliedJobs.slice(0, 4).map((applied_company, index) => (
+          {appliedJobs.length > 0 ? (
+            appliedJobs.map((applied_company, index) => (
               <div key={index} className="mb-2 border border-black p-2">
                 <h3 className="text-lg font-semibold">
                   {applied_company.company_name}
@@ -193,23 +205,14 @@ const Page = () => {
         <div className="p-4 border border-black">
           <h2 className="text-lg font-semibold mb-3">Followed Companies</h2>
           {followedCompanies.length > 0 ? (
-            followedCompanies.map(
-              (
-                company,
-                index // Changed variable name
-              ) => (
-                <div
-                  key={index}
-                  className="mb-2 border border
-              -black p-2"
-                >
-                  <h3 className="text-lg font-semibold">
-                    {company.company_name}
-                  </h3>
-                  <p>{company.bio}</p>
-                </div>
-              )
-            )
+            followedCompanies.map((company, index) => (
+              <div key={index} className="mb-2 border border-black p-2">
+                <h3 className="text-lg font-semibold">
+                  {company.company_name}
+                </h3>
+                <p>{company.bio}</p>
+              </div>
+            ))
           ) : (
             <div className="p-4 border border-black">
               <p>No followed companies available</p>

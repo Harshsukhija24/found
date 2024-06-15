@@ -33,7 +33,7 @@ const Register = () => {
         setError("All fields are necessary.");
         return;
       }
-
+      /*
       // Check if user already exists
       const resUserExists = await fetch("/api/UserExits", {
         method: "POST",
@@ -54,6 +54,7 @@ const Register = () => {
         setError("User already exists.");
         return;
       }
+        */
 
       // Register new user
       const res = await fetch("/api/Register/User", {

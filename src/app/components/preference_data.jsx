@@ -1,34 +1,44 @@
+// PreferencesData.js
 "use client";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 
-const PreferencesData = () => {
-  const [preferences, setPreferences] = useState([]);
+const PreferencesData = ({ params: userID }) => {
+  const [preferences, setPreferences] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     const fetchPreferences = async () => {
-      try {
-        const response = await fetch("/api/Profile/Preferences");
-        if (!response.ok) {
-          throw new Error("API not working");
+      if (status === "authenticated" && session?.user) {
+        const userId = session.user.userId;
+        try {
+          const response = await fetch(`/api/Profile/Preferences/${userId}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch preferences");
+          }
+          const data = await response.json();
+          if (data.length > 0) {
+            setPreferences(data[0]);
+          } else {
+            setPreferences(null);
+          }
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
-        const data = await response.json();
-        setPreferences(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchPreferences();
-  }, []);
+  }, [session, status]);
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        Loading...
+        <div className="loader ease-linear rounded-full border-8 border-t-8 border-gray-200 h-16 w-16"></div>
       </div>
     );
   }
@@ -37,33 +47,30 @@ const PreferencesData = () => {
     return <div className="text-red-500 text-center mt-4">Error: {error}</div>;
   }
 
+  if (!preferences) {
+    return <div className="text-center mt-4">No preferences set yet.</div>;
+  }
+
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Preferences</h1>
-      <ul className="space-y-4">
-        {preferences.map((item) => (
-          <li key={item._id} className="p-4 border rounded-lg shadow">
-            <h2 className="text-2xl font-semibold">Preferences</h2>
-
-            <p className="mt-2">
-              <strong>Job Type:</strong> {item.jobtype}
-            </p>
-            <p className="mt-2">
-              <strong>Open to Job Types:</strong> {item.openToJobTypes}
-            </p>
-            <p className="mt-2">
-              <strong>Desired Locations:</strong> {item.desiredLocations}
-            </p>
-
-            <p className="mt-2">
-              <strong>Desired Salary:</strong> {item.desiredSalary}
-            </p>
-            <p className="mt-2">
-              <strong>Company Sizes:</strong> {item.companySizes}
-            </p>
-          </li>
-        ))}
-      </ul>
+      <div className="p-4 ">
+        <h2 className="text-2xl font-semibold">Preferences</h2>
+        <p className="mt-2">
+          <strong>Job Type:</strong> {preferences.jobtype}
+        </p>
+        <p className="mt-2">
+          <strong>Open to Job Types:</strong> {preferences.openToJobTypes}
+        </p>
+        <p className="mt-2">
+          <strong>Desired Locations:</strong> {preferences.desiredLocations}
+        </p>
+        <p className="mt-2">
+          <strong>Desired Salary:</strong> {preferences.desiredSalary}
+        </p>
+        <p className="mt-2">
+          <strong>Company Sizes:</strong> {preferences.companySizes}
+        </p>
+      </div>
     </div>
   );
 };
