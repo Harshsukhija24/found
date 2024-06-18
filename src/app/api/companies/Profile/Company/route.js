@@ -3,7 +3,6 @@ import { connectDb } from "@/app/utils/connectdb";
 import Company from "../../../../model/companies/Company"; // Assuming you have a Company model
 import { getSession } from "next-auth/react";
 
-// Handler for POST request (create new company)
 export const POST = async (req) => {
   if (req.method === "POST") {
     const session = await getSession({ req });
@@ -27,7 +26,7 @@ export const POST = async (req) => {
     return NextResponse.json({ message: "Company created" }, { status: 201 });
   }
 };
-// Handler for PUT request (update existing company)
+
 export const PUT = async (req) => {
   if (req.method === "PUT") {
     const session = await getSession({ req });
@@ -35,12 +34,13 @@ export const PUT = async (req) => {
 
     const { userId, companyName, bio, overview, culture, benefit } =
       await req.json();
+    console.log(userId, "helleo");
 
     const { db } = await connectDb();
     const collection = db.collection("Company");
 
     const result = await collection.updateOne(
-      { userId },
+      { userId }, // Filter by userId
       {
         $set: {
           companyName,

@@ -1,4 +1,3 @@
-// pages/Profile.js
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -14,6 +13,8 @@ const Profile = () => {
   const [coFounderName, setCoFounderName] = useState("");
   const [coFounderLocation, setCoFounderLocation] = useState("");
   const [coFounderPastExperience, setCoFounderPastExperience] = useState("");
+  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isExistingProfile, setIsExistingProfile] = useState(false);
 
   const { data: session, status } = useSession();
 
@@ -37,6 +38,9 @@ const Profile = () => {
           setCoFounderName(profile.coFounderName || "");
           setCoFounderLocation(profile.coFounderLocation || "");
           setCoFounderPastExperience(profile.coFounderPastExperience || "");
+          setIsExistingProfile(true);
+        } else {
+          setIsExistingProfile(false);
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -52,8 +56,9 @@ const Profile = () => {
     e.preventDefault();
 
     try {
+      const method = isExistingProfile ? "PUT" : "POST";
       const response = await fetch("/api/companies/Profile/Team", {
-        method: "POST",
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -69,30 +74,14 @@ const Profile = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit form");
+        throw new Error(
+          `Failed to ${method === "POST" ? "submit" : "update"} form`
+        );
       }
 
-      const putResponse = await fetch("/api/companies/Profile/Team", {
-        method: "PUT", // Use PUT to update existing data
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId: session.user.userId,
-          founderName,
-          founderLocation,
-          founderPastExperience,
-          coFounderName,
-          coFounderLocation,
-          coFounderPastExperience,
-        }),
-      });
-
-      if (!putResponse.ok) {
-        throw new Error("Failed to update form");
-      }
-
-      console.log("Form updated successfully");
+      console.log(
+        `Form ${method === "POST" ? "submitted" : "updated"} successfully`
+      );
 
       setIsPopupVisible(true);
       setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
@@ -110,13 +99,16 @@ const Profile = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Nav_bar />
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav_bar />
+      </div>
       <div className="flex flex-1">
-        <div className="w-1/6">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-6 flex flex-col space-y-4">
+
+        <div className="w-5/6 p-4 overflow-auto">
           <ProfileNav />
           <form
             onSubmit={handleSubmit}
@@ -203,6 +195,11 @@ const Profile = () => {
               </button>
             </div>
           </form>
+          {isPopupVisible && (
+            <div className="bg-green-200 border border-green-600 text-green-800 px-4 py-3 rounded relative mt-4">
+              Form {isExistingProfile ? "updated" : "submitted"} successfully!
+            </div>
+          )}
         </div>
       </div>
     </div>

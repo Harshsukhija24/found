@@ -44,12 +44,13 @@ export const PUT = async (req) => {
     console.log(session);
 
     const { userId, founded, location, website, employees } = await req.json();
+    console.log("info", userId);
 
     const { db } = await connectDb();
     const collection = db.collection("infos");
 
     const result = await collection.updateOne(
-      { userId },
+      { userId: userId },
       {
         $set: {
           userId,

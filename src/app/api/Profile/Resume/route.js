@@ -1,40 +1,78 @@
-// pages/api/Profile/Resume.js
+import { connectDb } from "@/app/utils/connectdb";
+import { NextResponse } from "next/server";
 
-import cloudinary from "cloudinary";
-import formidable from "formidable";
+export const POST = async (req) => {
+  try {
+    const { db } = await connectDb();
+    const profileCollection = db.collection("Resume");
 
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+    // Parse FormData
+    const formData = await req.formData();
+    const resume = formData.get("resume");
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
+    // Insert resume into MongoDB (store as a string)
+    await profileCollection.insertOne({
+      resume: resume.toString(), // Ensure it's stored as a string
+      uploadDate: new Date(),
+    });
+
+    return NextResponse.json(
+      { message: "Resume uploaded successfully" },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Error uploading resume:", error);
+    return NextResponse.json(
+      { error: "Failed to upload resume" },
+      { status: 500 }
+    );
+  }
 };
 
-export const POST = async (req, res) => {
-  const form = new formidable.IncomingForm();
-  form.keepExtensions = true;
+export const GET = async (req) => {
+  try {
+    const { db } = await connectDb();
+    const profileCollection = db.collection("Resume");
 
-  form.parse(req, async (err, fields, files) => {
-    if (err) {
-      console.error("Error parsing form:", err);
-      return res.status(500).json({ error: "Error parsing form" });
+    // Retrieve the most recent resume
+    const resumeDocument = await profileCollection.findOne(
+      {},
+      { sort: { uploadDate: -1 } }
+    );
+
+    if (!resumeDocument || !resumeDocument.resume) {
+      return NextResponse.json({ error: "Resume not found" }, { status: 404 });
     }
 
-    try {
-      const result = await cloudinary.uploader.upload(files.resume.path, {
-        folder: "resumes", // Optional: Specify a folder in Cloudinary to upload the file
-      });
-
-      res.status(200).json({ url: result.secure_url });
-    } catch (error) {
-      console.error("Error uploading resume to Cloudinary:", error);
-      res.status(500).json({ error: "Error uploading resume to Cloudinary" });
+    let resumeBuffer;
+    if (typeof resumeDocument.resume === "string") {
+      resumeBuffer = Buffer.from(resumeDocument.resume, "base64");
+    } else if (resumeDocument.resume instanceof Buffer) {
+      resumeBuffer = resumeDocument.resume;
+    } else if (
+      typeof resumeDocument.resume === "object" &&
+      !(resumeDocument.resume instanceof Buffer)
+    ) {
+      resumeBuffer = Buffer.from(JSON.stringify(resumeDocument.resume));
+    } else {
+      console.error("Unsupported resume format:", typeof resumeDocument.resume);
+      return NextResponse.json(
+        { error: "Unsupported resume format" },
+        { status: 500 }
+      );
     }
-  });
+
+    const base64Resume = resumeBuffer.toString("base64");
+    const dataUri = `data:application/pdf;base64,${base64Resume}`;
+
+    return NextResponse.json({
+      resume: dataUri,
+    });
+  } catch (error) {
+    console.error("Error retrieving resume:", error);
+    return NextResponse.json(
+      { error: "Failed to retrieve resume" },
+      { status: 500 }
+    );
+  }
 };

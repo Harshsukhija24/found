@@ -3,7 +3,7 @@ import React from "react";
 
 const Nav_Home = () => {
   return (
-    <div className="flex justify-between items-center  p-4">
+    <div className="flex justify-center items-center mt-12 p-2 border-b-2 border-black">
       <div className="flex space-x-4">
         <Link href="/candidates/Profile/Overview">
           <div className="px-3 py-2 rounded-lg">Overview</div>

@@ -67,8 +67,10 @@ const ModalApply = ({ isOpen, onClose, company }) => {
                 <h2 className="text-xl font-bold mb-2">
                   {companyInfo.companyName}
                 </h2>
-                <h2>Cover Letter</h2>
-                <p>{coverLetter}</p>
+                <div className="border-2 border-black">
+                  <h2>Cover Letter</h2>
+                  <p>{coverLetter}</p>
+                </div>
               </div>
             )}
             {activeTab === "Jobdescription" && (

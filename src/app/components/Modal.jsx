@@ -8,40 +8,22 @@ const Modal = ({ isOpen, onClose, company }) => {
     return null;
   }
 
-  const [followed, setFollowed] = useState(company.followed);
   const [activeTab, setActiveTab] = useState("overview");
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleFollow = async () => {
-    try {
-      const response = await fetch("/api/candidates/follow", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: company.id }),
-      });
-      if (!response.ok) {
-        setFollowed(!followed);
-      } else {
-        console.error("Failed to follow/unfollow company");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
   return (
-    <div className="fixed inset-0 flex items-center  justify-end bg-black bg-opacity-50 z-50">
-      <div className="w-full max-w-2xl bg-white p-8 rounded-lg shadow-md max-h-full overflow-y-auto">
-        <div className="flex justify-between items-start mb-4">
+    <div className="fixed inset-0 flex items-center justify-end bg-black bg-opacity-50 z-50">
+      <div className="w-2/5 max-w-2xl h-full  bg-white p-6 rounded-lg shadow-lg overflow-y-auto">
+        <div className="flex justify-between mt-6 items-center mb-4">
           <div>
             {company.company.map((item, skuId) => (
               <div key={skuId}>
-                <h2 className="text-2xl font-bold">{item.companyName}</h2>
+                <h2 className="text-2xl font-bold text-gray-800">
+                  {item.companyName}
+                </h2>
                 <p className="text-gray-600">{item.bio}</p>
               </div>
             ))}
@@ -50,52 +32,65 @@ const Modal = ({ isOpen, onClose, company }) => {
             className="text-gray-600 hover:text-gray-900 focus:outline-none ml-4"
             onClick={onClose}
           >
-            X
-          </button>
-        </div>
-        <div className="flex items-center mb-4">
-          <button
-            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-300 ease-in-out hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
-            onClick={handleFollow}
-          >
-            {followed ? "Unfollow" : "Follow"}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
           </button>
         </div>
         <div className="flex mb-4 border-b pb-2 space-x-2">
           <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "overview" ? "bg-gray-300" : "bg-gray-100"
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === "overview"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
             onClick={() => handleTabChange("overview")}
           >
             Overview
           </button>
           <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "people" ? "bg-gray-300" : "bg-gray-100"
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === "people"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
             onClick={() => handleTabChange("people")}
           >
             People
           </button>
           <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "culture" ? "bg-gray-300" : "bg-gray-100"
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === "culture"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
             onClick={() => handleTabChange("culture")}
           >
             Culture
           </button>
           <button
-            className={`px-4 py-2 rounded ${
-              activeTab === "jobs" ? "bg-gray-300" : "bg-gray-100"
+            className={`px-4 py-2 rounded-lg ${
+              activeTab === "jobs"
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200 text-gray-700"
             }`}
             onClick={() => handleTabChange("jobs")}
           >
             Jobs
           </button>
         </div>
-        <div className="overflow-y-auto max-h-96">
+        <div className="overflow-y-auto max-h-full">
           {activeTab === "overview" && (
             <div>
               <h2 className="text-xl font-bold mb-2">Overview</h2>
@@ -109,7 +104,7 @@ const Modal = ({ isOpen, onClose, company }) => {
                   onClick={() =>
                     router.push(`/candidates/Job/${company.skuId}`)
                   }
-                  className="text-blue-500 underline"
+                  className="text-blue-500 underline mt-2 inline-block"
                 >
                   Apply
                 </button>
@@ -122,13 +117,13 @@ const Modal = ({ isOpen, onClose, company }) => {
               <div>
                 {company.team.map((people, index) => (
                   <div key={index} className="mb-4">
-                    <div className="border p-3 mb-2">
+                    <div className="border p-3 mb-2 rounded-lg">
                       <h3 className="text-lg font-bold">Founder</h3>
                       <p>{people.founderName}</p>
                       <p>{people.founderLocation}</p>
                       <p>{people.founderPastExperience}</p>
                     </div>
-                    <div className="border p-3 mb-2">
+                    <div className="border p-3 mb-2 rounded-lg">
                       <h3 className="text-lg font-bold">Co-founder</h3>
                       <p>{people.coFounderName}</p>
                       <p>{people.coFounderLocation}</p>
@@ -165,7 +160,7 @@ const Modal = ({ isOpen, onClose, company }) => {
                   onClick={() =>
                     router.push(`/candidates/Job/${company.skuId}`)
                   }
-                  className="text-blue-500 underline"
+                  className="text-blue-500 underline mt-2 inline-block"
                 >
                   Apply
                 </button>

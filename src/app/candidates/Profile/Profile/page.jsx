@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Nav_Home from "@/app/components/Nav_Home";
 import Sidebar from "@/app/components/Sidebar";
+import Nav from "../../../components/Nav";
 
 const Page = () => {
   const [name, setName] = useState("");
@@ -20,6 +21,7 @@ const Page = () => {
   const [skills, setSkills] = useState("");
   const [achievement, setAchievement] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isExistingProfile, setIsExistingProfile] = useState(false);
 
   const { data: session, status } = useSession();
 
@@ -52,6 +54,9 @@ const Page = () => {
             setEducation(userProfile.education || "");
             setSkills(userProfile.skills || "");
             setAchievement(userProfile.achievement || "");
+            setIsExistingProfile(true);
+          } else {
+            setIsExistingProfile(false);
           }
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -90,8 +95,9 @@ const Page = () => {
     };
 
     try {
+      const method = isExistingProfile ? "PUT" : "POST";
       const response = await fetch("/api/Profile/Profile", {
-        method: "POST",
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -99,22 +105,14 @@ const Page = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to save profile: ${response.statusText}`);
+        throw new Error(
+          `Failed to ${method === "POST" ? "create" : "update"} profile`
+        );
       }
 
-      const putResponse = await fetch("/api/Profile/Profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userProfile),
-      });
-
-      if (!putResponse.ok) {
-        throw new Error("Failed to update profile");
-      }
-
-      console.log("Profile updated successfully");
+      console.log(
+        `Profile ${method === "POST" ? "created" : "updated"} successfully`
+      );
       setIsPopupVisible(true);
       setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
     } catch (err) {
@@ -122,26 +120,25 @@ const Page = () => {
     }
   };
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
   if (!session || !session.user) {
     return <div>No user session found</div>;
   }
-
   return (
-    <div className="min-h-screen bg-white">
-      <div className="flex">
-        <div className="w-1/5 text-white">
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav />
+      </div>
+      <div className="flex flex-1">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-4/5 p-4">
-          <h1 className="text-xl font-bold mb-4">Edit your Found Profile</h1>
+        <div className="w-5/6 p-4  overflow-auto">
           <Nav_Home />
+          <h1 className="text-xl font-bold mb-4">Edit your Found Profile</h1>
+
           <form onSubmit={handleSubmit}>
             {/* Form fields */}
-            <div className="flex mb-4">
+            <div className="flex m-4 mb-4">
               <div className="w-1/2 pr-2">
                 <label className="block text-sm font-bold mb-2" htmlFor="name">
                   Your Name
@@ -172,8 +169,56 @@ const Page = () => {
                 />
               </div>
             </div>
+
+            <div className="flex mb-4">
+              <div className="w-1/2 pr-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  htmlFor="skills"
+                >
+                  Skills
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="skills"
+                  type="text"
+                  placeholder="Skills"
+                  value={skills}
+                  onChange={(e) => setSkills(e.target.value)}
+                ></input>
+              </div>
+              <div className="w-1/2 pl-2">
+                <label className="block text-sm font-bold mb-2" htmlFor="bio">
+                  Your Bio
+                </label>
+                <textarea
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="bio"
+                  rows="4"
+                  placeholder="Your Bio"
+                  value={bio}
+                  onChange={(e) => setBio(e.target.value)}
+                ></textarea>
+              </div>
+            </div>
             {/* More form fields */}
             <div className="flex mb-4">
+              <div className="w-1/2 pl-2">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  htmlFor="education"
+                >
+                  Education
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="education"
+                  type="text"
+                  placeholder="Your Education"
+                  value={education}
+                  onChange={(e) => setEducation(e.target.value)}
+                />
+              </div>
               <div className="w-1/2 pr-2">
                 <label className="block text-sm font-bold mb-2" htmlFor="role">
                   Select your primary role
@@ -193,20 +238,8 @@ const Page = () => {
                   <option value="uiux">UI/UX Designer</option>
                 </select>
               </div>
-              <div className="w-1/2 pl-2">
-                <label className="block text-sm font-bold mb-2" htmlFor="bio">
-                  Your Bio
-                </label>
-                <textarea
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="bio"
-                  rows="4"
-                  placeholder="Your Bio"
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                ></textarea>
-              </div>
             </div>
+            <h2>your social site links</h2>
             {/* Website and LinkedIn */}
             <div className="flex mb-4">
               <div className="w-1/2 pr-2">
@@ -277,6 +310,7 @@ const Page = () => {
                 />
               </div>
             </div>
+            <h2>pervious company experince(if any)</h2>
             {/* Company and Title */}
             <div className="flex mb-4">
               <div className="w-1/2 pr-2">
@@ -327,41 +361,10 @@ const Page = () => {
                   onChange={(e) => setDescription(e.target.value)}
                 ></textarea>
               </div>
-              <div className="w-1/2 pl-2">
-                <label
-                  className="block text-sm font-bold mb-2"
-                  htmlFor="education"
-                >
-                  Education
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="education"
-                  type="text"
-                  placeholder="Your Education"
-                  value={education}
-                  onChange={(e) => setEducation(e.target.value)}
-                />
-              </div>
             </div>
             {/* Skills and Achievement */}
+            <h2>any achievement</h2>
             <div className="flex mb-4">
-              <div className="w-1/2 pr-2">
-                <label
-                  className="block text-sm font-bold mb-2"
-                  htmlFor="skills"
-                >
-                  Skills
-                </label>
-                <input
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  id="skills"
-                  type="text"
-                  placeholder="Skills"
-                  value={skills}
-                  onChange={(e) => setSkills(e.target.value)}
-                ></input>
-              </div>
               <div className="w-1/2 pl-2">
                 <label
                   className="block text-sm font-bold mb-2"

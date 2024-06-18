@@ -6,23 +6,24 @@ import Sidebar from "../../components/side_bar";
 import ProfileNav from "../../components/ProfileNav";
 import { useSession } from "next-auth/react";
 
-const Page = () => {
+const Page = ({ params: { userId } }) => {
   const [companyName, setCompanyName] = useState("");
   const [bio, setBio] = useState("");
   const [overview, setOverview] = useState("");
   const [culture, setCulture] = useState("");
   const [benefit, setBenefit] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isUpdate, setIsUpdate] = useState(false); // Flag for update mode
 
   const { data: session, status } = useSession();
 
   useEffect(() => {
+    if (!session) return;
+
     const fetchData = async () => {
-      if (!session || !session.user) return;
-      const userId = session.user.userId;
       try {
         const response = await fetch(
-          `/api/companies/Profile/Company/${userId}`
+          `/api/companies/Profile/Company/${session.user.userId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -38,6 +39,7 @@ const Page = () => {
           setOverview(companyData.overview);
           setCulture(companyData.culture);
           setBenefit(companyData.benefit);
+          setIsUpdate(true); // Set update flag if data exists
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -71,7 +73,7 @@ const Page = () => {
 
     try {
       const response = await fetch("/api/companies/Profile/Company", {
-        method: "POST",
+        method: isUpdate ? "PUT" : "POST", // Use PUT for updates
         headers: {
           "Content-Type": "application/json",
         },
@@ -79,24 +81,14 @@ const Page = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit form");
+        throw new Error(
+          isUpdate ? "Failed to update form" : "Failed to submit form"
+        );
       }
 
-      console.log("Form submitted successfully");
-
-      const putResponse = await fetch("/api/companies/Profile/Company", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(companyData),
-      });
-
-      if (!putResponse.ok) {
-        throw new Error("Failed to update form");
-      }
-
-      console.log("Form updated successfully");
+      console.log(
+        isUpdate ? "Form updated successfully" : "Form submitted successfully"
+      );
 
       setIsPopupVisible(true);
       setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
@@ -106,13 +98,15 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Nav_bar />
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav_bar />
+      </div>
       <div className="flex flex-1">
-        <div className="w-1/6">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-6 flex flex-col space-y-4">
+        <div className="w-5/6 p-4 overflow-auto">
           <ProfileNav />
           <form
             onSubmit={handleSubmit}

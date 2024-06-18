@@ -39,45 +39,51 @@ const Page = () => {
   };
 
   return (
-    <div className="flex">
-      <Nav />
-      <div className="w-1/6 py-2 px-4">
-        <Sidebar />
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav />
       </div>
-      <div className="w-5/6 mt-20 p-4">
-        {/* Page content */}
-        {data.length > 0 ? (
-          data.map((item, index) => {
-            const companyData = item.companyData;
-            const companyInfo = companyData?.company?.[0];
-            const info = companyData?.info?.[0];
+      <div className="flex flex-1">
+        <div className="w-1/6 py-4 px-4">
+          <Sidebar />
+        </div>
+        <div className="w-5/6 p-2 mt-16  overflow-auto">
+          {/* Page content */}
+          {data.length > 0 ? (
+            data.map((item, index) => {
+              const companyData = item.companyData;
+              const companyInfo = companyData?.company?.[0];
+              const info = companyData?.info?.[0];
 
-            if (!companyInfo) {
-              return null; // Skip rendering if company info is missing
-            }
+              if (!companyInfo) {
+                return null; // Skip rendering if company info is missing
+              }
 
-            return (
-              <div
-                key={index}
-                className="bg-white shadow-md rounded p-4 mb-4"
-                onClick={() => openModal(item)}
-              >
-                <h2 className="text-xl font-bold">{companyInfo.companyName}</h2>
-                <p className="text-gray-600">{companyInfo.bio}</p>
-                {info && <p className="text-gray-600">{info.location}</p>}
-                <p className="text-gray-600">{companyData.JobDescription}</p>
-                <p className="text-gray-600">{companyData.SalaryRange}</p>
-              </div>
-            );
-          })
-        ) : (
-          <p>No data available.</p>
-        )}
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          company={selectedCompany}
-        />
+              return (
+                <div
+                  key={index}
+                  className="bg-white shadow-md border-b-2 border-black rounded p-4 mb-4"
+                  onClick={() => openModal(item)}
+                >
+                  <h2 className="text-xl font-bold">
+                    {companyInfo.companyName}
+                  </h2>
+                  <p className="text-gray-600">{companyInfo.bio}</p>
+                  {info && <p className="text-gray-600">{info.location}</p>}
+                  <p className="text-gray-600">{companyData.JobDescription}</p>
+                  <p className="text-gray-600">{companyData.SalaryRange}</p>
+                </div>
+              );
+            })
+          ) : (
+            <p>No data available.</p>
+          )}
+          <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            company={selectedCompany}
+          />
+        </div>
       </div>
     </div>
   );

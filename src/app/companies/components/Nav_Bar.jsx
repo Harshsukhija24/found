@@ -42,7 +42,7 @@ const Home = () => {
       <div className="max-w-7xl mx-auto px-4 py-2">
         <div className="flex justify-between items-center">
           <div>
-            <Link href="/candidates/Job">
+            <Link href="/companies/PostedJob">
               <Image
                 src="https://i.pinimg.com/564x/09/13/79/0913791df5a8a7090c37b77a98277653.jpg"
                 width={80}

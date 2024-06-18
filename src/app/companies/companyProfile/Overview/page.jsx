@@ -58,14 +58,6 @@ const OverView = () => {
     fetchData();
   }, [session, status]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-xl font-semibold text-gray-700">Loading...</div>
-      </div>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -75,12 +67,17 @@ const OverView = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Nav_bar />
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav_bar />
+      </div>
       <div className="flex flex-1">
-        <Sidebar className="w-1/6 p-4" />
-        <main className="w-5/6 p-6 ml-auto">
-          <ProfileNav className="mb-8" />
+        <div className="w-1/6 py-4 px-4">
+          <Sidebar />
+        </div>
+
+        <div className="w-5/6 p-4 overflow-auto">
+          <ProfileNav className="" />
           <div className="space-y-4">
             {company ? (
               <div className="p-4">
@@ -188,7 +185,7 @@ const OverView = () => {
               </div>
             )}
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );

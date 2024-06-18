@@ -41,16 +41,17 @@ const Page = () => {
     return <p>Error: {error}</p>;
   }
 
-  if (!userData) {
-    return <p>Loading...</p>;
-  }
-
   return (
-    <div className="flex">
-      <Sidebar />
-      <Nav />
-      <div className="flex-1 mt-24 ml-56 ">
-        <div className="bg-white p-4 rounded-lg shadow-md">
+    <div className="flex flex-col mt-6 ">
+      <div className="w-full">
+        <Nav />
+      </div>
+      <div className="flex flex-1">
+        <div className="w-1/6 py-4 px-4">
+          <Sidebar />
+        </div>
+
+        <div className="bg-white p-4 w-2/3 mt-20 rounded-lg shadow-md">
           <ul>
             {userData.profile && userData.profile.length > 0 ? (
               userData.profile.map((item, index) => (

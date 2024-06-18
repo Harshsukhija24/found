@@ -13,7 +13,7 @@ const Page = () => {
   const [employees, setEmployees] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false); // State for showing success message
   const { data: session, status } = useSession();
-  const [profileData, setProfileData] = useState({});
+  const [isUpdate, setIsUpdate] = useState(false); // Flag for update mode
   const userId = session?.user?.userId;
 
   useEffect(() => {
@@ -32,6 +32,7 @@ const Page = () => {
           setLocation(profile.location || "");
           setWebsite(profile.website || "");
           setEmployees(profile.employees || "");
+          setIsUpdate(true); // Set update flag if data exists
         }
       } catch (error) {
         console.error("Error fetching profile data:", error);
@@ -51,9 +52,8 @@ const Page = () => {
     }
 
     try {
-      // POST request to save new data or update existing data
       const response = await fetch("/api/companies/Profile/Info", {
-        method: "POST", // Use POST to create new data
+        method: isUpdate ? "PUT" : "POST", // Use PUT for updates and POST for new entries
         headers: {
           "Content-Type": "application/json",
         },
@@ -67,29 +67,14 @@ const Page = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to submit form");
+        throw new Error(
+          isUpdate ? "Failed to update form" : "Failed to submit form"
+        );
       }
 
-      // Assuming you handle updates with a PUT request
-      const putResponse = await fetch("/api/companies/Profile/Info", {
-        method: "PUT", // Use PUT to update existing data
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          userId,
-          founded,
-          location,
-          website,
-          employees,
-        }),
-      });
-
-      if (!putResponse.ok) {
-        throw new Error("Failed to update form");
-      }
-
-      console.log("Form updated successfully");
+      console.log(
+        isUpdate ? "Form updated successfully" : "Form submitted successfully"
+      );
 
       setIsPopupVisible(true);
       setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
@@ -98,22 +83,21 @@ const Page = () => {
     }
   };
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
   if (!session || !session.user) {
     return <div>No user session found</div>;
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Nav_bar />
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav_bar />
+      </div>
       <div className="flex flex-1">
-        <div className="w-1/6">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-6 flex flex-col space-y-4">
+
+        <div className="w-5/6 p-4 overflow-auto">
           <ProfileNav />
           <form
             onSubmit={handleSubmit}
@@ -183,7 +167,7 @@ const Page = () => {
           </form>
           {isPopupVisible && (
             <div className="bg-green-200 border border-green-600 text-green-800 px-4 py-3 rounded relative">
-              Form updated successfully!
+              Form {isUpdate ? "updated" : "submitted"} successfully!
             </div>
           )}
         </div>

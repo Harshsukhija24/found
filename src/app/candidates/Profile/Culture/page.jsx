@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import Sidebar from "@/app/components/Sidebar";
 import Nav_Home from "@/app/components/Nav_Home";
+import Nav from "../../../components/Nav";
 
 const JobPreferencesPage = () => {
   const [nextJob, setNextJob] = useState("");
@@ -10,6 +11,7 @@ const JobPreferencesPage = () => {
   const [future, setFuture] = useState("");
   const [environment, setEnvironment] = useState("");
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [preferencesExist, setPreferencesExist] = useState(false);
 
   const { data: session, status } = useSession();
 
@@ -25,12 +27,15 @@ const JobPreferencesPage = () => {
           }
 
           const data = await response.json();
-          if (data) {
+          if (data && data.length > 0) {
             const dataa = data[0];
             setNextJob(dataa.nextJob || "");
             setMotivate(dataa.motivate || "");
             setFuture(dataa.future || "");
             setEnvironment(dataa.environment || "");
+            setPreferencesExist(true);
+          } else {
+            setPreferencesExist(false);
           }
         } catch (error) {
           console.error("Error fetching preferences:", error);
@@ -59,8 +64,9 @@ const JobPreferencesPage = () => {
     };
 
     try {
+      const method = preferencesExist ? "PUT" : "POST";
       const response = await fetch("/api/Profile/Culture", {
-        method: "POST",
+        method,
         headers: {
           "Content-Type": "application/json",
         },
@@ -68,22 +74,12 @@ const JobPreferencesPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to save preferences");
+        throw new Error(
+          `Failed to ${method === "POST" ? "save" : "update"} preferences`
+        );
       }
 
-      const putResponse = await fetch("/api/Profile/Culture", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(preferences),
-      });
-
-      if (!putResponse.ok) {
-        throw new Error("Failed to update preferences");
-      }
-
-      console.log("Preferences updated successfully");
+      console.log("Culture updated successfully");
       setIsPopupVisible(true);
       setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
     } catch (err) {
@@ -100,14 +96,18 @@ const JobPreferencesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <div className="flex">
-        <div className="w-1/5 text-white">
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <Nav />
+      </div>
+      <div className="flex flex-1">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-4/5 p-4">
-          <h1 className="text-xl font-bold mb-4">Edit your Found Profile</h1>
+        <div className="w-5/6 p-4 mt-11 overflow-auto">
           <Nav_Home />
+          <h1 className="text-xl font-bold mb-4">Edit your Found Profile</h1>
+
           <h1 className="text-xl font-bold mb-4">Job Preferences</h1>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>

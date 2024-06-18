@@ -1,3 +1,4 @@
+// pages/Page.js
 "use client";
 import React, { useState, useEffect } from "react";
 import Sidebar from "../../components/Sidebar";
@@ -18,24 +19,7 @@ const Page = () => {
           throw new Error("Failed to fetch data");
         }
         const jsonData = await response.json();
-
-        if (Array.isArray(jsonData)) {
-          setData(jsonData);
-        } else if (
-          jsonData &&
-          jsonData?.data &&
-          Array?.isArray(jsonData.data)
-        ) {
-          setData(jsonData.data);
-        } else if (
-          jsonData &&
-          jsonData?.companies &&
-          Array.isArray(jsonData?.companies)
-        ) {
-          setData(jsonData?.companies);
-        } else {
-          throw new Error("Invalid data format");
-        }
+        setData(jsonData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -55,23 +39,22 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col mt-6 h-screen">
       <div className="w-full">
         <Nav />
-        <Nav_Home />
       </div>
       <div className="flex flex-1">
-        <div className="w-1/6 py-4 px-4 ">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-4 overflow-auto">
+        <div className="w-5/6 p-4   mt-11 overflow-auto">
           <div className="container mx-auto">
             {data.length > 0 ? (
               data.map((company, index) => (
                 <div
-                  key={index}
+                  key={index} // Assuming `index` is unique for each company, adjust if needed
                   onClick={() => openModal(company)}
-                  className="bg-white shadow-md rounded-lg p-6 mb-6 cursor-pointer"
+                  className="bg-white shadow-md border-b-2 border-black  p-6 mb-6 cursor-pointer"
                 >
                   {company.company.map((item, skuId) => (
                     <div key={skuId} className="bg-gray-100 p-4 rounded mb-2">
@@ -92,7 +75,7 @@ const Page = () => {
                         {company.SalaryRange}
                       </p>
                       <p className="mb-1">
-                        <span className="font-semibold">location:</span>{" "}
+                        <span className="font-semibold">Location:</span>{" "}
                         {company.JobLocation}
                       </p>
                     </div>

@@ -17,7 +17,6 @@ const Page = () => {
   const [name, setName] = useState("");
   const [recommendedJobs, setRecommendedJobs] = useState([]);
   const [appliedJobs, setAppliedJobs] = useState([]);
-  const [followedCompanies, setFollowedCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
 
@@ -34,7 +33,6 @@ const Page = () => {
           fetchProfileData(),
           fetchRecommendedJobs(),
           fetchAppliedJobs(),
-          fetchFollowData(),
         ]);
       } finally {
         setLoading(false);
@@ -66,40 +64,16 @@ const Page = () => {
     }
   };
 
-  const fetchFollowData = async () => {
-    try {
-      const response = await fetch("/api/candidates/followup");
-      if (!response.ok) {
-        throw new Error("Failed to fetch follow data");
-      }
-      const data = await response.json();
-      setFollowedCompanies(data);
-    } catch (err) {
-      console.error("Follow Data Error:", err);
-    }
-  };
-
   const fetchRecommendedJobs = async () => {
     try {
-      const response = await fetch("/api/candidates/Companies");
+      const response = await fetch("/api/candidates/AppliedData");
       if (!response.ok) {
-        throw new Error("Failed to fetch recommended jobs data");
+        throw new Error("Failed to fetch data");
       }
       const jsonData = await response.json();
+      console.log("Recommended Jobs Data:", jsonData); // Log the recommended jobs data
 
-      if (Array.isArray(jsonData)) {
-        setRecommendedJobs(jsonData.slice(5, 9)); // Adjusted slicing to limit results
-      } else if (jsonData && jsonData.data && Array.isArray(jsonData.data)) {
-        setRecommendedJobs(jsonData.data.slice(5, 9)); // Adjusted slicing to limit results
-      } else if (
-        jsonData &&
-        jsonData.companies &&
-        Array.isArray(jsonData.companies)
-      ) {
-        setRecommendedJobs(jsonData.companies.slice(5, 9)); // Adjusted slicing to limit results
-      } else {
-        throw new Error("Invalid data format");
-      }
+      setRecommendedJobs(jsonData.slice(0, 4));
     } catch (error) {
       console.error("Error fetching recommended jobs:", error);
     }
@@ -112,22 +86,19 @@ const Page = () => {
         throw new Error("Failed to fetch applied jobs data");
       }
       const jsonData = await response.json();
-      setAppliedJobs(jsonData.slice(0, 4)); // Adjusted slicing to limit results
+      console.log("Applied Jobs Data:", jsonData); // Log the applied jobs data
+      setAppliedJobs(jsonData.slice(0, 4)); // Slice to show only 4 applied jobs
     } catch (error) {
       console.error("Error fetching applied jobs:", error);
     }
   };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="grid grid-cols-12 gap-5">
       <div className="col-span-12">
         <Nav />
       </div>
-      <div className="col-span-2 m-5 text-white">
+      <div className="col-span-2 m-2 p-4  text-white h-screen">
         <Sidebar />
       </div>
       <div className="col-span-10 p-5 mt-9 grid gap-5">
@@ -154,23 +125,43 @@ const Page = () => {
             </select>
           </form>
         </div>
+
         <div className="p-4 border border-black">
           <h2 className="text-lg font-semibold mb-3">Recommended Jobs</h2>
           {recommendedJobs.length > 0 ? (
             recommendedJobs.map((company, index) => (
-              <div key={index} className="mb-4 border border-black p-4">
-                <h3 className="text-lg font-semibold">
-                  {company.company_name}
-                </h3>
-                <p>Location: {company.jobs[0].location}</p>
-                <p>Salary: {company.jobs[0].salary}</p>
-                <p>{company.bio}</p>
+              <div
+                key={index}
+                className="bg-white shadow-md rounded-lg p-6 mb-6"
+              >
+                {company.company.map((item, skuId) => (
+                  <div key={skuId} className="">
+                    <p className="mb-1">
+                      <span className="font-semibold">Company Name:</span>{" "}
+                      {item.companyName}
+                    </p>
+                    <p className="mb-1">
+                      <span className="font-semibold">Bio:</span> {item.bio}
+                    </p>
+                    <h3 className="text-lg font-semibold mb-2">Jobs:</h3>
+                    <p className="mb-1">
+                      <span className="font-semibold">Job Description:</span>{" "}
+                      {company.JobDescription}
+                    </p>
+                    <p className="mb-1">
+                      <span className="font-semibold">Salary:</span>{" "}
+                      {company.SalaryRange}
+                    </p>
+                    <p className="mb-1">
+                      <span className="font-semibold">Location:</span>{" "}
+                      {company.JobLocation}
+                    </p>
+                  </div>
+                ))}
               </div>
             ))
           ) : (
-            <div className="p-4 border border-black">
-              <p>No recommended jobs available</p>
-            </div>
+            <p className="text-center text-gray-700">No data available.</p>
           )}
           <Link href="/candidates/Job">
             <button className="mb-2 w-full border border-black text-black p-2">
@@ -178,17 +169,34 @@ const Page = () => {
             </button>
           </Link>
         </div>
+
         <div className="p-4 border border-black">
           <h2 className="text-lg font-semibold mb-3">Applied Jobs</h2>
           {appliedJobs.length > 0 ? (
             appliedJobs.map((applied_company, index) => (
               <div key={index} className="mb-2 border border-black p-2">
                 <h3 className="text-lg font-semibold">
-                  {applied_company.company_name}
+                  {applied_company.company_name ||
+                    (applied_company.companyData?.company[0]?.companyName ??
+                      "Company Name Not Available")}
                 </h3>
-                <p>Location: {applied_company.location}</p>
-                <p>Salary: {applied_company.salary}</p>
-                <p>{applied_company.bio}</p>
+                <p>
+                  Location:{" "}
+                  {applied_company.location ||
+                    (applied_company.companyData?.JobLocation ??
+                      "Location Not Available")}
+                </p>
+                <p>
+                  Salary:{" "}
+                  {applied_company.salary ||
+                    (applied_company.companyData?.SalaryRange ??
+                      "Salary Not Available")}
+                </p>
+                <p>
+                  {applied_company.bio ||
+                    (applied_company.companyData?.company[0]?.bio ??
+                      "Bio Not Available")}
+                </p>
               </div>
             ))
           ) : (
@@ -201,23 +209,6 @@ const Page = () => {
               More Applied Jobs
             </button>
           </Link>
-        </div>
-        <div className="p-4 border border-black">
-          <h2 className="text-lg font-semibold mb-3">Followed Companies</h2>
-          {followedCompanies.length > 0 ? (
-            followedCompanies.map((company, index) => (
-              <div key={index} className="mb-2 border border-black p-2">
-                <h3 className="text-lg font-semibold">
-                  {company.company_name}
-                </h3>
-                <p>{company.bio}</p>
-              </div>
-            ))
-          ) : (
-            <div className="p-4 border border-black">
-              <p>No followed companies available</p>
-            </div>
-          )}
         </div>
       </div>
     </div>

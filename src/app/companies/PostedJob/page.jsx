@@ -42,10 +42,12 @@ const Page = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavBar />
+    <div className="flex flex-col mt-6 h-screen">
+      <div className="w-full">
+        <NavBar />
+      </div>
       <div className="flex flex-1">
-        <div className="w-1/6">
+        <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
         <div className="w-5/6 p-6 flex flex-col mt-16 space-y-4">
