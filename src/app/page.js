@@ -1,34 +1,118 @@
-import React from "react";
+"use client";
 import Nav_main from "./components/Nav_main";
-import Image from "next/image";
+import React, { useState } from "react";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-const Page = () => {
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("select "); // Default to job seeker
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+
+    try {
+      const response = await signIn("credentials", {
+        email,
+        password,
+        userType,
+        redirect: false,
+      });
+
+      if (response?.error) {
+        setError("Invalid email or password.");
+        console.log(response.error);
+        return;
+      }
+
+      if (userType === "jobseeker") {
+        router.push("/candidates/Job");
+      } else if (userType === "company") {
+        router.push("/companies/PostedJob"); // Change this to the company's dashboard route
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      setError("An unexpected error occurred.");
+    }
+  };
+
   return (
-    <div className="flex flex-col h-screen">
-      <Nav_main />
-      <div className="flex-grow flex justify-center items-center">
-        <div className="relative w-full ">
-          <Image
-            src="https://i.pinimg.com/736x/7f/7e/3b/7f7e3ba755112b07cd989cc1d76fdccb.jpg"
-            width={600}
-            height={600}
-            className="w-full h-full rounded-lg"
-          />
-          {/* Buttons 
-
-          <div className="absolute bottom-40   left-1/2 transform -translate-x-1/2 flex  space-x-96 ">
-            <button className="px-4 py-2  bg-blue-400 text-white rounded">
-              Button 1
+    <>
+      <div>
+        <Nav_main />
+      </div>
+      <div
+        className="min-h-screen bg-cover bg-center flex items-center justify-evenly"
+        style={{
+          backgroundImage:
+            'url("https://i.pinimg.com/474x/ca/d7/6d/cad76d75091745f0636572ff0cc027ad.jpg")',
+        }}
+      >
+        <div>
+          <p className="text-center text-2xl ml-36  mb-">
+            "Welcome to Found, your gateway to exciting career opportunities!
+            Explore diverse job listings, connect with leading employers.
+          </p>
+        </div>
+        <div className="p-8 mx-auto w-full  ml-64  max-w-md">
+          {/* Centering the form and adding padding */}
+          {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col">
+              <label htmlFor="userType" className="mb-1">
+                I am a:
+              </label>
+              <select
+                id="userType"
+                className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
+                value={userType}
+                onChange={(e) => setUserType(e.target.value)}
+              >
+                <option value="jobseeker">Job Seeker</option>
+                <option value="company">Company</option>
+              </select>
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="email" className="mb-1">
+                Email
+              </label>
+              <input
+                id="email"
+                placeholder="Enter your email"
+                type="text"
+                className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label htmlFor="password" className="mb-1">
+                Password
+              </label>
+              <input
+                id="password"
+                placeholder="Enter your password"
+                type="password"
+                className="px-4 py-2 rounded-md focus:outline-none focus:border-blue-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
+            >
+              Login
             </button>
-            <button className="px-4 py-2 bg-blue-400 text-white rounded">
-              Button 2
-            </button>
-          </div>
-  */}
+          </form>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
-export default Page;
+export default Login;

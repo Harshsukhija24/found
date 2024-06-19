@@ -11,9 +11,7 @@ const Nav_Home = () => {
         <Link href="/candidates/Profile/Profile">
           <div className="px-3 py-2 rounded-lg">Profile</div>
         </Link>
-        <Link href="/candidates/Profile/Resume">
-          <div className="px-3 py-2 rounded-lg">Resume</div>
-        </Link>
+
         <Link href="/candidates/Profile/Preference ">
           <div className="px-3 py-2 rounded-lg">Preferences</div>
         </Link>

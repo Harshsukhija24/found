@@ -5,7 +5,7 @@ import Nav from "../components/Nav_Bar"; // Adjusted import
 import { useRouter } from "next/navigation";
 
 const Page = () => {
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState([]);
   const [error, setError] = useState(null);
   const router = useRouter();
 
@@ -19,7 +19,7 @@ const Page = () => {
         const data = await response.json();
         console.log("Fetched userData:", data); // Log fetched data
         if (data.length > 0) {
-          setUserData(data[0]); // Assuming there's only one item in the array
+          setUserData(data);
         } else {
           throw new Error("No data found");
         }
@@ -42,7 +42,7 @@ const Page = () => {
   }
 
   return (
-    <div className="flex flex-col mt-6 ">
+    <div className="flex flex-col mt-6">
       <div className="w-full">
         <Nav />
       </div>
@@ -53,23 +53,31 @@ const Page = () => {
 
         <div className="bg-white p-4 w-2/3 mt-20 rounded-lg shadow-md">
           <ul>
-            {userData.profile && userData.profile.length > 0 ? (
-              userData.profile.map((item, index) => (
-                <li key={index} onClick={() => handleClick(userData.skuId)}>
-                  <strong>Name:</strong> {item.name}
-                  <br />
-                  <strong>Bio:</strong> {item.bio}
-                  <br />
-                  <strong>Skills:</strong> {item.skills}
-                  <br />
-                  <p>
-                    <strong>Cover Letter:</strong>{" "}
-                    {userData.coverLetter || "Not provided"}
-                  </p>
-                </li>
-              ))
+            {userData.length > 0 ? (
+              userData.map((user, index) =>
+                user.profile && user.profile.length > 0 ? (
+                  <li key={index} onClick={() => handleClick(user.skuId)}>
+                    {user.profile.map((item, profileIndex) => (
+                      <div key={profileIndex}>
+                        <strong>Name:</strong> {item.name}
+                        <br />
+                        <strong>Bio:</strong> {item.bio}
+                        <br />
+                        <strong>Skills:</strong> {item.skills}
+                        <br />
+                        <p>
+                          <strong>Cover Letter:</strong>{" "}
+                          {user.coverLetter || "Not provided"}
+                        </p>
+                      </div>
+                    ))}
+                  </li>
+                ) : (
+                  <li key={index}></li>
+                )
+              )
             ) : (
-              <li>No profile data available</li>
+              <li>No data available</li>
             )}
           </ul>
         </div>

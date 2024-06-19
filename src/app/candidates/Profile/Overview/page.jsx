@@ -142,7 +142,6 @@ const UserProfile = () => {
                 <div className="text-center">No culture data available.</div>
               )}
             </div>
-            <Resume_data />
           </div>
         </main>
       </div>

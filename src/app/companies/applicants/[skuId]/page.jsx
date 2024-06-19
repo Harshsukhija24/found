@@ -5,6 +5,7 @@ import Nav from "../../components/Nav_Bar";
 
 const Page = ({ params: { skuId } }) => {
   const [userData, setUserData] = useState(null);
+  const [summaryData, setSummaryData] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -12,15 +13,30 @@ const Page = ({ params: { skuId } }) => {
       try {
         const response = await fetch(`/api/candidates/Summary/${skuId}`);
         if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
+          throw new Error(
+            `Failed to fetch summary data: ${response.statusText}`
+          );
         }
         const data = await response.json();
-        console.log("Fetched userData:", data); // Log fetched data
-
+        console.log("Fetched userData:", data);
         if (data.length > 0) {
           setUserData(data[0]);
         } else {
-          throw new Error("No data found");
+          throw new Error("No summary data found");
+        }
+
+        const responseSummary = await fetch(`/api/candidates/Applied/${skuId}`);
+        if (!responseSummary.ok) {
+          throw new Error(
+            `Failed to fetch applied data: ${responseSummary.statusText}`
+          );
+        }
+        const dataSummary = await responseSummary.json();
+        console.log("Fetched summaryData:", dataSummary);
+        if (dataSummary.length > 0) {
+          setSummaryData(dataSummary[0]);
+        } else {
+          throw new Error("No applied data found");
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -28,22 +44,43 @@ const Page = ({ params: { skuId } }) => {
       }
     };
 
-    fetchData();
-  }, []);
+    if (skuId) {
+      fetchData();
+    } else {
+      setError("No SKU ID provided");
+    }
+  }, [skuId]);
 
-  const handleClick = (skuId) => {
-    // Handle click event
-    console.log(`Clicked on SKU ID: ${skuId}`);
-  };
+  const handleAccept = async () => {
+    if (!userData) {
+      console.error("No user data to accept");
+      return;
+    }
 
-  const handleAccept = (name) => {
-    // Handle accept button click
-    console.log(`Accepted: ${name}`);
-    // Add additional functionality here as needed
+    try {
+      const response = await fetch("/api/Messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userData, summaryData }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to accept user: ${response.statusText}`);
+      }
+
+      const result = await response.json();
+      console.log("User accepted:", result);
+      // Additional functionality can be added here if needed
+    } catch (error) {
+      console.error("Error accepting user:", error);
+      setError(error.message);
+    }
   };
 
   return (
-    <div className="flex flex-col mt-6 ">
+    <div className="flex flex-col mt-6">
       <div className="w-full">
         <Nav />
       </div>
@@ -51,7 +88,7 @@ const Page = ({ params: { skuId } }) => {
         <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="bg-white p-6 w-full  mt-24 rounded-lg shadow-lg">
+        <div className="bg-white p-6 w-full mt-24 rounded-lg shadow-lg">
           {error ? (
             <div className="text-red-500 font-semibold">{error}</div>
           ) : !userData ? (
@@ -72,7 +109,9 @@ const Page = ({ params: { skuId } }) => {
                       <li
                         key={index}
                         className="bg-gray-50 p-4 rounded-lg shadow hover:bg-gray-100 cursor-pointer transition"
-                        onClick={() => handleClick(userData.skuId)}
+                        onClick={() =>
+                          console.log(`Clicked on SKU ID: ${userData.skuId}`)
+                        }
                       >
                         <div>
                           <strong className="text-lg font-semibold">
@@ -307,7 +346,10 @@ const Page = ({ params: { skuId } }) => {
               </div>
             </div>
           )}
-          <button className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition">
+          <button
+            onClick={handleAccept}
+            className="mt-4 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+          >
             Accept
           </button>
         </div>
