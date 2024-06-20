@@ -196,8 +196,8 @@ const Profile = () => {
             </div>
           </form>
           {isPopupVisible && (
-            <div className="bg-green-200 border border-green-600 text-green-800 px-4 py-3 rounded relative mt-4">
-              Form {isExistingProfile ? "updated" : "submitted"} successfully!
+            <div className="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-md shadow-lg">
+              Data saved successfully!
             </div>
           )}
         </div>

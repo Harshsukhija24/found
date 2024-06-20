@@ -104,7 +104,7 @@ const JobPreferencesPage = () => {
         <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <div className="w-5/6 p-4 mt-11 overflow-auto">
+        <div className="w-5/6 p-4  overflow-auto">
           <Nav_Home />
           <h1 className="text-xl font-bold mb-4">Edit your Found Profile</h1>
 
@@ -183,7 +183,7 @@ const JobPreferencesPage = () => {
           </form>
           {isPopupVisible && (
             <div className="fixed bottom-0 right-0 mb-4 mr-4 p-4 bg-green-500 text-white rounded shadow-lg">
-              Preferences updated successfully!
+              Culture updated successfully!
             </div>
           )}
         </div>

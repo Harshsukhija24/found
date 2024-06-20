@@ -16,7 +16,6 @@ const USWorkAuthorizationPage = () => {
   const [companySizes, setCompanySizes] = useState([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isExistingProfile, setIsExistingProfile] = useState(false);
-  // Added state for popup visibility
 
   const { data: session, status } = useSession();
 
@@ -51,6 +50,19 @@ const USWorkAuthorizationPage = () => {
 
     fetchPreferences();
   }, [session, status]);
+
+  const handleCheckboxChange = (e, currentState, setterFunction) => {
+    const { value, checked } = e.target;
+
+    let updatedState;
+    if (checked) {
+      updatedState = [...currentState, value];
+    } else {
+      updatedState = currentState.filter((item) => item !== value);
+    }
+
+    setterFunction(updatedState);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,19 +105,7 @@ const USWorkAuthorizationPage = () => {
       );
 
       // Update culture preferences using PUT method
-      const putResponse = await fetch("/api/Profile/Culture", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(preferences),
-      });
 
-      if (!putResponse.ok) {
-        throw new Error("Failed to update culture preferences");
-      }
-
-      console.log("Culture preferences updated successfully");
       setIsPopupVisible(true);
       setTimeout(() => setIsPopupVisible(false), 3000); // Hide popup after 3 seconds
     } catch (err) {
@@ -262,7 +262,8 @@ const USWorkAuthorizationPage = () => {
               </label>
               <textarea
                 onChange={(e) => setDesiredLocations(e.target.value)}
-                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                className="shadow appearance-none border rounded w-full py-2 px
+                3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 rows="4"
                 value={desiredLocations}
                 placeholder="Enter locations"

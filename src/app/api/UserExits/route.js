@@ -1,5 +1,5 @@
+import { connectDb } from "@/app/utils/connectdb";
 import User from "../../../model/UserRegister";
-import { connectDb } from "../../../utils/connectdb";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {

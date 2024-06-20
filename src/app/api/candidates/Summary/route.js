@@ -8,7 +8,7 @@ export const POST = async (req) => {
     const session = await getSession({ req });
     console.log("hello", session);
 
-    const { skuId, coverLetter, profile, preference, culture } =
+    const { skuId, companyId, coverLetter, profile, preference, culture } =
       await req.json();
 
     const { db } = await connectDb();
@@ -16,9 +16,12 @@ export const POST = async (req) => {
 
     await collection.insertOne({
       skuId,
+      companyId,
+
       coverLetter,
       profile,
       preference,
+
       culture,
     });
 

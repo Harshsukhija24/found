@@ -9,6 +9,7 @@ const Page = () => {
   const [jobs, setJobs] = useState([]);
   const { data: session, status } = useSession();
   const userId = session?.user?.userId; // Ensure userId is safely accessed
+  console.log("hello", userId);
 
   useEffect(() => {
     const fetchData = async () => {

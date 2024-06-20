@@ -109,7 +109,7 @@ const Page = () => {
               </div>
               <div className="flex flex-col">
                 <label className="block text-gray-700 font-bold mb-1">
-                  Founded
+                  Founded in which year
                 </label>
                 <input
                   type="text"
@@ -166,8 +166,8 @@ const Page = () => {
             </div>
           </form>
           {isPopupVisible && (
-            <div className="bg-green-200 border border-green-600 text-green-800 px-4 py-3 rounded relative">
-              Form {isUpdate ? "updated" : "submitted"} successfully!
+            <div className="fixed bottom-4 right-4 bg-green-500 text-white p-4 rounded-md shadow-lg">
+              Data saved successfully!
             </div>
           )}
         </div>

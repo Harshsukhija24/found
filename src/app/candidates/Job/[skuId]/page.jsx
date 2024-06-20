@@ -5,17 +5,17 @@ import Sidebar from "@/app/components/Sidebar";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-const Page = ({ params: { skuId, userId } }) => {
+const Page = ({ params: { skuId } }) => {
   const [companyData, setCompanyData] = useState(null);
   const [profile, setProfile] = useState(null);
-  const [preference, setPreference] = useState(null); // Corrected typo in state variable name
+  const [preference, setPreference] = useState(null);
   const [culture, setCulture] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
   const { data: session, status } = useSession();
+  const userId = session?.user?.userId;
 
   useEffect(() => {
     if (!session) return;
-    const userId = session.user.userId;
 
     const fetchCompanyData = async () => {
       try {
@@ -33,14 +33,13 @@ const Page = ({ params: { skuId, userId } }) => {
 
     const fetchProfileData = async () => {
       try {
-        const response = await fetch(`/api/Profile/Profile/${userId}`);
+        const response = await fetch(`/api/Profile/Profile/${userId}`); // Corrected URL
         if (!response.ok)
           throw new Error(
             `Failed to fetch profile data: ${response.statusText}`
           );
         const data = await response.json();
         setProfile(data);
-        console.log(profile);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -78,14 +77,13 @@ const Page = ({ params: { skuId, userId } }) => {
     fetchProfileData();
     fetchPreferenceData();
     fetchCultureData();
-  }, [skuId, session]);
+  }, [skuId, session, userId]);
 
   const handleCoverLetterChange = (e) => setCoverLetter(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Check if companyData is available
     if (!companyData || !companyData.company) {
       console.error("Company data not available.");
       return;
@@ -101,13 +99,14 @@ const Page = ({ params: { skuId, userId } }) => {
     const summaryData = {
       skuId,
       coverLetter,
+      companyId: companyData.userId,
+
       profile,
       preference,
       culture,
     };
 
     try {
-      // Submit application data
       const response = await fetch("/api/candidates/AppliedData", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -119,7 +118,6 @@ const Page = ({ params: { skuId, userId } }) => {
       const result = await response.json();
       console.log(result.message);
 
-      // Submit summary data
       const summaryResponse = await fetch("/api/candidates/Summary", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,7 +145,7 @@ const Page = ({ params: { skuId, userId } }) => {
         <div className="w-1/4 lg:w-1/6 m-3">
           <Sidebar />
         </div>
-        <div className="flex-grow mt-16 p-8">
+        <div className="flex-grow ml-16 mt-16 p-8">
           <div className="text-2xl font-bold mb-4">Company Info</div>
           <div className="flex mb-8 bg-white rounded p-4">
             <div className="w-1/2">
@@ -168,6 +166,10 @@ const Page = ({ params: { skuId, userId } }) => {
                       </p>
                     </div>
                   ))}
+                  <p className="text-gray-700 mb-2">
+                    <span className="font-semibold">Location:</span>{" "}
+                    {companyData.JobDescription}
+                  </p>
                   <p className="text-gray-700 mb-2">
                     <span className="font-semibold">Location:</span>{" "}
                     {companyData.JobLocation}

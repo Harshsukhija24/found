@@ -5,7 +5,7 @@ const Sidebar = () => {
     <aside className="bg-white fixed mt-10 text-black w-36 h-4/5 flex flex-col justify-between p-4">
       <div className="mt-9 ">
         <Link
-          href="/companies/companyProfile/Profile"
+          href="/companies/companyProfile/Overview"
           className="block py-4 px-6 mb-4 hover:bg-sky-400"
         >
           Profile

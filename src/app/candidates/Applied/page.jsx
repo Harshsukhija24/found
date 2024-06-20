@@ -5,28 +5,33 @@ import Nav from "../../components/Nav";
 import Sidebar from "../../components/Sidebar";
 import { useSession } from "next-auth/react";
 
-const Page = () => {
+const Page = ({ params: { userId } }) => {
   const [data, setData] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: session, status } = useSession();
+  console.log("session", session);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/candidates/Applied");
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
+        if (status === "authenticated" && session?.user?.userId) {
+          const response = await fetch(
+            `/api/candidates/Applied/${session.user.userId}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+          const jsonData = await response.json();
+          setData(jsonData);
         }
-        const jsonData = await response.json();
-        setData(jsonData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
-  }, [session]);
+  }, [session, status]);
 
   const openModal = (company) => {
     setSelectedCompany(company);

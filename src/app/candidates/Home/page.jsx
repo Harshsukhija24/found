@@ -19,6 +19,7 @@ const Page = () => {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
+  const userId = session?.user?.userId;
 
   const handleSelectChange = (e) => {
     const newIndex = parseInt(e.target.value);
@@ -46,7 +47,7 @@ const Page = () => {
     if (status === "authenticated" && session?.user) {
       const userId = session.user.userId;
       try {
-        const response = await fetch(`/api/Profile/Profile?userId=${userId}`);
+        const response = await fetch(`/api/Profile/Profile/{userId}`);
         if (!response.ok) {
           throw new Error("Failed to fetch profile data");
         }

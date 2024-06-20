@@ -35,7 +35,7 @@ const page = () => {
   return (
     <div className="flex flex-col mt-6 h-screen">
       <div className="w-full">
-        <NavBar />
+        <Nav />
       </div>
       <div className="flex flex-1">
         <div className="w-1/6 py-4 px-4">

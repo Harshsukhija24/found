@@ -20,23 +20,41 @@ const UserProfile = () => {
       if (status === "authenticated" && session?.user) {
         const userId = session.user.userId;
         try {
+          // Fetch profile data
           const profileResponse = await fetch(`/api/Profile/Profile/${userId}`);
-          if (!profileResponse.ok) throw new Error("Failed to fetch profile");
+          if (!profileResponse.ok) {
+            if (profileResponse.status === 404) {
+              throw new Error("Profile not found");
+            } else {
+              throw new Error(
+                `Failed to fetch profile (${profileResponse.status})`
+              );
+            }
+          }
           const profileData = await profileResponse.json();
           setProfile(profileData.length > 0 ? profileData[0] : null);
 
+          // Fetch preferences data
           const preferencesResponse = await fetch(
             `/api/Profile/Preferences/${userId}`
           );
-          if (!preferencesResponse.ok)
-            throw new Error("Failed to fetch preferences");
+          if (!preferencesResponse.ok) {
+            throw new Error(
+              `Failed to fetch preferences (${preferencesResponse.status})`
+            );
+          }
           const preferencesData = await preferencesResponse.json();
           setPreferences(
             preferencesData.length > 0 ? preferencesData[0] : null
           );
 
+          // Fetch culture data
           const cultureResponse = await fetch(`/api/Profile/Culture/${userId}`);
-          if (!cultureResponse.ok) throw new Error("Failed to fetch culture");
+          if (!cultureResponse.ok) {
+            throw new Error(
+              `Failed to fetch culture (${cultureResponse.status})`
+            );
+          }
           const cultureData = await cultureResponse.json();
           setCulture(cultureData.length > 0 ? cultureData[0] : null);
         } catch (error) {
@@ -52,8 +70,8 @@ const UserProfile = () => {
     fetchData();
   }, [session, status]);
 
-  if (error) {
-    return <div className="text-red-500 text-center mt-4">Error: {error}</div>;
+  if (loading) {
+    return <div className="text-center mt-4">Loading...</div>;
   }
 
   return (
@@ -65,83 +83,99 @@ const UserProfile = () => {
         <div className="w-1/6 py-4 px-4">
           <Sidebar />
         </div>
-        <main className="w-5/6 p-4  mt-11 overflow-auto">
+        <main className="w-5/6 p-4  overflow-auto">
           <Nav_Home />
           <div className="mt-10">
-            <div className="p-4 bg-white rounded shadow-md">
-              <h2 className="text-2xl font-bold mb-4">
-                this is how your profile while be shown to recutiers
-              </h2>
-              <div className="border-b-2 border-black">
-                <p>
-                  <strong>Name:</strong> {profile?.name || "No name"}
-                </p>
-                <p>
-                  <strong>Bio:</strong> {profile?.bio || "No bio"}
-                </p>
-                <p>
-                  <strong>Education:</strong>{" "}
-                  {profile?.education || "No education"}
-                </p>
-                <p>
-                  <strong>Skills:</strong> {profile?.skills || "No skills"}
-                </p>
-                <p>
-                  <strong>Role:</strong> {profile?.role || "No role"}
-                </p>
-                {profile?.github && (
-                  <p>
-                    <strong>GitHub:</strong> {profile.github}
-                  </p>
-                )}
+            {error ? (
+              <div className="text-red-500 text-center mt-4">
+                Error: {error}
               </div>
-            </div>
-            <div className="p-4 border-b-2 border-black bg-white rounded shadow-md">
-              {preferences ? (
-                <>
-                  <p>
-                    <strong>Job Type:</strong> {preferences.jobtype}
-                  </p>
-                  <p>
-                    <strong>Open to Job Types:</strong>{" "}
-                    {preferences.openToJobTypes}
-                  </p>
-                  <p>
-                    <strong>Desired Locations:</strong>{" "}
-                    {preferences.desiredLocations}
-                  </p>
-                  <p>
-                    <strong>Desired Salary:</strong> {preferences.desiredSalary}
-                  </p>
-                  <p>
-                    <strong>Company Sizes:</strong> {preferences.companySizes}
-                  </p>
-                </>
-              ) : (
-                <div className="text-center">No preferences set yet.</div>
-              )}
-            </div>
+            ) : (
+              <>
+                <div className="p-4 bg-white rounded shadow-md">
+                  <h2 className="text-2xl font-bold mb-4">
+                    This is how your profile will be shown to recruiters
+                  </h2>
+                  {profile ? (
+                    <div className="border-b-2 border-black">
+                      <p>
+                        <strong>Name:</strong> {profile.name || "No name"}
+                      </p>
+                      <p>
+                        <strong>Bio:</strong> {profile.bio || "No bio"}
+                      </p>
+                      <p>
+                        <strong>Education:</strong>{" "}
+                        {profile.education || "No education"}
+                      </p>
+                      <p>
+                        <strong>Skills:</strong> {profile.skills || "No skills"}
+                      </p>
+                      <p>
+                        <strong>Role:</strong> {profile.role || "No role"}
+                      </p>
+                      {profile.github && (
+                        <p>
+                          <strong>GitHub:</strong> {profile.github}
+                        </p>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-center">Profile not found.</div>
+                  )}
+                </div>
+                <div className="p-4 border-b-2 border-black bg-white rounded shadow-md">
+                  {preferences ? (
+                    <>
+                      <p>
+                        <strong>Job Type:</strong> {preferences.jobtype}
+                      </p>
+                      <p>
+                        <strong>Open to Job Types:</strong>{" "}
+                        {preferences.openToJobTypes}
+                      </p>
+                      <p>
+                        <strong>Desired Locations:</strong>{" "}
+                        {preferences.desiredLocations}
+                      </p>
+                      <p>
+                        <strong>Desired Salary:</strong>{" "}
+                        {preferences.desiredSalary}
+                      </p>
+                      <p>
+                        <strong>Company Sizes:</strong>{" "}
+                        {preferences.companySizes}
+                      </p>
+                    </>
+                  ) : (
+                    <div className="text-center">No preferences set yet.</div>
+                  )}
+                </div>
 
-            <div className="p-4 bg-white border-b-2 border-black rounded shadow-md">
-              {culture ? (
-                <>
-                  <p>
-                    <strong>NextJob:</strong> {culture.nextJob}
-                  </p>
-                  <p>
-                    <strong>Motivate:</strong> {culture.motivate}
-                  </p>
-                  <p>
-                    <strong>Future:</strong> {culture.future}
-                  </p>
-                  <p>
-                    <strong>Environment:</strong> {culture.environment}
-                  </p>
-                </>
-              ) : (
-                <div className="text-center">No culture data available.</div>
-              )}
-            </div>
+                <div className="p-4 bg-white border-b-2 border-black rounded shadow-md">
+                  {culture ? (
+                    <>
+                      <p>
+                        <strong>Next Job:</strong> {culture.nextJob}
+                      </p>
+                      <p>
+                        <strong>Motivate:</strong> {culture.motivate}
+                      </p>
+                      <p>
+                        <strong>Future:</strong> {culture.future}
+                      </p>
+                      <p>
+                        <strong>Environment:</strong> {culture.environment}
+                      </p>
+                    </>
+                  ) : (
+                    <div className="text-center">
+                      No culture data available.
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </main>
       </div>

@@ -31,7 +31,7 @@ const OverView = () => {
                 method: "GET",
               }),
               fetch(`/api/companies/Profile/Team/${userId}`, { method: "GET" }),
-              fetch("/api/companies/PostJob", { method: "GET" }),
+              fetch(`/api/companies/PostJob/${userId}`, { method: "GET" }),
             ]);
 
           if (!infoResponse.ok || !companyResponse.ok || !teamResponse.ok) {
@@ -104,9 +104,6 @@ const OverView = () => {
                     <p className="mt-1">
                       <strong>Employees:</strong> {info.employees}
                     </p>
-                    <p className="mt-1">
-                      <strong>Environment:</strong> {company.culture}
-                    </p>
                   </div>
                   <div className="w-full sm:w-1/2 mt-1 text-gray-700">
                     <p className="mt-1">
@@ -129,6 +126,9 @@ const OverView = () => {
                     <p className="mt-1">
                       <strong>Co-Founder Past Experience:</strong>{" "}
                       {team?.coFounderPastExperience}
+                    </p>
+                    <p className="mt-1">
+                      <strong>Environment:</strong> {company.culture}
                     </p>
                   </div>
                 </div>
