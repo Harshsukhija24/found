@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/SidebarCanidates";
 import Nav_Home from "../../components/Nav_Home";
 import Nav from "../../components/Nav";
 

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { database } from "../../../components/firebase";
 import { ref, onValue, push, serverTimestamp, off } from "firebase/database";
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "../../components/SidebarCompany";
 import Nav_bar from "../../../components/Nav";
 
 const CompanyMessagePage = ({ params: { skuId } }) => {

@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../components/side_bar"; // Adjusted import
+import Sidebar from "../../components/SidebarCompany"; // Adjusted import
 import Nav from "../../components/Nav_Bar"; // Adjusted import
 import { useRouter } from "next/navigation";
 

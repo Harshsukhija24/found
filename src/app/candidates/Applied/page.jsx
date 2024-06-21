@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "../../components/Modal_apply";
 import Nav from "../../components/Nav";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/SidebarCanidates";
 import { useSession } from "next-auth/react";
 
 const Page = ({ params: { userId } }) => {

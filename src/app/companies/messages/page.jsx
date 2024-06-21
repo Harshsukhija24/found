@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Nav from "../../companies/components/Nav_Bar";
-import Sidebar from "../components/side_bar";
+import Sidebar from "../../companies/components/SidebarCompany";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 

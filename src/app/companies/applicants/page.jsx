@@ -1,7 +1,8 @@
 // pages/Page.js
 "use client";
 import React, { useState, useEffect } from "react";
-import Sidebar from "../components/side_bar";
+import SideBar from "../components/SidebarCompany";
+
 import Nav from "../components/Nav_Bar";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
@@ -44,7 +45,7 @@ const Page = ({ params: userId }) => {
       </div>
       <div className="flex flex-1">
         <div className="w-1/6 py-4 px-4">
-          <Sidebar />
+          <SideBar />
         </div>
 
         <div className="bg-white p-4 w-2/3 mt-20 rounded-lg shadow-md">

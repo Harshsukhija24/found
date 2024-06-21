@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../../components/side_bar";
+import Sidebar from "../../../components/SidebarCompany";
 import Nav from "../../../components/Nav_Bar";
 
 const Page = ({ params: { skuId, userId } }) => {

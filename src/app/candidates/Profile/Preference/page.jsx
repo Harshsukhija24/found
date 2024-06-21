@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "@/app/components/SidebarCanidates";
 import Nav_Home from "@/app/components/Nav_Home";
 import { useSession } from "next-auth/react";
 import Nav from "../../../components/Nav";

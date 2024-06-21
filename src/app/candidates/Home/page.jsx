@@ -1,14 +1,13 @@
-// pages/Page.js
 "use client";
 import React, { useEffect, useState } from "react";
 import Nav from "../../components/Nav";
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "@/app/components/SidebarCanidates";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setSelectedContentIndex } from "../../redux/contentSlice";
 import { useSession } from "next-auth/react";
 
-const Page = () => {
+const Page = ({ params: { userId } }) => {
   const selectedContentIndex = useSelector(
     (state) => state.content.selectedContentIndex
   );
@@ -19,7 +18,6 @@ const Page = () => {
   const [appliedJobs, setAppliedJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const { data: session, status } = useSession();
-  const userId = session?.user?.userId;
 
   const handleSelectChange = (e) => {
     const newIndex = parseInt(e.target.value);
@@ -27,41 +25,38 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        await Promise.all([
-          fetchProfileData(),
-          fetchRecommendedJobs(),
-          fetchAppliedJobs(),
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (status === "authenticated" && session?.user?.userId) {
+      fetchData();
+    }
+  }, [session, status]);
 
-    fetchData();
-  }, []);
+  const fetchData = async () => {
+    setLoading(true);
+    try {
+      await Promise.all([
+        fetchProfileData(),
+        fetchRecommendedJobs(),
+        fetchAppliedJobs(),
+      ]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchProfileData = async () => {
-    if (status === "authenticated" && session?.user) {
-      const userId = session.user.userId;
-      try {
-        const response = await fetch(`/api/Profile/Profile/{userId}`);
-        if (!response.ok) {
-          throw new Error("Failed to fetch profile data");
-        }
-        const data = await response.json();
-        console.log("Profile Data:", data); // Log the data received from the API
-        if (data.length > 0) {
-          setName(data[0].name); // Assuming 'name' is a property of the object
-        } else {
-          setName(null);
-        }
-      } catch (err) {
-        console.error("Profile Error:", err);
-        setName(null); // Set name to null on error
+    try {
+      const response = await fetch(
+        `/api/Profile/Profile/${session?.user?.userId}`
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch profile data");
       }
+      const data = await response.json();
+      setName(data[0]?.name || "Name not available");
+      console.log("Profile Data:", data);
+    } catch (err) {
+      console.error("Profile Error:", err);
+      setName("Name not available"); // Set name to default on error
     }
   };
 
@@ -69,11 +64,9 @@ const Page = () => {
     try {
       const response = await fetch("/api/candidates/AppliedData");
       if (!response.ok) {
-        throw new Error("Failed to fetch data");
+        throw new Error("Failed to fetch recommended jobs");
       }
       const jsonData = await response.json();
-      console.log("Recommended Jobs Data:", jsonData); // Log the recommended jobs data
-
       setRecommendedJobs(jsonData.slice(0, 4));
     } catch (error) {
       console.error("Error fetching recommended jobs:", error);
@@ -82,12 +75,13 @@ const Page = () => {
 
   const fetchAppliedJobs = async () => {
     try {
-      const response = await fetch("/api/candidates/Applied");
+      const response = await fetch(
+        `/api/candidates/Applied/${session?.user?.userId}`
+      );
       if (!response.ok) {
         throw new Error("Failed to fetch applied jobs data");
       }
       const jsonData = await response.json();
-      console.log("Applied Jobs Data:", jsonData); // Log the applied jobs data
       setAppliedJobs(jsonData.slice(0, 4)); // Slice to show only 4 applied jobs
     } catch (error) {
       console.error("Error fetching applied jobs:", error);
@@ -99,14 +93,13 @@ const Page = () => {
       <div className="col-span-12">
         <Nav />
       </div>
-      <div className="col-span-2 m-2 p-4  text-white h-screen">
+      <div className="col-span-2 m-2 p-4 text-white h-screen">
         <Sidebar />
       </div>
       <div className="col-span-10 p-5 mt-9 grid gap-5">
         <div className="p-4 border border-black">
           <h1 className="text-xl font-bold mb-3">Profile</h1>
-          <p>Name: {typeof name === "string" ? name : "Name not available"}</p>
-
+          <p>Name: {name}</p>
           <h2>
             Where are you in your job search?
             <br /> Keep your job status up-to-date to inform employers of your
@@ -136,7 +129,7 @@ const Page = () => {
                 className="bg-white shadow-md rounded-lg p-6 mb-6"
               >
                 {company.company.map((item, skuId) => (
-                  <div key={skuId} className="">
+                  <div key={skuId}>
                     <p className="mb-1">
                       <span className="font-semibold">Company Name:</span>{" "}
                       {item.companyName}

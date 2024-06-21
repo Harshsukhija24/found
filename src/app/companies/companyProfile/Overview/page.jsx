@@ -3,7 +3,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../components/side_bar";
+import Sidebar from "../../components/SidebarCompany";
 import Nav_bar from "../../../companies/components/Nav_Bar";
 import ProfileNav from "../../components/ProfileNav";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import Nav_bar from "../companies/components/Nav_Bar";
-import Side_bar from "../companies/components/side_bar";
+import Side_bar from "../companies/components/SidebarCompany";
 const page = () => {
   return (
     <div>

@@ -1,7 +1,7 @@
 // pages/Page.js
 "use client";
 import React, { useState, useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
+import Sidebar from "../../components/SidebarCanidates";
 import Modal from "../../components/Modal";
 import Nav_Home from "@/app/components/Nav_Home";
 import Nav from "../../components/Nav";

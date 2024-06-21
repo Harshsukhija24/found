@@ -2,7 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/Nav_Bar"; // Corrected component name
-import Sidebar from "../components/Side_Bar"; // Corrected component name
+import Sidebar from "../components/SidebarCompany"; // Corrected component name
 import { useSession } from "next-auth/react";
 
 const Page = () => {

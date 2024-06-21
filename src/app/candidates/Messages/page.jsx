@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Sidebar from "@/app/components/Sidebar";
+import Sidebar from "@/app/components/SidebarCanidates";
 import Nav_bar from "../../components/Nav";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
